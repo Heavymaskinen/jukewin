@@ -46,16 +46,16 @@
     <Compile Include="Core\PlayerEngine.cs" />
     <Compile Include="Core\PlayerEngineFactory.cs" />
     <Compile Include="Core\SongQueue.cs" />
+    <Compile Include="Core\Library.cs" />
+    <Compile Include="Core\LibraryBrowser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\AsyncSongLoader.cs" />
     <Compile Include="IO\LoadHandler.cs" />
     <Compile Include="IO\PersistedSong.cs" />
     <Compile Include="IO\SongCatalogue.cs" />
     <Compile Include="IO\SongConverter.cs" />
-    <Compile Include="IO\SongWriter.cs" />
-    <Compile Include="Core\Library.cs" />
-    <Compile Include="Core\LibraryBrowser.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\SongLoader.cs" />
+    <Compile Include="IO\SongWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModel\DataModel.csproj">
@@ -64,6 +64,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="IO\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

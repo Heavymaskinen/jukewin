@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JukeControllerCore\JukeControllerCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NetCoreAudio" Version="1.5.0" />
+  </ItemGroup>
+</Project>
