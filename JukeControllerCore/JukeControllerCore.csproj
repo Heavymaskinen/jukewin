@@ -8,9 +8,7 @@
     <Compile Remove="Class1.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Control\" />
     <Folder Include="Core\" />
-    <Folder Include="IO\" />
     <Folder Include="Datamodel\" />
   </ItemGroup>
 </Project>

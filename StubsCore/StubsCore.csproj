@@ -6,5 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JukeControllerCore\JukeControllerCore.csproj" />
+    <ProjectReference Include="..\ViewModelCore\ViewModelCore.csproj" />
   </ItemGroup>
 </Project>

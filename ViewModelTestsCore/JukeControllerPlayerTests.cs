@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using DataModel;
-using Juke.Core;
 using NUnit.Framework;
+using Juke.Core;
+using DataModel;
 
 namespace Juke.Control.Tests
 {
@@ -17,13 +17,13 @@ namespace Juke.Control.Tests
             control.Player.RegisterPlayerEngine(new FakePlayerEngine());
         }
 
-        [TestCase]
+        [Test]
         public void InitialState_NotPlayingAnything()
         {
             Assert.AreEqual(null, control.Player.NowPlaying);
         }
 
-        [TestCase]
+        [Test]
         public void PlaySong_IsNowPlaying()
         {
             control.Player.RegisterPlayerEngine(new FakePlayerEngine());
@@ -31,7 +31,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual("song1", control.Player.NowPlaying.Name);
         }
 
-        [TestCase]
+        [Test]
         public void SongPlayed_ListenerNotified()
         {
             var listener = new EventListener();
@@ -40,7 +40,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(song, listener.SongPlayed);
         }
 
-        [TestCase]
+        [Test]
         public void PlaySong_PlayedInEngine()
         {
             var engine = new FakePlayerEngine();
@@ -51,7 +51,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(song, engine.PlayedSong);
         }
 
-        [TestCase]
+        [Test]
         public void SongFinished_PlayNextFromQueue()
         {
             var engine = new FakePlayerEngine();
@@ -66,7 +66,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(song2, control.Player.NowPlaying);
         }
 
-        [TestCase]
+        [Test]
         public void SongFinished_EmptyQueue_PlayNothing()
         {
             var engine = new FakePlayerEngine();
@@ -79,7 +79,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(null, control.Player.NowPlaying);
         }
 
-        [TestCase]
+        [Test]
         public void PlaySongWhilePlaying_KeepPlayingCurrent()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -87,7 +87,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual("song1", control.Player.NowPlaying.Name);
         }
 
-        [TestCase]
+        [Test]
         public void StopSong_ReactsAsFinished()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -95,20 +95,20 @@ namespace Juke.Control.Tests
             Assert.IsNull(control.Player.NowPlaying);
         }
 
-        [TestCase]
+        [Test]
         public void InitialState_QueueEmpty()
         {
             control.Player.PlaySong(new Song("artist", "song", "song2"));
             Assert.AreEqual(0, control.Player.Queue.Count);
         }
 
-        [TestCase]
+        [Test]
         public void InitialState_QueueNextIsNull()
         {
             Assert.IsNull(control.Player.Queue.Next);
         }
 
-        [TestCase]
+        [Test]
         public void PlaySongWhilePlaying_EnqueueSecond()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -116,7 +116,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual("song2", control.Player.Queue.Next.Name);
         }
 
-        [TestCase]
+        [Test]
         public void PlaySongsWhilePlaying_QueueIncreases()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -125,7 +125,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(2, control.Player.Queue.Count);
         }
 
-        [TestCase]
+        [Test]
         public void CantEnqueueDuplicates()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -134,7 +134,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(1, control.Player.Queue.Count);
         }
 
-        [TestCase]
+        [Test]
         public void CantEnqueueCurrentlyPlaying()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -143,7 +143,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(1, control.Player.Queue.Count);
         }
 
-        [TestCase]
+        [Test]
         public void EnqueuedSongsInList()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));

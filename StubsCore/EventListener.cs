@@ -19,6 +19,13 @@ namespace Juke.Control.Tests
         public string CollectionChanged { get; private set; }
         public Song SongPlayed { get; set; }
 
+        public System.Collections.Specialized.NotifyCollectionChangedEventArgs CollectionArgs;
+        
+        public void CollectionChangedHandler(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            CollectionArgs = e;
+        }
+
         public EventListener()
         {
             AsyncSongLoader.LoadInitiated += SongLoader_LoadInitiated;
@@ -40,6 +47,7 @@ namespace Juke.Control.Tests
         private void Coll_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             CollectionChanged = e.PropertyName;
+            
         }
         
         private void AsyncSongLoader_LoadCompleted1(object sender, IList<Song> e)

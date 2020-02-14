@@ -11,7 +11,7 @@ namespace Juke.Control.Tests
     public class FakeAsyncSongLoader : AsyncSongLoader
     {
         private IList<Song> list;
-
+        public bool AutoComplete { get; set; }
         public FakeAsyncSongLoader():this(new List<Song>())
         {
         }
@@ -23,6 +23,7 @@ namespace Juke.Control.Tests
 
         public void SignalComplete()
         {
+            Console.WriteLine("Notify complete " + list.Count);
             NotifyCompleted(list);
         }
 
@@ -33,6 +34,11 @@ namespace Juke.Control.Tests
 
         protected override void InvokeLoad()
         {
+            Console.WriteLine("Invoke load!");
+            if (AutoComplete)
+            {
+                SignalComplete();
+            }
             
         }
     }

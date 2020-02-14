@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using DataModel;
 using Juke.Core;
+using JukeControllerCore.IO;
 
 namespace Juke.IO
 {
-    class SongCatalogue : LoadHandler
+    class SongCatalogue : LoadHandler, SaveHandler
     {
         private Library library;
 
@@ -30,6 +31,11 @@ namespace Juke.IO
             loader.BeginLoading();
         }
 
+        public void SaveSongs(SongWriter writer)
+        {
+            writer.Write(library.Songs);
+        }
+
         private void AsyncSongLoader_LoadCompleted(object sender, IList<Song> list)
         {
             UpdateLibrary(list);
@@ -37,6 +43,7 @@ namespace Juke.IO
 
         private void UpdateLibrary(IList<Song> list)
         {
+            Console.WriteLine("Catalogue update "+list.Count);
             foreach (var song in list)
             {
                 library.AddSong(song);
