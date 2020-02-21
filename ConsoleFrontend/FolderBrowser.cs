@@ -8,31 +8,31 @@ namespace ConsoleFrontend
 {
     public class FolderBrowser
     {
-        public event EventHandler<string> FolderSelected;
-        
+        private DirectoryInfo currentDir;
+
         private string currentPath;
         private ConsoleMenu menu;
-        private DirectoryInfo currentDir;
-        
-        public string SelectedFolder { get; private set; }
-        
-        public bool Show { get; private set; }
 
         public FolderBrowser(string currentPath)
         {
             ConsoleMenu.ItemSelected += OnMenuItemSelected;
-            this.currentPath = currentPath;
-            currentDir = new DirectoryInfo(currentPath);
+            this.currentPath         =  currentPath;
+            currentDir               =  new DirectoryInfo(currentPath);
             InitialiseMenu();
             Show = true;
         }
+
+        public string SelectedFolder { get; private set; }
+
+        public bool Show { get; private set; }
+        public event EventHandler<string> FolderSelected;
 
         private void InitialiseMenu()
         {
             menu = new ConsoleMenu("Select a folder");
             if (currentDir.Parent != null)
             {
-                menu.AddItem(new ConsoleMenuItem(){ID="..", Label = ".."});
+                menu.AddItem(new ConsoleMenuItem() {ID = "..", Label = ".."});
             }
 
             try
@@ -45,7 +45,7 @@ namespace ConsoleFrontend
             }
             catch (Exception e)
             {
-                Console.WriteLine("This is bad: "+e.Message);
+                Console.WriteLine("This is bad: " + e.Message);
             }
         }
 
@@ -53,15 +53,15 @@ namespace ConsoleFrontend
         {
             if (e == "..")
             {
-                currentDir = currentDir.Parent;
+                currentDir  = currentDir.Parent;
                 currentPath = currentDir.FullName;
             }
             else
             {
                 currentPath = e;
-                currentDir = new DirectoryInfo(currentPath);
+                currentDir  = new DirectoryInfo(currentPath);
             }
-            
+
             InitialiseMenu();
         }
 
@@ -75,19 +75,18 @@ namespace ConsoleFrontend
             if (key == ConsoleKey.Escape)
             {
                 Show = false;
-                Console.WriteLine("Aborted");
             }
+
             if (key == ConsoleKey.Spacebar)
             {
                 SelectedFolder = currentPath;
-                Show = false;
+                Show           = false;
                 FolderSelected?.Invoke(this, SelectedFolder);
             }
             else
             {
-                menu.UpdateInput(key);    
+                menu.UpdateInput(key);
             }
-            
         }
     }
 }

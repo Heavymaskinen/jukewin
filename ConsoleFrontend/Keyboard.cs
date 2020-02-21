@@ -7,6 +7,7 @@ namespace ConsoleFrontend
     {
         public event EventHandler<ConsoleKey> KeyPressed;
         private bool run = true;
+
         public async void Listen()
         {
             while (run)
