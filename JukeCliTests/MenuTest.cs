@@ -33,20 +33,5 @@ namespace JukeCliTests
             Assert.AreEqual(menu.TitlePart.BackgroundColor, menu.MenuPart.BackgroundColor);
             Assert.AreEqual(menu.TitlePart.ForegroundColor, ConsoleColor.White);
         }
-
-        [Test]
-        public void PartBackgroundsAreTheSame()
-        {
-            var menu = new ConsoleMenu("title", new ConsoleMenuItem())
-            {
-                Width           = 100,
-                BackgroundColor = ConsoleColor.Black,
-                ForegroundColor = ConsoleColor.White, SelectedColor = ConsoleColor.Green
-            };
-            
-            Assert.AreEqual(menu.TitlePart.Background.BackgroundColor, menu.MenuPart.Background.BackgroundColor);
-            Assert.AreEqual(ConsoleColor.Black, menu.MenuPart.Background.BackgroundColor);
-            Assert.AreEqual(100, menu.MenuPart.Background.Width);
-        }
     }
 }

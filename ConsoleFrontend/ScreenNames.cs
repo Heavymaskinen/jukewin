@@ -6,6 +6,7 @@ namespace ConsoleFrontend
         Library,
         Player,
         Queue,
-        Admin
+        Admin,
+        Quit
     }
 }

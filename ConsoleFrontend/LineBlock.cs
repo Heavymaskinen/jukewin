@@ -77,6 +77,12 @@ namespace ConsoleFrontend
             Console.ResetColor();
         }
 
+        public void SmallRedraw()
+        {
+            DrawLines();
+            Console.ResetColor();
+        }
+
         private void DrawBackground()
         {
             SetStandardColors();
@@ -106,8 +112,8 @@ namespace ConsoleFrontend
                     SetStandardColors();
                 }
 
-                SetPosition(offset);
-                Console.WriteLine(line);
+                Console.SetCursorPosition(Left, Top+offset);
+                Console.Write(line);
                 offset++;
             }
         }
@@ -116,12 +122,6 @@ namespace ConsoleFrontend
         {
             Console.ForegroundColor = ForegroundColor;
             Console.BackgroundColor = SelectedBackgroundColor;
-        }
-
-        private void SetPosition(int offset)
-        {
-            Console.CursorLeft = Left;
-            Console.CursorTop  = Top + offset;
         }
 
         public void Clear()

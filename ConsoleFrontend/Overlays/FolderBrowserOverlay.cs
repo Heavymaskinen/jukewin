@@ -7,43 +7,59 @@ namespace ConsoleFrontend.Overlays
 {
     public class FolderBrowserOverlay : Overlay
     {
+        public event EventHandler<string> FolderSelected;
+
         private DirectoryInfo currentDir;
         private string currentPath;
         private ConsoleMenu menu;
         private Background background;
+        private Label label;
 
-        public FolderBrowserOverlay(string currentPath)
+        private int startLine;
+        private int endLine;
+
+        public string SelectedFolder { get; set; }
+
+        public FolderBrowserOverlay(Screen parent, string currentPath, int width, int height) : base(parent)
         {
-            Top  = 0;
-            Left = 0;
+            label = new Label(currentPath)
+            {
+                ForegroundColor = ConsoleColor.Green, BackgroundColor = ConsoleColor.Black,
+                Top  = Top,
+                Left = Left
+            };
             background = new Background
             {
-                BackgroundColor = ConsoleColor.DarkCyan,
-                ForegroundColor = ConsoleColor.Red,
+                BackgroundColor = ConsoleColor.Black,
+                ForegroundColor = ConsoleColor.Green,
                 Top             = 0,
                 Left            = 0,
-                MinHeight       = Console.WindowHeight,    
+                MinHeight       = Console.WindowHeight,
                 Width           = Console.WindowWidth
             };
-            ConsoleMenu.ItemSelected += OnMenuItemSelected;
-            this.currentPath         =  currentPath;
-            currentDir               =  new DirectoryInfo(currentPath);
+            this.currentPath = currentPath;
+            currentDir       = new DirectoryInfo(currentPath);
             menu = new ConsoleMenu("Select a folder")
             {
-                BackgroundColor = ConsoleColor.DarkCyan,
-                SelectedColor   = ConsoleColor.DarkMagenta
+                BackgroundColor = ConsoleColor.DarkGray,
+                SelectedColor   = ConsoleColor.DarkGreen,
+                Top             = Top + 10,
+                Left            = Left
             };
+            menu.InstanceItemSelected += OnMenuItemSelected;
 
             ForegroundColor = ConsoleColor.Green;
             BackgroundColor = ConsoleColor.DarkCyan;
+            startLine       = 0;
+            endLine         = height - menu.Top;
 
             AddComponent(background);
             AddComponent(menu);
+            AddComponent(label);
             InitialiseMenu();
-            Open();
         }
 
-        private void OnMenuItemSelected(object? sender, string e)
+        private void OnMenuItemSelected(object sender, string e)
         {
             if (e == "..")
             {
@@ -56,14 +72,17 @@ namespace ConsoleFrontend.Overlays
                 currentDir  = new DirectoryInfo(currentPath);
             }
 
+            label.SetText(currentPath);
+            GuiController.LogList.Add("Path: " + currentPath);
+
             InitialiseMenu();
         }
 
         private void InitialiseMenu()
         {
             menu.ClearItems();
-            menu.Left = 0;
-            menu.Top = 0;
+            menu.Left = Left;
+            menu.Top  = Top;
 
             if (currentDir.Parent != null)
             {
@@ -73,9 +92,10 @@ namespace ConsoleFrontend.Overlays
             try
             {
                 var items = new Collection<string>(Directory.EnumerateDirectories(currentDir.FullName).ToArray());
-                foreach (var s in items)
+                for (var i = startLine; i < items.Count && i < endLine; i++)
                 {
-                    menu.AddItem(new ConsoleMenuItem() {ID = s, Label = s});
+                    var s = items[i];
+                    menu.AddItem(new ConsoleMenuItem {ID = s, Label = new DirectoryInfo(s).Name});
                 }
 
                 background.AdjustHeight(items.Count);
@@ -86,15 +106,18 @@ namespace ConsoleFrontend.Overlays
             }
         }
 
-        public override void UpdateInput(ConsoleKey key)
+        protected override void CustomInputHandle(ConsoleKey key)
         {
-            if (key == ConsoleKey.Escape)
+            if (key == ConsoleKey.Spacebar)
             {
+                SelectedFolder = currentPath;
+                FolderSelected?.Invoke(this, SelectedFolder);
                 Close();
             }
             else
             {
                 menu.UpdateInput(key);
+                Invalidate(false);
             }
         }
     }

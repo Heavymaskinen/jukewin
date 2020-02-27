@@ -6,15 +6,25 @@ namespace ConsoleFrontend
 {
     public abstract class Overlay : IDrawable
     {
-        public static event EventHandler Opened;
-        public static event EventHandler Closed;
+        public event EventHandler Opened;
+        public event EventHandler Closed;
 
         public int Top { get; set; }
         public int Left { get; set; }
         public ConsoleColor BackgroundColor { get; set; }
         public ConsoleColor ForegroundColor { get; set; }
+        public int Width { get; set; }
+        public int MinHeight { get; set; }
 
         private IList<IDrawable> components = new Collection<IDrawable>();
+
+        private Screen parent;
+
+        protected Overlay(Screen parent)
+        {
+            this.parent = parent;
+            parent.AssignOverlay(this);
+        }
 
         protected void AddComponent(IDrawable drawable)
         {
@@ -23,7 +33,7 @@ namespace ConsoleFrontend
             components.Add(drawable);
         }
 
-        protected void Open()
+        public void Open()
         {
             Opened?.Invoke(this, EventArgs.Empty);
         }
@@ -35,6 +45,7 @@ namespace ConsoleFrontend
 
         public void Draw()
         {
+            Console.Clear();
             foreach (var comp in components)
             {
                 Console.ForegroundColor = comp.ForegroundColor;
@@ -44,8 +55,44 @@ namespace ConsoleFrontend
             }
 
             Console.ResetColor();
+            PostDraw();
         }
 
-        public abstract void UpdateInput(ConsoleKey key);
+        protected virtual void PostDraw()
+        {
+            
+        }
+
+        public void ReducedDraw()
+        {
+            foreach (var comp in components)
+            {
+                Console.ForegroundColor = comp.ForegroundColor;
+                Console.BackgroundColor = comp.BackgroundColor;
+                Console.SetCursorPosition(comp.Left, comp.Top);
+                comp.ReducedDraw();
+            }
+
+            Console.ResetColor();
+        }
+
+        public void UpdateInput(ConsoleKey key)
+        {
+            if (key == ConsoleKey.Escape)
+            {
+                Close();
+            }
+            else
+            {
+                CustomInputHandle(key);
+            }
+        }
+
+        protected void Invalidate(bool fullRedraw)
+        {
+            parent.Invalidate(fullRedraw);
+        }
+
+        protected abstract void CustomInputHandle(ConsoleKey key);
     }
 }

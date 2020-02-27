@@ -1,12 +1,23 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsoleFrontend
 {
     public class Keyboard
     {
-        public event EventHandler<ConsoleKey> KeyPressed;
+        public static event EventHandler<ConsoleKey> KeyPressed;
         private bool run = true;
+
+        public static void Run()
+        {
+            Task t = new Task(() =>
+            {
+                var key = new Keyboard();
+                key.Listen();
+            });
+            t.Start();
+        }
 
         public async void Listen()
         {

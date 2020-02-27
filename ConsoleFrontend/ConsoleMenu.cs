@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading;
 
 namespace ConsoleFrontend
 {
     public class ConsoleMenu : IDrawable
     {
         public static event EventHandler<string> ItemSelected;
+        public event EventHandler<string> InstanceItemSelected;
 
         private IList<ConsoleMenuItem> items;
 
@@ -69,13 +71,14 @@ namespace ConsoleFrontend
             {
                 top           = value;
                 titlePart.Top = value;
-                menuPart.Top  = value;
+                menuPart.Top  = value + titlePart.MinHeight;
             }
         }
 
-        public LineBlock TitlePart => titlePart;
+        public IDrawable TitlePart => titlePart;
 
         public LineBlock MenuPart => menuPart;
+
 
         public int MinHeight
         {
@@ -83,9 +86,7 @@ namespace ConsoleFrontend
             set => menuPart.MinHeight = value;
         }
 
-        public ConsoleMenuItem SelectedItem => items[selectedIndex];
-
-        private LineBlock titlePart;
+        private TextBox titlePart;
         private LineBlock menuPart;
         private string title;
         private int left;
@@ -102,11 +103,7 @@ namespace ConsoleFrontend
             var selCol  = ConsoleColor.DarkCyan;
             var foreCol = ConsoleColor.Gray;
 
-            titlePart = new LineBlock
-            {
-                BackgroundColor = backCol, ForegroundColor = selCol, Left = Left, Top = Top,
-                MinHeight       = 1
-            };
+            titlePart = new TextBox(title, '|', '-', 10);
 
             menuPart = new LineBlock
             {
@@ -117,29 +114,34 @@ namespace ConsoleFrontend
 
         private void BuildTitlePart()
         {
-            titlePart.Clear();
-            titlePart.AddLine(FillLine('-'));
-            titlePart.AddLine(PadString(title));
-            titlePart.AddLine(FillLine('-'));
-            titlePart.AddLine(FillLine(' '));
+            titlePart.Top             = top;
+            titlePart.Left            = Left;
+            titlePart.Width           = Width;
+            titlePart.ForegroundColor = ForegroundColor;
+            titlePart.BackgroundColor = BackgroundColor;
         }
 
-        public void UpdateInput(ConsoleKey key)
+        public bool UpdateInput(ConsoleKey key)
         {
             if (key == ConsoleKey.UpArrow)
             {
                 Previous();
+                return true;
             }
 
             if (key == ConsoleKey.DownArrow)
             {
                 Next();
+                return true;
             }
 
             if (key == ConsoleKey.Enter)
             {
                 ItemSelected?.Invoke(this, items[selectedIndex].ID);
+                InstanceItemSelected?.Invoke(this, items[selectedIndex].ID);
             }
+
+            return false;
         }
 
         public void ClearItems()
@@ -176,7 +178,14 @@ namespace ConsoleFrontend
             BuildMenuPart();
             menuPart.Draw();
 
+            //border.Draw();
+
             Console.ResetColor();
+        }
+
+        public void ReducedDraw()
+        {
+            menuPart.SmallRedraw();
         }
 
         private void BuildMenuPart()
@@ -188,7 +197,6 @@ namespace ConsoleFrontend
             }
 
             menuPart.SelectedIndex = selectedIndex;
-            menuPart.Top           = Top + titlePart.Height;
         }
 
         private string PadString(string txt)

@@ -8,6 +8,13 @@ namespace ConsoleFrontend
         public int Left { get; set; }
         public ConsoleColor BackgroundColor { get; set; }
         public ConsoleColor ForegroundColor { get; set; }
+        public int Width { get; set; }
+        public int MinHeight { get; set; }
         public void Draw();
+
+        public void ReducedDraw()
+        {
+            Draw();
+        }
     }
 }

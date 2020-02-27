@@ -1,4 +1,5 @@
-﻿using DataModel;
+﻿using System;
+using DataModel;
 using Juke.Core;
 using NetCoreAudio;
 
@@ -10,6 +11,7 @@ namespace CoreAudioComponent
         public CorePlayerEngine()
         {
             player = new NetCoreAudio.Player();
+            player.PlaybackFinished += (sender, args) => SignalFinished();
         }
 
         public override void Play(Song song)

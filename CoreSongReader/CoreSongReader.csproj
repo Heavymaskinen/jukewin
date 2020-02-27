@@ -2,10 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>CoreSongIO</AssemblyName>
+    <RootNamespace>CoreSongIO</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\JukeControllerCore\JukeControllerCore.csproj" />
-    <ProjectReference Include="..\DataModelCore\DataModelCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="taglib" Version="2.1.0" />
   </ItemGroup>
 </Project>

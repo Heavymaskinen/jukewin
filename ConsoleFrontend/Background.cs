@@ -42,18 +42,12 @@ namespace ConsoleFrontend
             var count = 0;
             for (var y = 0; y < MinHeight; y++)
             {
-                SetPosition(count);
-                Console.WriteLine(padding);
+                Console.SetCursorPosition(Left, Top+count);
+                Console.Write(padding);
                 count++;
             }
         }
 
-        private void SetPosition(int offset)
-        {
-            Console.CursorLeft = Left;
-            Console.CursorTop  = Top + offset;
-        }
-        
         private void SetColors()
         {
             Console.ForegroundColor = ForegroundColor;

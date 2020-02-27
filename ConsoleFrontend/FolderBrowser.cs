@@ -8,6 +8,7 @@ namespace ConsoleFrontend
 {
     public class FolderBrowser
     {
+        public event EventHandler<string> FolderSelected;
         private DirectoryInfo currentDir;
 
         private string currentPath;
@@ -25,7 +26,6 @@ namespace ConsoleFrontend
         public string SelectedFolder { get; private set; }
 
         public bool Show { get; private set; }
-        public event EventHandler<string> FolderSelected;
 
         private void InitialiseMenu()
         {
@@ -49,7 +49,7 @@ namespace ConsoleFrontend
             }
         }
 
-        private void OnMenuItemSelected(object? sender, string e)
+        private void OnMenuItemSelected(object sender, string e)
         {
             if (e == "..")
             {
