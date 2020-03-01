@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JukeControllerCore\JukeControllerCore.csproj" />
+    <ProjectReference Include="..\MessageRouting\MessageRouting.csproj" />
   </ItemGroup>
 
   <ItemGroup>

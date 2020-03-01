@@ -1,11 +1,15 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using MessageRouting;
+using Microsoft.VisualBasic;
 
 namespace ConsoleFrontend.Overlays
 {
-    public class FolderBrowserOverlay : Overlay
+    public class FolderBrowserOverlay : Overlay, PagedMenu.IPopulator
     {
         public event EventHandler<string> FolderSelected;
 
@@ -14,6 +18,7 @@ namespace ConsoleFrontend.Overlays
         private ConsoleMenu menu;
         private Background background;
         private Label label;
+        private PagedMenu pagedMenu;
 
         private int startLine;
         private int endLine;
@@ -25,8 +30,8 @@ namespace ConsoleFrontend.Overlays
             label = new Label(currentPath)
             {
                 ForegroundColor = ConsoleColor.Green, BackgroundColor = ConsoleColor.Black,
-                Top  = Top,
-                Left = Left
+                Top             = Top,
+                Left            = Left
             };
             background = new Background
             {
@@ -46,21 +51,45 @@ namespace ConsoleFrontend.Overlays
                 Top             = Top + 10,
                 Left            = Left
             };
-            menu.InstanceItemSelected += OnMenuItemSelected;
+
+            pagedMenu = new PagedMenu("Select a folder", GetSubDirsAsMenuItems())
+            {
+                BackgroundColor = ConsoleColor.DarkGray,
+                ForegroundColor = ConsoleColor.DarkGreen,
+                Top             = Top + 10,
+                Left            = Left,
+                ItemPopulator   = this
+            };
+
+            ItemSelected(currentPath);
 
             ForegroundColor = ConsoleColor.Green;
             BackgroundColor = ConsoleColor.DarkCyan;
-            startLine       = 0;
-            endLine         = height - menu.Top;
 
             AddComponent(background);
-            AddComponent(menu);
+            AddComponent(pagedMenu);
             AddComponent(label);
-            InitialiseMenu();
         }
 
-        private void OnMenuItemSelected(object sender, string e)
+
+        protected override void CustomInputHandle(ConsoleKey key)
         {
+            if (key == ConsoleKey.Spacebar)
+            {
+                SelectedFolder = currentPath;
+                FolderSelected?.Invoke(this, SelectedFolder);
+                Close();
+            }
+            else
+            {
+                pagedMenu.UpdateInput(key);
+                Invalidate(false);
+            }
+        }
+
+        public void ItemSelected(string e)
+        {
+            GuiController.SLog("Item selected()");
             if (e == "..")
             {
                 currentDir  = currentDir.Parent;
@@ -73,52 +102,40 @@ namespace ConsoleFrontend.Overlays
             }
 
             label.SetText(currentPath);
-            GuiController.LogList.Add("Path: " + currentPath);
-
-            InitialiseMenu();
-        }
-
-        private void InitialiseMenu()
-        {
-            menu.ClearItems();
-            menu.Left = Left;
-            menu.Top  = Top;
-
-            if (currentDir.Parent != null)
-            {
-                menu.AddItem(new ConsoleMenuItem() {ID = "..", Label = ".."});
-            }
 
             try
             {
-                var items = new Collection<string>(Directory.EnumerateDirectories(currentDir.FullName).ToArray());
-                for (var i = startLine; i < items.Count && i < endLine; i++)
-                {
-                    var s = items[i];
-                    menu.AddItem(new ConsoleMenuItem {ID = s, Label = new DirectoryInfo(s).Name});
-                }
-
-                background.AdjustHeight(items.Count);
+                var items = GetSubDirsAsMenuItems();
+                pagedMenu.SetItems(items);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("This is bad: " + e.Message);
+                Messenger.Post("This is bad: " + ex.Message);
             }
         }
 
-        protected override void CustomInputHandle(ConsoleKey key)
+        private Collection<ConsoleMenuItem> GetSubDirsAsMenuItems()
         {
-            if (key == ConsoleKey.Spacebar)
+            GuiController.SLog("Fetching for "+currentDir.FullName);
+            var dirs  = new Collection<string>(Directory.EnumerateDirectories(currentDir.FullName).ToArray());
+            GuiController.SLog("Found "+dirs.Count);
+            var items = new Collection<ConsoleMenuItem>();
+            foreach (var s in dirs)
             {
-                SelectedFolder = currentPath;
-                FolderSelected?.Invoke(this, SelectedFolder);
-                Close();
+                items.Add(new ConsoleMenuItem {ID = s, Label = new DirectoryInfo(s).Name});
             }
-            else
+
+            return items;
+        }
+
+        public IList<ConsoleMenuItem> GetPreItems()
+        {
+            if (currentDir.Parent != null)
             {
-                menu.UpdateInput(key);
-                Invalidate(false);
+                return new Collection<ConsoleMenuItem> {new ConsoleMenuItem() {ID = "..", Label = ".."}};
             }
+
+            return new Collection<ConsoleMenuItem>();
         }
     }
 }

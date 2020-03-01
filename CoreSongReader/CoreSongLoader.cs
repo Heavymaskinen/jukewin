@@ -25,7 +25,6 @@ namespace CoreSongIO
             {
                 var tag = TagLib.File.Create(file.FullName).Tag;
                 var song = new Song(tag.FirstAlbumArtist, tag.Album, tag.Title, tag.Track.ToString(), file.FullName);
-                Console.WriteLine("Added "+song.Artist+" "+ song.TrackNo+" "+song.Name+" - "+song.Album);
                 files.Add(song);
             }
 

@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Serialization;
 using DataModel;
 using Juke.IO;
+using MessageRouting;
 
 
 namespace CoreSongIO
@@ -20,36 +23,60 @@ namespace CoreSongIO
         
         public IList<Song> LoadSongs()
         {
-            var file = File.Open(filename, FileMode.Open);
-            var serializer = new XmlSerializer(typeof(List<PersistedSong>));
-            var list = (List<PersistedSong>) serializer.Deserialize(file);
-            var songs = list.Select(s => s.ToSong()).ToList();
-            return songs;
+            if (!File.Exists(filename))
+            {
+                Messenger.Post(filename+" doesn't exist!");
+                return new Collection<Song>();
+            }
+
+            var stream = new StreamReader(filename);
+
+            try
+            {
+                var serializer = new XmlSerializer(typeof(List<PersistedSong>));
+                var list       = (List<PersistedSong>) serializer.Deserialize(stream);
+                var songs      = list.Select(s => s.ToSong()).ToList();
+                Messenger.Post(songs.Count + " songs loaded");
+                return songs;
+            }
+            catch (Exception e)
+            {
+                Messenger.Post("Error occured: "+e.Message);
+            }
+            finally
+            {
+                stream.Close();
+                stream.Dispose();
+            }
+            
+            return new Collection<Song>();
+            ;
         }
 
         public void Write(IList<Song> songs)
         {
+            Messenger.Post("Writing "+songs.Count+" songs");
             var persisted = new List<PersistedSong>();
             foreach (var song in songs)
             {
                 persisted.Add(new PersistedSong(song));
             }
 
-
-            var file = File.Open(filename, FileMode.OpenOrCreate);
+            var stream = new StreamWriter(filename,false);
             try
             {
                 var serializer = new XmlSerializer(typeof(List<PersistedSong>));
-                serializer.Serialize(file, persisted);
+                serializer.Serialize(stream, persisted);
+                stream.Flush();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                Messenger.Post("Error occured! "+e.Message);
             }
             finally
             {
-                file.Close();
+                stream.Close();
+                stream.Dispose();
             }
         }
     }

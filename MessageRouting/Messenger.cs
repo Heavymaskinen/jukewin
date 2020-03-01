@@ -1,7 +1,6 @@
 using System;
-using System.Runtime.CompilerServices;
 
-namespace ConsoleFrontend
+namespace MessageRouting
 {
     public class Messenger
     {

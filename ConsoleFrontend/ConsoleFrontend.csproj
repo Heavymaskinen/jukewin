@@ -9,6 +9,7 @@
         <ProjectReference Include="..\CoreAudioComponent\CoreAudioComponent.csproj" />
         <ProjectReference Include="..\CoreSongReader\CoreSongReader.csproj" />
         <ProjectReference Include="..\JukeControllerCore\JukeControllerCore.csproj" />
+        <ProjectReference Include="..\MessageRouting\MessageRouting.csproj" />
     </ItemGroup>
 
 </Project>

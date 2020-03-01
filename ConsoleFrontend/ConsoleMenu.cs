@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Text;
 using System.Threading;
+using MessageRouting;
+using TagLib.Riff;
 
 namespace ConsoleFrontend
 {
@@ -11,7 +15,7 @@ namespace ConsoleFrontend
         public static event EventHandler<string> ItemSelected;
         public event EventHandler<string> InstanceItemSelected;
 
-        private IList<ConsoleMenuItem> items;
+        private List<ConsoleMenuItem> items;
 
         private int selectedIndex;
 
@@ -86,6 +90,8 @@ namespace ConsoleFrontend
             set => menuPart.MinHeight = value;
         }
 
+        public int ItemCount => items.Count;
+
         private TextBox titlePart;
         private LineBlock menuPart;
         private string title;
@@ -147,7 +153,7 @@ namespace ConsoleFrontend
         public void ClearItems()
         {
             items.Clear();
-            menuPart.SelectedIndex = -1;
+            menuPart.SelectedIndex = 0;
             selectedIndex          = 0;
         }
 
@@ -178,8 +184,6 @@ namespace ConsoleFrontend
             BuildMenuPart();
             menuPart.Draw();
 
-            //border.Draw();
-
             Console.ResetColor();
         }
 
@@ -199,34 +203,15 @@ namespace ConsoleFrontend
             menuPart.SelectedIndex = selectedIndex;
         }
 
-        private string PadString(string txt)
-        {
-            var str = new StringBuilder(txt);
-            for (var i = txt.Length; i < Width; i++)
-            {
-                str.Append(" ");
-            }
-
-            return str.ToString();
-        }
-
-        private string FillLine(char c)
-        {
-            var str = new StringBuilder();
-            for (var i = 0; i < Width; i++)
-            {
-                str.Append(c);
-            }
-
-            return str.ToString();
-        }
-
         public void AddItem(ConsoleMenuItem item)
         {
             items.Add(item);
+            items.Sort();
+            
             if (selectedIndex < 0)
             {
-                selectedIndex = 0;
+                menuPart.SelectedIndex = 0;
+                selectedIndex          = 0;
             }
         }
     }

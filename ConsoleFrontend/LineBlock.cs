@@ -41,8 +41,6 @@ namespace ConsoleFrontend
 
         public int MinHeight { get; set; }
 
-        public int Height => lines.Count;
-
         public int SelectedIndex { get; set; }
 
         public Background Background => background;
@@ -88,7 +86,7 @@ namespace ConsoleFrontend
             SetStandardColors();
             background.Top  = Top;
             background.Left = Left;
-            background.AdjustHeight(lines.Count);
+            background.AdjustHeight(MinHeight);
             background.Draw();
         }
 

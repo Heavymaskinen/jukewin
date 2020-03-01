@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using MessageRouting;
 
 namespace ConsoleFrontend
 {
@@ -24,7 +25,6 @@ namespace ConsoleFrontend
             var screen = (Screen) sender;
             if (e)
             {
-                GuiController.LogList.Add("Full render " + screen + ", " + screen.Width + " , " + screen.MinHeight);
                 Console.Clear();
                 screen.Redraw();
                 if (!screen.HasOverlay)
@@ -36,7 +36,6 @@ namespace ConsoleFrontend
             }
             else
             {
-                GuiController.LogList.Add("Small render " + screen + ", " + screen.Width + " , " + screen.MinHeight);
                 screen.Draw();
             }
         }

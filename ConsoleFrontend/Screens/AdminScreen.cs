@@ -3,6 +3,7 @@ using System.IO;
 using ConsoleFrontend.Overlays;
 using CoreSongIO;
 using Juke.Control;
+using MessageRouting;
 
 namespace ConsoleFrontend.Screens
 {
@@ -11,7 +12,7 @@ namespace ConsoleFrontend.Screens
         private Background background;
         private ConsoleMenu menu;
         private IJukeControl jukeControl;
-        private string selectedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        private string selectedFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
         public AdminScreen(IJukeControl jukeControl, int width, int height)
         {

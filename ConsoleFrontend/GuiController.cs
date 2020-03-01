@@ -15,6 +15,12 @@ namespace ConsoleFrontend
     public class GuiController
     {
         public static List<string> LogList = new List<string>();
+
+        public static void SLog(string log)
+        {
+            LogList.Add(log);
+        }
+
         private Keyboard keyboard;
 
         private IList<LineBlock> drawables;
@@ -65,7 +71,6 @@ namespace ConsoleFrontend
 
         private void WindowOnWindowResized(object sender, EventArgs e)
         {
-            Log("It's resized!");
             Console.Clear();
             activeScreen.Resized(Console.WindowWidth, Console.WindowHeight);
         }
@@ -100,34 +105,13 @@ namespace ConsoleFrontend
             }
         }
 
-        private void Render(bool redraw)
-        {
-            rendering = true;
-            Log("Render start, " + redraw);
-            if (redraw)
-            {
-                Console.Clear();
-                activeScreen.Redraw();
-            }
-            else
-            {
-                activeScreen.Draw();
-            }
-
-            Log("Render finished");
-            rendering = false;
-
-            if (!rendering && renderQueue.Count > 0)
-            {
-                Log("*** Do the queue " + renderQueue.Count);
-                renderQueue.Dequeue();
-                Render(renderQueue.Dequeue());
-            }
-        }
-
         private void OnKeyPressed(object sender, ConsoleKey key)
         {
-            //Log("Key pressed: " + key.ToString());
+            if (key == ConsoleKey.R)
+            {
+                activeScreen.Invalidate(true);
+            }
+
             activeScreen.UpdateInput(key);
         }
     }

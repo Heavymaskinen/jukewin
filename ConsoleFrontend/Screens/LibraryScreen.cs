@@ -3,6 +3,7 @@ using System.IO;
 using ConsoleFrontend.Overlays;
 using CoreSongIO;
 using Juke.Control;
+using MessageRouting;
 using TagLib;
 
 namespace ConsoleFrontend.Screens
@@ -40,21 +41,36 @@ namespace ConsoleFrontend.Screens
                     overlay.Open();
                     break;
                 case "Save":
-
                     var prompt = new PromptOverlay(this, "Choose filename");
                     prompt.TextEntered += SaveFileSelected; 
                     prompt.Open();
                     break;
+                case "Load":
+                    var loadPrompt = new PromptOverlay(this, "Choose filename");
+                    loadPrompt.TextEntered +=  LoadPromptOnTextEntered;
+                    loadPrompt.Open();
+                    break;
             }
+        }
+
+        private void LoadPromptOnTextEntered(object? sender, string filename)
+        {
+            var musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var totalName   = Path.Combine(musicFolder, filename + ".xml");
+            var io          = new LibraryIO(totalName);
+            jukeControl.LoadHandler.LoadSongs(io);
+            Invalidate(true);
         }
 
         private void SaveFileSelected(object? sender, string filename)
         {
-            var musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-            var totalName = musicFolder + "//" + filename + ".xml";
-            var io = new LibraryIO(filename);
+            var musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            
+            var totalName = Path.Combine(musicFolder, filename + ".xml");
+            var io = new LibraryIO(totalName);
             jukeControl.SaveHandler.SaveSongs(io);
             Messenger.Post("Library saved to "+totalName);
+            Invalidate(true);
         }
         
 

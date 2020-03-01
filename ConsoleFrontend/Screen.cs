@@ -55,7 +55,6 @@ namespace ConsoleFrontend
             Console.Clear();
             if (dialog != null)
             {
-                GuiController.LogList.Add("Full draw dialog "+dialog);
                 dialog.Draw();
             }
             else
@@ -70,7 +69,6 @@ namespace ConsoleFrontend
 
             if (dialog != null)
             {
-                GuiController.LogList.Add("Small draw dialog "+dialog);
                 dialog.Draw();
             }
             else
@@ -92,12 +90,10 @@ namespace ConsoleFrontend
         {
             if (dialog != null)
             {
-                GuiController.LogList.Add("Dialog key input: "+key+", "+dialog);
                 dialog.UpdateInput(key);
             }
             else
             {
-                GuiController.LogList.Add(" Key input: "+key+", "+GetType());
                 CustomUpdateInput(key);
             }
         }
@@ -106,7 +102,7 @@ namespace ConsoleFrontend
 
         private void OverlayOnOpened(object sender, EventArgs e)
         {
-            GuiController.LogList.Add("Dialog opened, "+sender);
+            GuiController.SLog("Dialog opened, "+sender);
             dialog = (Overlay) sender;
             HasOverlay = true;
             Invalidate(true);
@@ -114,7 +110,7 @@ namespace ConsoleFrontend
 
         private void OverlayOnClosed(object sender, EventArgs e)
         {
-            GuiController.LogList.Add("Dialog closed, "+sender);
+            GuiController.SLog("Dialog closed, "+sender);
             dialog = null;
             HasOverlay = false;
             Invalidate(true);
