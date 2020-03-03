@@ -45,10 +45,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataModel\DataModel.csproj">
-      <Project>{F3727A39-B6CC-4A8F-8168-6AD2AECCAD7E}</Project>
-      <Name>DataModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\JukeController\JukeController.csproj">
       <Project>{d4bcd500-55a6-4e74-9943-3bdfe830dc68}</Project>
       <Name>JukeController</Name>

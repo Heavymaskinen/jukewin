@@ -1,13 +1,6 @@
-﻿using DataModel;
-using Juke.Core;
-using Juke.IO;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Juke.Control.Tests
 {
@@ -21,7 +14,7 @@ namespace Juke.Control.Tests
 
         public EventListener()
         {
-            AsyncSongLoader.LoadInitiated += SongLoader_LoadInitiated;
+            AsyncongLoader.LoadInitiated += SongLoader_LoadInitiated;
             AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted1;
             AsyncSongLoader.LoadProgress += AsyncSongLoader_LoadProgress;
             Player.SongPlayed += Instance_SongPlayed;

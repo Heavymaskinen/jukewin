@@ -56,16 +56,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataModel\DataModel.csproj">
-      <Project>{f3727a39-b6cc-4a8f-8168-6ad2aeccad7e}</Project>
-      <Name>DataModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\JukeController\JukeController.csproj">
-      <Project>{d4bcd500-55a6-4e74-9943-3bdfe830dc68}</Project>
-      <Name>JukeController</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
