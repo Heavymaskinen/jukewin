@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Juke</RootNamespace>
     <AssemblyName>JukeController</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -48,6 +48,8 @@
     <Compile Include="Core\SongQueue.cs" />
     <Compile Include="Core\Library.cs" />
     <Compile Include="Core\LibraryBrowser.cs" />
+    <Compile Include="Datamodel\Song.cs" />
+    <Compile Include="Datamodel\SongUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\AsyncSongLoader.cs" />
     <Compile Include="IO\LoadHandler.cs" />
@@ -57,16 +59,8 @@
     <Compile Include="IO\SongLoader.cs" />
     <Compile Include="IO\SongWriter.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataModel\DataModel.csproj">
-      <Project>{f3727a39-b6cc-4a8f-8168-6ad2aeccad7e}</Project>
-      <Name>DataModel</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="IO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
