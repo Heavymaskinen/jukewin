@@ -161,7 +161,7 @@ namespace Juke.UI.Tests
 
         private JukeViewModel CreateViewModel(FakeViewControl viewControl)
         {
-            return new JukeViewModel(viewControl);
+            return new JukeViewModel(viewControl, new FakePlayerEngine());
         }
 
         private List<Song> CreateSongs(int artistMax, int albumMax, int songmax)
