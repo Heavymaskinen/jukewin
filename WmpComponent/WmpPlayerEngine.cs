@@ -1,9 +1,4 @@
 ﻿using Juke.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataModel;
 using WMPLib;
 
@@ -28,6 +23,11 @@ namespace Juke.External.Wmp
                 player.URL = song.FilePath;
                 player.controls.play();
             }
+        }
+
+        public override void Dispose()
+        {
+            player.close();
         }
 
         private void Player_PlayStateChange(int NewState)

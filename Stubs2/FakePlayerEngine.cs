@@ -25,5 +25,10 @@ namespace Juke.Control.Tests
         {
             SignalFinished();
         }
+
+        public override void Dispose()
+        {
+            
+        }
     }
 }

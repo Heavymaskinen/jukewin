@@ -1,24 +1,13 @@
 ﻿using Juke.External.Wmp.IO;
-using Juke.UI;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using DataModel;
-using Juke.External.Lookup;
 using System.IO;
+using Juke.External.Wmp;
+using Juke.UI.Command;
+using System;
 
 namespace Juke.UI.Wpf
 {
@@ -30,7 +19,7 @@ namespace Juke.UI.Wpf
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new JukeViewModel(this);
+            DataContext = new JukeViewModel(this, new WmpPlayerEngine());
             LoaderFactory.SetLoaderInstance(new AsyncFileFinder(""));
             (DataContext as JukeViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
@@ -50,23 +39,40 @@ namespace Juke.UI.Wpf
         {
             if (e.PropertyName == "Albums")
             {
-                albumBox.Items.Refresh();
-                albumBox.Items.SortDescriptions.Add(new SortDescription("", ListSortDirection.Ascending));
+                Dispatcher.Invoke(() => UpdateAlbums());
             }
             else if (e.PropertyName == "Songs")
             {
-                songBox.Items.SortDescriptions.Add(new SortDescription("", ListSortDirection.Ascending));
+                Dispatcher.Invoke(() => UpdateSongs());
             }
             else if (e.PropertyName == "Artists")
             {
-                artistBox.Items.SortDescriptions.Add(new SortDescription("", ListSortDirection.Ascending));
+                Dispatcher.Invoke(() => UpdateArtists());
             }
+        }
+
+        private void UpdateArtists()
+        {
+            //artistBox.Items.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            artistBox.Items.Refresh();
+        }
+
+        private void UpdateSongs()
+        {
+            //songBox.Items.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            songBox.Items.Refresh();
+        }
+
+        private void UpdateAlbums()
+        {
+            //albumBox.Items.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            albumBox.Items.Refresh();
         }
 
         public string PromptPath()
         {
             var dlg = new FolderBrowserDialog();
-            if (dlg.ShowDialog()==System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 return dlg.SelectedPath;
             }
@@ -74,9 +80,56 @@ namespace Juke.UI.Wpf
             return null;
         }
 
-        public SongUpdate PromptSongData()
+        public SongUpdate PromptSongData(JukeViewModel.InfoType infoType)
         {
-            return new SongUpdate(null);
+            Song song;
+
+            if (songBox.SelectedItem != null)
+            {
+                song = songBox.SelectedItem as Song;
+            }
+            else if (artistBox.SelectedItem != null)
+            {
+                if (albumBox.SelectedItem != null)
+                {
+                    song = new Song(artistBox.SelectedItem.ToString(), albumBox.SelectedItem.ToString(), "");
+                }
+                else
+                {
+                    song = new Song(artistBox.SelectedItem.ToString(), "", "");
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            if (infoType == JukeViewModel.InfoType.Song)
+            {
+                if (song.Album == "<unknown>" || song.Artist == "<unknown>")
+                {
+                    var tagFactory = new WmpTagReaderFactory();
+                    var tag = tagFactory.Create(song.FilePath);
+                    song = new Song(tag.Artist, tag.Album, tag.Title, song.TrackNo, song.FilePath);
+                }
+            }
+            
+
+            var dialog = new InfoWindow(new SongUpdate(song), infoType);
+
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                return dialog.SongData;
+            }
+
+            return null;
         }
+
+        public void CommandCompleted(JukeCommand command)
+        {
+
+        }
+
     }
 }

@@ -71,6 +71,8 @@ namespace Juke.UI.Tests
                 });
             viewModel.SelectedArtist = "artist1";
             viewModel.SelectedArtist = null;
+            AreEqual("album1", viewModel.Albums[0]);
+            AreEqual("album2", viewModel.Albums[1]);
         }
 
         [TestMethod]
@@ -161,7 +163,7 @@ namespace Juke.UI.Tests
 
         private JukeViewModel CreateViewModel(FakeViewControl viewControl)
         {
-            return new JukeViewModel(viewControl);
+            return new JukeViewModel(viewControl, new FakePlayerEngine());
         }
 
         private List<Song> CreateSongs(int artistMax, int albumMax, int songmax)

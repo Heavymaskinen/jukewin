@@ -22,11 +22,14 @@ namespace Juke.External.Xml
 
         public void Write(IList<Song> songs)
         {
+            Console.WriteLine("Writing: " + songs.Count+" to "+filename);
             var xmlWriterSettings = new XmlWriterSettings();
             using (XmlWriter writer = XmlWriter.Create(filename))
             {
                 var persistableSongs = new SongConverter().ConvertSongs(songs);
                 serializerInstance.Serialize(writer, persistableSongs.ToArray());
+                writer.Flush();
+                writer.Close();
             }
         }
     }

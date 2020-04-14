@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataModel;
+using Juke.UI.Command;
 
 namespace Juke.UI.Tests
 {
@@ -22,9 +23,14 @@ namespace Juke.UI.Tests
             return path;
         }
 
-        public SongUpdate PromptSongData()
+        public SongUpdate PromptSongData(JukeViewModel.InfoType info)
         {
             return SongDataToReturn;
+        }
+
+        public void CommandCompleted(JukeCommand command)
+        {
+            throw new NotImplementedException();
         }
 
         public SongUpdate SongDataToReturn { get; set; }

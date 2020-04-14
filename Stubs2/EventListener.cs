@@ -47,12 +47,12 @@ namespace Juke.Control.Tests
             LoadCompleted = true;
         }
 
-        private void AsyncSongLoader_LoadProgress(object sender, string e)
+        private void AsyncSongLoader_LoadProgress(object sender, int e)
         {
-            ProgressNoted = e;
+            ProgressNoted = e.ToString();
         }
         
-        private void SongLoader_LoadInitiated(object sender, EventArgs e)
+        private void SongLoader_LoadInitiated(object sender, int e)
         {
             LoadInitiated = true;
         }

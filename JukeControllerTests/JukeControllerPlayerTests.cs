@@ -72,7 +72,7 @@ namespace Juke.Control.Tests
         }
 
         [TestMethod()]
-        public void SongFinished_EmptyQueue_PlayNothing()
+        public void SongFinished_EmptyQueue_EmptyLibrary_PlayNothing()
         {
             var engine = new FakePlayerEngine();
             control.Player.RegisterPlayerEngine(engine);

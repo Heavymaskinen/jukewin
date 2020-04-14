@@ -21,7 +21,12 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            SongUpdate update = view.PromptSongData();
+            SongUpdate update = view.PromptSongData(JukeViewModel.InfoType.Song);
+            if (update != null)
+            {
+                controller.LoadHandler.UpdateSong(update);
+                model.SelectedAlbum = update.NewAlbum;
+            }
         }
     }
 }

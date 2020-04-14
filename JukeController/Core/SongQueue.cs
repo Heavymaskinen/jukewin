@@ -10,7 +10,8 @@ namespace Juke.Core
     public class SongQueue
     {
         private Queue<Song> queue;
-
+        private LibraryBrowser browser;
+        private Randomizer randomizer;
         public Song Next
         {
             get
@@ -24,6 +25,8 @@ namespace Juke.Core
             }
         }
 
+        public Song Random => randomizer.Next();
+
         public List<Song> Songs
         {
             get { return queue.ToList(); }
@@ -34,9 +37,11 @@ namespace Juke.Core
             get { return queue.Count; }
         }
 
-        public SongQueue()
+        public SongQueue(LibraryBrowser browser)
         {
             queue = new Queue<Song>();
+            this.browser = browser;
+            randomizer = new Randomizer(browser);
         }
 
         public void Enqueue(Song song)
@@ -52,10 +57,17 @@ namespace Juke.Core
         {
             if (queue.Count >0)
             {
-                return queue.Dequeue();
+                var song = queue.Dequeue();
+                randomizer.Add(song);
+                return song;
             }
 
-            return null;
+            if (browser.Songs.Count <= 1)
+            {
+                return null;
+            }
+
+            return randomizer.Next();
         }
 
         internal void Clear()

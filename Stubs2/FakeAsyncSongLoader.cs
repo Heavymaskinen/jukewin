@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataModel;
+using Juke.Core;
 
 namespace Juke.Control.Tests
 {
@@ -16,7 +17,7 @@ namespace Juke.Control.Tests
         {
         }
 
-        public FakeAsyncSongLoader(IList<Song> list):base()
+        public FakeAsyncSongLoader(IList<Song> list):base(new FakeTagReaderFactory())
         {
             this.list = list;
         }
@@ -26,14 +27,22 @@ namespace Juke.Control.Tests
             NotifyCompleted(list);
         }
 
-        public void SignalProgress(string message)
+        public void SignalProgress()
         {
-            NotifyProgress(message);
+            NotifyProgress(1);
         }
 
         protected override void InvokeLoad()
         {
-            
+            NotifyLoadInitiated(10);
+        }
+    }
+
+    class FakeTagReaderFactory : TagReaderFactory
+    {
+        public TagReader Create(string filename)
+        {
+            return null;
         }
     }
 }

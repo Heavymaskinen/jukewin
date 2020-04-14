@@ -55,11 +55,18 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncJukeCommand.cs" />
+    <Compile Include="Command\AsyncLoadSongsCommandcs.cs" />
+    <Compile Include="Command\DeleteAlbumCommand.cs" />
+    <Compile Include="Command\DeleteSongCommand.cs" />
+    <Compile Include="Command\EditAlbumCommand.cs" />
     <Compile Include="Command\EditSongCommand.cs" />
     <Compile Include="Command\JukeCommand.cs" />
     <Compile Include="Command\LoadLibraryCommand.cs" />
     <Compile Include="Command\LoadSongsCommand.cs" />
+    <Compile Include="Command\PlayAlbumCommand.cs" />
     <Compile Include="Command\PlaySongCommand.cs" />
+    <Compile Include="Command\RenameArtistCommand.cs" />
     <Compile Include="Command\SaveLibraryCommand.cs" />
     <Compile Include="Command\StopSongCommand.cs" />
     <Compile Include="JukeViewModel.cs" />

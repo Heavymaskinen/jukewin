@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace Juke.UI.Command
 {
-    abstract class JukeCommand : ICommand
+    public abstract class JukeCommand : ICommand
     {
         protected JukeController controller;
         protected ViewControl view;
@@ -30,10 +30,10 @@ namespace Juke.UI.Command
             try
             {
                 ControlledExecute(parameter);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Console.WriteLine(e.InnerException.Message);
                 Console.WriteLine(e.ToString());
             }
         }

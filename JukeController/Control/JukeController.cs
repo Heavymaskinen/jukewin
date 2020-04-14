@@ -1,6 +1,7 @@
 ﻿using DataModel;
 using Juke.Core;
 using Juke.IO;
+using System;
 using System.Collections.Generic;
 
 namespace Juke.Control
@@ -10,8 +11,10 @@ namespace Juke.Control
         private static JukeController instance;
         public static JukeController Instance
         {
-            get {
-                if (instance == null) {
+            get
+            {
+                if (instance == null)
+                {
                     instance = new JukeController();
                 }
 
@@ -31,16 +34,21 @@ namespace Juke.Control
         {
             library = new Library();
             catalogue = new SongCatalogue(library);
-            AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
-            Player = new Player();
+            //AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
+            Player = new Player(library);
         }
-        
+
+        public void Dispose()
+        {
+            Player.Dispose();
+        }
+
         public void ClearLibrary()
         {
             library.Clear();
             Player.Queue.Clear();
         }
-        
+
         public LibraryBrowser Browser
         {
             get { return library; }
@@ -58,11 +66,6 @@ namespace Juke.Control
             library.UpdateSong(edit);
         }
 
-        public void DeleteSong(Song song)
-        {
-            library.DeleteSong(song);
-        }
-
         public void SaveLibrary(SongWriter writer)
         {
             writer.Write(library.Songs);
@@ -72,13 +75,19 @@ namespace Juke.Control
         {
             LoadHandler.LoadSongs(loader);
         }
-        
+        public void LoadLibrarySync(SongLoader loader)
+        {
+            LoadHandler.LoadSongsSync(loader);
+        }
+
+
         private void AsyncSongLoader_LoadCompleted(object sender, IList<Song> loadedSongs)
         {
             foreach (var song in loadedSongs)
             {
                 library.AddSong(song);
             }
+
         }
 
     }

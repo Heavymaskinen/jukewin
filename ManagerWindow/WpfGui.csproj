@@ -60,18 +60,59 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="InfoWindow.xaml.cs">
+      <DependentUpon>InfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IntroWindow.xaml.cs">
+      <DependentUpon>IntroWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SearchLogic.cs" />
+    <Compile Include="SearchLogics\AlbumSearchLogic.cs" />
+    <Compile Include="SearchLogics\ArtistSearchLogic.cs" />
+    <Compile Include="SearchLogics\SearchLogicFactory.cs" />
+    <Compile Include="SearchLogics\SongSearchLogic.cs" />
+    <Compile Include="SearchSelectorWindow.xaml.cs">
+      <DependentUpon>SearchSelectorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SineDataGenerator.cs" />
+    <Page Include="3dButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IntroWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JukeboxWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ManagerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="3dButton.xaml.cs">
+      <DependentUpon>3dButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JukeboxWindow.xaml.cs">
+      <DependentUpon>JukeboxWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ManagerWindow.xaml.cs">
       <DependentUpon>ManagerWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SearchSelectorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -120,6 +161,10 @@
     <ProjectReference Include="..\WmpComponent\WmpComponent.csproj">
       <Project>{3DCAD1F3-800D-4217-8C28-DBE3F7FF755D}</Project>
       <Name>WmpComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XmlLibrary\XmlLibrary.csproj">
+      <Project>{DF5A5D42-389C-4FFD-94F3-BFCB46553B82}</Project>
+      <Name>XmlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

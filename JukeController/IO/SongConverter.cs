@@ -13,7 +13,13 @@ namespace Juke.IO
 
         public IList<Song> ConvertPersistedSongs(IList<PersistedSong> songs)
         {
-            return songs.Select(song => song.ToSong()).ToList();
+            var converted = new List<Song>();
+            foreach (var ps in songs)
+            {
+                converted.Add(ps.ToSong());
+            }
+
+            return converted;
         }
     }
 }

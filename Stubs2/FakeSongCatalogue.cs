@@ -35,7 +35,7 @@ namespace Juke.Control.Tests
           
         }
 
-        public IList<Song> LoadSongs()
+        public override IList<Song> LoadSongs()
         {
             return songsToLoad;
         }

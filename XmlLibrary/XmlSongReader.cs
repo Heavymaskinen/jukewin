@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DataModel;
 using System.Xml;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace Juke.External.Xml
 {
@@ -20,9 +21,20 @@ namespace Juke.External.Xml
             this.filename = filename;
         }
 
-        public IList<Song> LoadSongs()
+        public override IList<Song> LoadSongs()
         {
+            return LoadFromXml();
+        }
+
+        private IList<Song> LoadFromXml()
+        {
+            if (!File.Exists(filename))
+            {
+                throw new Exception(filename + " not found!");
+            }
+
             List<PersistedSong> songs = null;
+
             using (XmlReader reader = XmlReader.Create(filename))
             {
                 songs = new List<PersistedSong>((PersistedSong[])serializerInstance.Deserialize(reader));

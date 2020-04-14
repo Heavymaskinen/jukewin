@@ -42,12 +42,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\JukeController.cs" />
+    <Compile Include="Control\Messenger.cs" />
     <Compile Include="Core\Player.cs" />
     <Compile Include="Core\PlayerEngine.cs" />
     <Compile Include="Core\PlayerEngineFactory.cs" />
+    <Compile Include="Core\Randomizer.cs" />
     <Compile Include="Core\SongQueue.cs" />
     <Compile Include="Core\Library.cs" />
     <Compile Include="Core\LibraryBrowser.cs" />
+    <Compile Include="Core\TagReader.cs" />
+    <Compile Include="Core\TagReaderFactory.cs" />
     <Compile Include="Datamodel\Song.cs" />
     <Compile Include="Datamodel\SongUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

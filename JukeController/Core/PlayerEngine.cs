@@ -19,5 +19,7 @@ namespace Juke.Core
         }
 
         public abstract void Stop();
+
+        public abstract void Dispose();
     }
 }

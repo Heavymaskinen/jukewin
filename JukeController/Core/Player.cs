@@ -16,9 +16,9 @@ namespace Juke.Core
         public SongQueue Queue { get; private set; }
         
 
-        public Player()
+        public Player(LibraryBrowser browser)
         {
-            Queue = new SongQueue();
+            Queue = new SongQueue(browser);
         }
 
         public Player(PlayerEngine engine)
@@ -49,6 +49,11 @@ namespace Juke.Core
             SongPlayed?.Invoke(this, song);
         }
 
+        internal void Dispose()
+        {
+            engine?.Dispose();
+        }
+
         private void Engine_SongFinished(object sender, EventArgs e)
         {
             NowPlaying = null;
@@ -58,6 +63,11 @@ namespace Juke.Core
         public void Stop()
         {
             engine.Stop();
+        }
+
+        public void PlayRandom()
+        {
+            PlaySong(Queue.Random);
         }
     }
 }

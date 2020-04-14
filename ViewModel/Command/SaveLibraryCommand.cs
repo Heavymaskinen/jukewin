@@ -1,14 +1,10 @@
 ﻿using Juke.External.Xml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Juke.Control;
+using System.Threading.Tasks;
 
 namespace Juke.UI.Command
 {
-    class SaveLibraryCommand : JukeCommand
+    public class SaveLibraryCommand : JukeCommand
     {
         public SaveLibraryCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
         {
@@ -21,7 +17,12 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            controller.SaveLibrary(new XmlSongWriter("library.xml"));
+            Task.Run(() =>
+            {
+                controller.SaveLibrary(new XmlSongWriter("library.xml"));
+                view.CommandCompleted(this);
+            });
+            
         }
     }
 }
