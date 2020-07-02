@@ -10,17 +10,17 @@ using DataModel;
 
 namespace Juke.Control.Tests
 {
-    public class FakeSongCatalogue : SongLoader, SongWriter
+    public class FakeSongIO : SongLoader, SongWriter
     {
         private IList<Song> songsToLoad;
 
         private IList<Song> writtenSongs;
 
-        public FakeSongCatalogue():this(new List<Song>())
+        public FakeSongIO():this(new List<Song>())
         {
         }
 
-        public FakeSongCatalogue(IList<Song> songsToLoad)
+        public FakeSongIO(IList<Song> songsToLoad)
         {
             this.songsToLoad = songsToLoad;
             writtenSongs = new List<Song>();

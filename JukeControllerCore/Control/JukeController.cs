@@ -35,7 +35,6 @@ namespace Juke.Control
         {
             library = new Library();
             catalogue = new SongCatalogue(library);
-            //AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
             Player = new Player();
         }
 

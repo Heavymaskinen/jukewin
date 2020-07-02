@@ -18,17 +18,30 @@ namespace CoreSongIO
         }
 
 
-        public IList<Song> LoadSongs()
+        public virtual IList<Song> LoadSongs()
         {
-            files = new List<Song>();
-            foreach (var file in startDir.EnumerateFiles(extension))
+            files = RecursiveLoad(startDir, 0);
+
+            return files;
+        }
+
+        private IList<Song> RecursiveLoad(DirectoryInfo directory, int level)
+        {
+            var foundSongs = new List<Song>();
+            foreach (var file in directory.EnumerateFiles(extension))
             {
                 var tag = TagLib.File.Create(file.FullName).Tag;
                 var song = new Song(tag.FirstAlbumArtist, tag.Album, tag.Title, tag.Track.ToString(), file.FullName);
-                files.Add(song);
+                foundSongs.Add(song);
             }
 
-            return files;
+            foreach (var dir in directory.EnumerateDirectories())
+            {
+                if (dir.Name.Length < 3) continue;
+                foundSongs.AddRange(RecursiveLoad(dir, level+1));
+            }
+
+            return foundSongs;
         }
     }
 }

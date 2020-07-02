@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Xml;
-using System.Xml.Serialization;
 using DataModel;
 using Juke.IO;
 using MessageRouting;
@@ -15,13 +13,17 @@ namespace CoreSongIO
     public class LibraryIO :SongLoader, SongWriter
     {
         private string filename;
+        private LibrarySerializer serializer;
+        private LibraryDeserializer deserializer;
 
-        public LibraryIO(string filename)
+        public LibraryIO(string filename, LibrarySerializer serializer, LibraryDeserializer deserializer)
         {
             this.filename = filename;
+            this.serializer = serializer;
+            this.deserializer = deserializer;
         }
         
-        public IList<Song> LoadSongs()
+        public virtual IList<Song> LoadSongs()
         {
             if (!File.Exists(filename))
             {
@@ -33,8 +35,7 @@ namespace CoreSongIO
 
             try
             {
-                var serializer = new XmlSerializer(typeof(List<PersistedSong>));
-                var list       = (List<PersistedSong>) serializer.Deserialize(stream);
+                var list       = deserializer.Deserialize(stream);
                 var songs      = list.Select(s => s.ToSong()).ToList();
                 Messenger.Post(songs.Count + " songs loaded");
                 return songs;
@@ -49,11 +50,10 @@ namespace CoreSongIO
                 stream.Dispose();
             }
             
-            return new Collection<Song>();
-            ;
+            return new List<Song>();
         }
 
-        public void Write(IList<Song> songs)
+        public virtual void Write(IList<Song> songs)
         {
             Messenger.Post("Writing "+songs.Count+" songs");
             var persisted = new List<PersistedSong>();
@@ -65,7 +65,6 @@ namespace CoreSongIO
             var stream = new StreamWriter(filename,false);
             try
             {
-                var serializer = new XmlSerializer(typeof(List<PersistedSong>));
                 serializer.Serialize(stream, persisted);
                 stream.Flush();
             }

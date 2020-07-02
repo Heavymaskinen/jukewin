@@ -121,7 +121,7 @@ namespace JukeControllerTests
         {
             var songs = createSongs(2, 2, 2);
             FakeLoad(songs);
-            var writer = new FakeSongCatalogue();
+            var writer = new FakeSongIO();
             control.SaveLibrary(writer);
             Assert.AreEqual(songs.Count, writer.WrittenSongs.Count);
         }
@@ -130,7 +130,7 @@ namespace JukeControllerTests
         public void LoadLibrary()
         {
             var songs = createSongs(2, 2, 2);
-            var loader = new FakeSongCatalogue(songs);
+            var loader = new FakeSongIO(songs);
             control.LoadLibrary(loader);
             Assert.AreEqual(songs.Count, control.Browser.Songs.Count);
         }
@@ -376,7 +376,7 @@ namespace JukeControllerTests
 
         private void FakeLoad(List<Song> songs)
         {
-            control.LoadHandler.LoadSongs(new FakeSongCatalogue(songs));
+            control.LoadHandler.LoadSongs(new FakeSongIO(songs));
         }
 
         private List<Song> createSongs(int artistMax, int albumMax, int songmax)

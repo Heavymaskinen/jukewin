@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Juke.Core
 {
-    class Library : LibraryBrowser
+    public class Library : LibraryBrowser
     {
         public IList<Song> Songs { get; private set; }
         public IList<string> Artists { get; private set; }
