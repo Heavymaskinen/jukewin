@@ -57,7 +57,8 @@ namespace ConsoleFrontend.Screens
         {
             var musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             var totalName   = Path.Combine(musicFolder, filename + ".xml");
-            var io          = new LibraryIO(totalName);
+            var access = new XmlLibraryAccess();
+            var io = new LibraryIO(totalName, access, access);
             jukeControl.LoadHandler.LoadSongs(io);
             Invalidate(true);
         }
@@ -67,7 +68,8 @@ namespace ConsoleFrontend.Screens
             var musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             
             var totalName = Path.Combine(musicFolder, filename + ".xml");
-            var io = new LibraryIO(totalName);
+            var access = new XmlLibraryAccess();
+            var io = new LibraryIO(totalName, access, access);
             jukeControl.SaveHandler.SaveSongs(io);
             Messenger.Post("Library saved to "+totalName);
             Invalidate(true);

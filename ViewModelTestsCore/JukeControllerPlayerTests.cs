@@ -153,7 +153,7 @@ namespace Juke.Control.Tests
 
         private void FakeLoad(List<Song> songs)
         {
-            control.LoadHandler.LoadSongs(new FakeSongCatalogue(songs));
+            control.LoadHandler.LoadSongs(new FakeSongIO(songs));
         }
 
         private List<Song> createSongs(int artistMax, int albumMax, int songmax)

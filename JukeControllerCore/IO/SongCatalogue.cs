@@ -9,7 +9,7 @@ using JukeControllerCore.IO;
 
 namespace Juke.IO
 {
-    class SongCatalogue : LoadHandler, SaveHandler
+    public class SongCatalogue : LoadHandler, SaveHandler
     {
         private Library library;
 
@@ -43,7 +43,6 @@ namespace Juke.IO
 
         private void UpdateLibrary(IList<Song> list)
         {
-            Console.WriteLine("Catalogue update "+list.Count);
             foreach (var song in list)
             {
                 library.AddSong(song);

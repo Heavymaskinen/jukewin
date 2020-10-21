@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App">
+      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JukeApiLibrary\JukeApiLibrary.csproj" />
+    <ProjectReference Include="..\UserMemoryRepository\UserMemoryRepository.csproj" />
+    <ProjectReference Include="..\ApiModel\ApiModel.csproj" />
+    <ProjectReference Include="..\VlcTest\VlcTest.csproj" />
+  </ItemGroup>
+</Project>
