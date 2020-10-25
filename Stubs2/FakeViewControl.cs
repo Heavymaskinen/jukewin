@@ -30,9 +30,10 @@ namespace Juke.UI.Tests
 
         public void CommandCompleted(JukeCommand command)
         {
-            throw new NotImplementedException();
+            LastCompletedCommand = command;
         }
 
         public SongUpdate SongDataToReturn { get; set; }
+        public JukeCommand LastCompletedCommand { get; private set; }
     }
 }

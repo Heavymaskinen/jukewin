@@ -1,5 +1,6 @@
 ﻿using DataModel;
 using Juke.External.Wmp;
+using Juke.IO;
 using Juke.UI.Command;
 using System;
 using System.Windows;
@@ -18,7 +19,14 @@ namespace Juke.UI.Wpf
             //viewModel.PropertyChanged += ViewModel_PropertyChanged;
             DataContext = viewModel;
             viewModel.View = this;
-            LoaderFactory.SetLoaderInstance(new AsyncFileFinder2(""));
+            //LoaderFactory.SetLoaderInstance(new AsyncFileFinder2(""));
+            LoaderFactory.SetLoaderInstance(new IO.AsyncSongLoader(new FileFinderEngine(new TaglibTagReaderFactory())));
+            AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
+        }
+
+        private void AsyncSongLoader_LoadCompleted(object sender, System.Collections.Generic.IList<Song> e)
+        {
+            Dispatcher.Invoke(() => Close());
         }
 
         public IntroWindow()

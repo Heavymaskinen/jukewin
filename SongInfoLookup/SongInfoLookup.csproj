@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Juke.External.Lookup</RootNamespace>
     <AssemblyName>SongInfoLookup</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModel\DataModel.csproj">
-      <Project>{F3727A39-B6CC-4A8F-8168-6AD2AECCAD7E}</Project>
+      <Project>{f3727a39-b6cc-4a8f-8168-6ad2aeccad7e}</Project>
       <Name>DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\JukeController\JukeController.csproj">

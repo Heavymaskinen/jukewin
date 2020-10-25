@@ -41,7 +41,8 @@ namespace Juke.IO
 
         public void LoadSongs(AsyncSongLoader loader)
         {
-            loader.BeginLoading();
+            loader.StartNewLoad();
+            //loader.BeginLoading();
         }
 
         public void AddSong(Song song)

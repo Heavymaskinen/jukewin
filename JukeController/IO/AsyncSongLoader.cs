@@ -10,7 +10,7 @@ using Juke.Core;
 
 namespace Juke.IO
 {
-    public abstract class AsyncSongLoader
+    public class AsyncSongLoader : LoadListener
     {
         public static event EventHandler NewLoad;
         public static event EventHandler<int> LoadInitiated;
@@ -21,11 +21,34 @@ namespace Juke.IO
         public string Path { get; set; }
 
         public static List<Task> tasks = new List<Task>();
+        private LoadEngine engine;
 
         protected AsyncSongLoader(TagReaderFactory tagReaderFactory)
         {
             this.tagReaderFactory = tagReaderFactory;
             tasks.Clear();
+        }
+
+        public AsyncSongLoader(LoadEngine engine)
+        {
+            this.engine = engine;
+        }
+
+        public AsyncSongLoader(LoadEngine engine, TagReaderFactory tagReaderFactory)
+        {
+            this.engine = engine;
+            this.tagReaderFactory = tagReaderFactory;
+        }
+
+        public void StartNewLoad()
+        {
+            if (engine != null)
+            {
+                engine.Load(Path, this);
+            } else
+            {
+                BeginLoading();
+            }
         }
 
         internal void BeginLoading()
@@ -56,7 +79,7 @@ namespace Juke.IO
             await task.ConfigureAwait(false);
         }
 
-        protected abstract void InvokeLoad();
+        protected virtual void InvokeLoad() { }
 
         protected void NotifyNewLoad()
         {
@@ -78,6 +101,25 @@ namespace Juke.IO
             LoadCompleted?.Invoke(this, loadedSongs);
         }
 
+        public void NotifyNewLoad2()
+        {
+            NotifyNewLoad();
+        }
+
+        public void NotifyLoadInitiated2(int capacity)
+        {
+            NotifyLoadInitiated(capacity);
+        }
+
+        public void NotifyProgress2(int progressed)
+        {
+            NotifyProgress(progressed);
+        }
+
+        public void NotifyCompleted2(IList<Song> loadedSongs)
+        {
+            NotifyCompleted(loadedSongs);
+        }
     }
 
     class FileCounter

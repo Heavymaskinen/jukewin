@@ -22,6 +22,8 @@ namespace Juke.UI.Wpf.SearchLogics
 
         public List<Song> Search(string input)
         {
+            if (input == string.Empty || input.Length < 2) return list;
+
             list.Clear();
             var lowerName = input.ToLower();
             var artistList = browser.Artists.ToArray();
@@ -29,11 +31,10 @@ namespace Juke.UI.Wpf.SearchLogics
             {
                 if ( art.ToLower().StartsWith(lowerName))
                 {
-                    browser.SelectedArtist = art;
-                    list.AddRange(browser.Songs);
+                    var songs = browser.GetSongsByArtist(art);
+                    list.AddRange(songs);
                 }
             }
-            browser.SelectedArtist = Song.ALL_ARTISTS;
 
             return list;
         }

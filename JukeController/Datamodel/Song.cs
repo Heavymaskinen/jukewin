@@ -42,9 +42,12 @@ namespace DataModel
                          return result;
                      }
 
-                     if (!string.IsNullOrEmpty(a.TrackNo) && !string.IsNullOrEmpty(b.TrackNo))
+                     if (a.TrackNo != b.TrackNo)
                      {
-                         return int.Parse(a.TrackNo).CompareTo(int.Parse(b.TrackNo));
+                         if (!string.IsNullOrEmpty(a.TrackNo) && !string.IsNullOrEmpty(b.TrackNo))
+                         {
+                             return int.Parse(a.TrackNo).CompareTo(int.Parse(b.TrackNo));
+                         }
                      }
 
                      return a.Name.CompareTo(b.Name);

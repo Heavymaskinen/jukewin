@@ -8,7 +8,7 @@ using TagLib;
 
 namespace Juke.External.Wmp
 {
-    class TaglibTagReaderFactory : TagReaderFactory
+    public class TaglibTagReaderFactory : TagReaderFactory
     {
         public TagReader Create(string filename)
         {

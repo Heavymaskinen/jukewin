@@ -30,6 +30,12 @@ namespace Juke.UI
         public ObservableCollection<Song> Queue { get; private set; }
         public ObservableCollection<Song> Songs { get; private set; }
         public ObservableCollection<string> Albums { get; private set; }
+
+        public IList<Song> GetSongsByArtist(string art)
+        {
+            return controller.Browser.GetSongsByArtist(art);
+        }
+
         public ObservableCollection<string> Artists { get; private set; }
 
         public double ProgressMax { get; set; }

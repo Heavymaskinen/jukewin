@@ -22,6 +22,11 @@ namespace Juke.Control
             }
         }
 
+        public static void Reset()
+        {
+            instance = new JukeController();
+        }
+
         public static JukeController Create()
         {
             return new JukeController();

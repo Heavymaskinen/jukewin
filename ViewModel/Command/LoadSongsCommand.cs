@@ -31,9 +31,11 @@ namespace Juke.UI.Command
 
         private async void LoadAsync(string path)
         {
-            await Task.Run(()=> {
-                var loader = new LoaderFactory().CreateAsync(path);
-                controller.LoadHandler.LoadSongs(loader);
+            var loader = new LoaderFactory().CreateAsync(path);
+            controller.LoadHandler.LoadSongs(loader);
+            return;
+            await Task.Run(async ()=> {
+               
 
                 var done = false;
                 while (!done)

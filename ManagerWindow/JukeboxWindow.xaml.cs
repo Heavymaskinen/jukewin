@@ -156,6 +156,7 @@ namespace Juke.UI.Wpf
                 viewModel.View = this;
                 AddHandler(Window.KeyDownEvent, new KeyEventHandler(Window_KeyDown), true);
                 viewModel.SaveLibrary.Execute(this);
+                
                 loaded = true;
                 logoLabel.BeginAnimation(OpacityProperty, fadeInAnimation, HandoffBehavior.SnapshotAndReplace);
             }

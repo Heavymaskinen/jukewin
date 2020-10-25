@@ -1,37 +1,70 @@
-﻿using System.Collections.Generic;
-using Juke.Control.Tests;
-using DataModel;
+﻿using DataModel;
 using Juke.Control;
-using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using Juke.Control.Tests;
+using Juke.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Juke.UI.Tests
 {
+    [TestClass]
     public class JukeViewModelTests
     {
-        [TestInitialize()]
+        [TestInitialize]
         public void Setup()
         {
-            JukeController.Instance.ClearLibrary();
+            JukeController.Reset();
         }
 
         [TestMethod()]
         public void LoadSongs_LoaderStartedWithPath()
         {
-            FakeAsyncSongLoader fakeLoader = CreateFakeLoader();
+            FakeSongLoadEngine engine = CreateFakeLoadEngine(CreateSongs(1, 2, 1));
             var listener = new EventListener();
             var viewControl = new FakeViewControl("path");
 
             JukeViewModel viewModel = CreateViewModel(viewControl);
             viewModel.LoadSongs.Execute(this);
-            AreEqual("path", fakeLoader.Path);
+
+            Assert.AreEqual("path", engine.Path);
             IsTrue(listener.LoadInitiated);
+        }
+
+        [TestMethod()]
+        public void LoadSongs_ProgressIsTracked()
+        {
+            FakeSongLoadEngine engine = CreateFakeLoadEngine(CreateSongs(1, 2, 1));
+            var listener = new EventListener();
+            var viewControl = new FakeViewControl("path");
+
+            JukeViewModel viewModel = CreateViewModel(viewControl);
+            viewModel.LoadSongs.Execute(this);
+            engine.SignalProgress();
+            AreEqual(1, int.Parse(listener.ProgressNoted));
+        }
+
+       
+
+        [TestMethod()]
+        public void LoadSongs_SongsAreAddedOnCompletion()
+        {
+            FakeSongLoadEngine engine = CreateFakeLoadEngine(CreateSongs(1, 2, 1));
+            var listener = new EventListener();
+            var viewControl = new FakeViewControl("path");
+
+            JukeViewModel viewModel = CreateViewModel(viewControl);
+            viewModel.LoadSongs.Execute(this);
+            engine.SignalProgress();
+            engine.SignalComplete();
+            AreEqual(1, viewModel.Artists.Count);
+            AreEqual(2, viewModel.Albums.Count);
         }
 
         [TestMethod]
         public void LoadSongs_PromptReturnsNull_NothingLoaded()
         {
-            var fakeLoader = CreateFakeLoader();
+            CreateFakeLoadEngine(CreateSongs(1,1,1));
             var listener = new EventListener();
             var viewControl = new FakeViewControl(null);
             var viewModel = CreateViewModel(viewControl);
@@ -139,7 +172,7 @@ namespace Juke.UI.Tests
 
         private JukeViewModel InitializeLoadedViewModel(IList<Song> songs)
         {
-            var fakeLoader = CreateFakeLoader(songs);
+            var fakeLoader = CreateFakeLoadEngine(songs);
             var viewControl = new FakeViewControl("path");
             var viewModel = CreateViewModel(viewControl);
             viewModel.LoadSongs.Execute(this);
@@ -147,18 +180,11 @@ namespace Juke.UI.Tests
             return viewModel;
         }
 
-        private FakeAsyncSongLoader CreateFakeLoader()
+        private static FakeSongLoadEngine CreateFakeLoadEngine(IList<Song> songs)
         {
-            var fakeLoader = new FakeAsyncSongLoader();
-            LoaderFactory.SetLoaderInstance(fakeLoader);
-            return fakeLoader;
-        }
-
-        private FakeAsyncSongLoader CreateFakeLoader(IList<Song> songs)
-        {
-            var fakeLoader = new FakeAsyncSongLoader(songs);
-            LoaderFactory.SetLoaderInstance(fakeLoader);
-            return fakeLoader;
+            FakeSongLoadEngine engine = new FakeSongLoadEngine(songs);
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(engine));
+            return engine;
         }
 
         private JukeViewModel CreateViewModel(FakeViewControl viewControl)
