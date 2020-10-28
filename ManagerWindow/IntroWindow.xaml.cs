@@ -16,10 +16,8 @@ namespace Juke.UI.Wpf
         public IntroWindow(JukeViewModel viewModel)
         {
             InitializeComponent();
-            //viewModel.PropertyChanged += ViewModel_PropertyChanged;
             DataContext = viewModel;
             viewModel.View = this;
-            //LoaderFactory.SetLoaderInstance(new AsyncFileFinder2(""));
             LoaderFactory.SetLoaderInstance(new IO.AsyncSongLoader(new FileFinderEngine(new TaglibTagReaderFactory())));
             AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
         }
@@ -35,19 +33,13 @@ namespace Juke.UI.Wpf
         }
 
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ProgressMax")
-            {
-                Console.WriteLine("Progress max " + e.PropertyName);
-            }
-        }
-
         public string PromptPath()
         {
             var dlg = new FolderBrowserDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                openButton.Visibility = Visibility.Hidden;
+                openLabel.Visibility = Visibility.Hidden;
                 return dlg.SelectedPath;
             }
 

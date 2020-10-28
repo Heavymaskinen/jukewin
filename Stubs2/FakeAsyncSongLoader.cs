@@ -45,6 +45,10 @@ namespace Juke.Control.Tests
             listener.NotifyLoadInitiated2(list.Count);
         }
 
+        public Task LoadAsync(string path, LoadListener listener)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class FakeAsyncSongLoader : AsyncSongLoader

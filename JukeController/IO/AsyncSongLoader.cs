@@ -44,7 +44,8 @@ namespace Juke.IO
         {
             if (engine != null)
             {
-                engine.Load(Path, this);
+                engine.LoadAsync(Path, this);
+
             } else
             {
                 BeginLoading();

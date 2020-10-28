@@ -49,9 +49,15 @@
   <ItemGroup>
     <Compile Include="ASyncFileFinder.cs" />
     <Compile Include="AsyncFileFinder2.cs" />
+    <Compile Include="FileCollector.cs" />
     <Compile Include="FileFinderEngine.cs" />
+    <Compile Include="IFolderBrowserFactory.cs" />
+    <Compile Include="IFolderBrowser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SongCollector.cs" />
     <Compile Include="TaglibTagReaderFactory.cs" />
+    <Compile Include="WindowsFolderBrowser.cs" />
+    <Compile Include="WinowsFolderBrowserFactory.cs" />
     <Compile Include="WmpPlayerEngine.cs" />
     <Compile Include="WmpTagReaderFactory.cs" />
   </ItemGroup>

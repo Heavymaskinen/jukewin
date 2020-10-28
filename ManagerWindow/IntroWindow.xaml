@@ -15,8 +15,8 @@
             </Label>
             <Border x:Name="innerContent" Background="WhiteSmoke" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="258" Margin="58,149,0,0" VerticalAlignment="Top" Width="375">
                 <Grid>
-                    <Label Content="Please select a library folder to get started." HorizontalAlignment="Left" Height="31" Margin="9,22.2,0,0" VerticalAlignment="Top" Width="232"/>
-                    <Button Content="Open" Width="50" Height="20" Margin="301,25,22.6,211" Command="{Binding LoadSongs}" />
+                    <Label Name="openLabel"  Content="Please select a library folder to get started." HorizontalAlignment="Left" Height="31" Margin="9,22.2,0,0" VerticalAlignment="Top" Width="232"/>
+                    <Button Name="openButton" Content="Open" Height="20" Margin="301,25,32.6,211" Command="{Binding LoadSongs}" />
                     <Label Content="{Binding SystemMessage}" Height="30" />
                 </Grid>
             </Border>

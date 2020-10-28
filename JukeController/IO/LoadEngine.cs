@@ -9,5 +9,6 @@ namespace Juke.IO
     public interface LoadEngine
     {
         void Load(string path, LoadListener listener);
+        Task LoadAsync(string path, LoadListener listener);
     }
 }
