@@ -54,7 +54,7 @@ namespace Juke.IO
 
         internal void BeginLoading()
         {
-            _ = LoadAsync();
+            engine.LoadAsync(Path, this);
         }
 
         private async Task LoadAsync()

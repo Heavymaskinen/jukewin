@@ -47,7 +47,14 @@ namespace Juke.Control.Tests
 
         public Task LoadAsync(string path, LoadListener listener)
         {
-            throw new NotImplementedException();
+            Task task = Task.Run(() =>
+                           {
+                               this.Path = path;
+                               this.listener = listener;
+                               Initiate();
+                           });
+            task.Wait();
+            return task;
         }
     }
 
