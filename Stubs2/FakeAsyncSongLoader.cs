@@ -66,7 +66,7 @@ namespace Juke.Control.Tests
         {
         }
 
-        public FakeAsyncSongLoader(IList<Song> list):base(new FakeTagReaderFactory())
+        public FakeAsyncSongLoader(IList<Song> list):base(new FakeSongLoadEngine(list) ,new FakeTagReaderFactory())
         {
             this.list = list;
         }
