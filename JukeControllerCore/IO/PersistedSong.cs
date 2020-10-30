@@ -25,7 +25,7 @@ namespace Juke.IO
 
         public Song ToSong()
         {
-            return new Song(Artist, Album, Name, TrackNo, FilePath);
+            return new Song(Artist ?? "<Unknown>", Album ?? "<Unknown>", Name, TrackNo, FilePath);
         }
     }
 }

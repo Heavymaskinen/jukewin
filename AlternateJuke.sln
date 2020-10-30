@@ -35,6 +35,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JukeWebAPI", "JukeWebAPI\Ju
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiObjects", "ApiObjects\ApiObjects.csproj", "{DB2724BA-2A4A-4BB6-B07D-41856B19F5C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcJukeServer", "GrpcJukeServer\GrpcJukeServer.csproj", "{92F9EFB1-277F-4FEB-B218-2D78D8D03CFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcClient", "GrpcClient\GrpcClient.csproj", "{8BCAF5C7-B141-4456-A8AE-05994D390974}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proto", "Proto", "{9A370A34-5821-4B41-972F-96EE314AE084}"
+ProjectSection(SolutionItems) = preProject
+	greet.proto = greet.proto
+EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcTests", "GrpcTests\GrpcTests.csproj", "{3C1DA84A-32E8-4D9C-819D-8D5FF6C14518}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoTypes", "ProtoTypes\ProtoTypes.csproj", "{59709845-F934-4A61-8D6F-8754BFCF7093}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -89,5 +89,9 @@ namespace Juke.Control
             }
         }
 
+        public void Dispose()
+        {
+            Player?.Dispose();
+        }
     }
 }

@@ -44,9 +44,10 @@ namespace DataModel
 
         public override bool Equals(object obj)
         {
-            if (obj is Song)
+            if (obj == null) return false;
+
+            if (obj is Song other)
             {
-                var other = obj as Song;
                 return Name.Equals(other.Name) && Artist.Equals(other.Artist) && FilePath.Equals(other.FilePath);
             }
 

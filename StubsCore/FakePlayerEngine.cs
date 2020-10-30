@@ -11,6 +11,8 @@ namespace Juke.Control.Tests
     public class FakePlayerEngine : PlayerEngine
     {
         public Song PlayedSong { get; set; }
+        public bool Disposed { get; set; }
+
         public override void Play(Song song)
         {
             PlayedSong = song;
@@ -24,6 +26,11 @@ namespace Juke.Control.Tests
         public override void Stop()
         {
             SignalFinished();
+        }
+
+        public override void Dispose()
+        {
+            Disposed = true;
         }
     }
 }

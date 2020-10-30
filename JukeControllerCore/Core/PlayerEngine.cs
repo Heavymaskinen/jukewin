@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Juke.Core
 {
-    public abstract class PlayerEngine
+    public abstract class PlayerEngine : IDisposable
     {
         public event EventHandler SongFinished;
 
@@ -19,5 +19,6 @@ namespace Juke.Core
         }
 
         public abstract void Stop();
+        public abstract void Dispose();
     }
 }

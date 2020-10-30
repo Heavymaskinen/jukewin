@@ -23,6 +23,12 @@ namespace Juke.Core
         
         public void AddSong(Song song)
         {
+
+            if (song == null)
+            {
+                return;
+            }
+
             if (!Songs.Contains(song))
             {
                 Songs.Add(song);

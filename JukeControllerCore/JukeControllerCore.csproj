@@ -11,4 +11,7 @@
     <Folder Include="Core\" />
     <Folder Include="Datamodel\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MessageRouting\MessageRouting.csproj" />
+  </ItemGroup>
 </Project>
