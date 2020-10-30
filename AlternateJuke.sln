@@ -42,6 +42,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proto", "Proto", "{9A370A34-5821-4B41-972F-96EE314AE084}"
 ProjectSection(SolutionItems) = preProject
 	greet.proto = greet.proto
+	azure-pipelines-1.yml = azure-pipelines-1.yml
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcTests", "GrpcTests\GrpcTests.csproj", "{3C1DA84A-32E8-4D9C-819D-8D5FF6C14518}"
