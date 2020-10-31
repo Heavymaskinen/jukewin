@@ -22,5 +22,6 @@ namespace Juke.Core
         IList<Song> GetSongsByTitle(string title);
 
         IList<Song> GetSongsByArtistAndTitle(string artistName, string songTitle);
+        Song GetSongByID(int id);
     }
 }

@@ -10,25 +10,29 @@ namespace Juke.Core
 {
     public class Library : LibraryBrowser
     {
-        public IList<Song> Songs { get; private set; }
-        public IList<string> Artists { get; private set; }
-        public IList<string> Albums { get; private set; }
+        public IList<Song> Songs { get; }
+        public IList<string> Artists { get; }
+        public IList<string> Albums { get; }
 
         public Library()
         {
-            Songs = new List<Song>();
+            Songs   = new List<Song>();
             Artists = new List<string>();
-            Albums = new List<string>();
+            Albums  = new List<string>();
         }
-        
+
         public void AddSong(Song song)
         {
-
             if (song == null)
             {
                 return;
             }
 
+            if (song.ID == 0)
+            {
+                song.ID = Songs.Count + 1;
+            }
+            
             if (!Songs.Contains(song))
             {
                 Songs.Add(song);
@@ -47,8 +51,8 @@ namespace Juke.Core
 
         public void UpdateSong(SongUpdate edit)
         {
-            Songs.Remove(edit.SongSource);
-            Songs.Add(CreateSongFromUpdate(edit));
+            DeleteSong(edit.SongSource);
+            AddSong(CreateSongFromUpdate(edit));
         }
 
         internal void Clear()
@@ -117,35 +121,23 @@ namespace Juke.Core
 
         public IList<Song> GetSongsByTitle(string title)
         {
-            var songList = new List<Song>();
-            foreach (var song in Songs)
-            {
-                if (song.Name == title)
-                {
-                    songList.Add(song);
-                }
-            }
-
-            return songList;
+            return Songs.Where(song => song.Name == title).ToList();
         }
-        
+
         public IList<Song> GetSongsByArtistAndTitle(string artistName, string songTitle)
         {
-            var songList = new List<Song>();
-            foreach (var song in Songs)
-            {
-                if (song.Artist == artistName && song.Name == song.Name)
-                {
-                    songList.Add(song);
-                }
-            }
+            return Songs.Where(song => song.Artist == artistName && song.Name == songTitle).ToList();
+        }
 
-            return songList;
+        public Song GetSongByID(int id)
+        {
+            return Songs.First(song => song.ID == id);
         }
 
         private Song CreateSongFromUpdate(SongUpdate edit)
         {
-            return new Song(edit.NewArtist, edit.NewAlbum, edit.NewName, edit.NewTrackNo, edit.SongSource.FilePath);
+            return new Song(edit.NewArtist, edit.NewAlbum, edit.NewName, edit.NewTrackNo, edit.SongSource.FilePath)
+                {ID = edit.SongSource.ID};
         }
     }
 }

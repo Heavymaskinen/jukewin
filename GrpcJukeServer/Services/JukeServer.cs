@@ -37,7 +37,10 @@ namespace GrpcJukeServer.Services
             jukeController             = JukeController.Instance;
             Player.SongPlayed += (sender, song) => Messenger.Post("Now playing: " + song.Artist + " - " + song.Name);
             jukeController.Player.RegisterPlayerEngine(new CorePlayerEngine());
-            Messenger.MessagePosted += (sender, s) => messages.Add(s);
+            Messenger.MessagePosted += (sender, s) =>
+            {
+                if (!messages.Contains(s)) messages.Add(s);
+            };
         }
 
         public override async Task GetLogStream(EmptyRequest request, IServerStreamWriter<OutputData> responseStream,
@@ -52,7 +55,7 @@ namespace GrpcJukeServer.Services
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    await responseStream.WriteAsync(new OutputData {Message = e.Message});
                     break;
                 }
             }
@@ -61,16 +64,16 @@ namespace GrpcJukeServer.Services
 
         private static async Task WriteMessagesToStream(IServerStreamWriter<OutputData> responseStream)
         {
-            string[] messagesToPost;
+            List<string> messagesToPost;
             lock (messages)
             {
-                messagesToPost = new string[messages.Count];
-                messages.CopyTo(messagesToPost);
+                messagesToPost = messages.GetRange(0, messages.Count);
                 messages.Clear();
             }
 
             foreach (var message in messagesToPost)
             {
+                if (message == null) continue;
                 await responseStream.WriteAsync(new OutputData {Message = message});
             }
 
@@ -105,7 +108,9 @@ namespace GrpcJukeServer.Services
         {
             Console.WriteLine("Add songs from " + request.Folder);
             jukeController.LoadHandler.LoadSongs(new CoreSongLoader("*.mp3", request.Folder));
+            Messenger.Post("All songs added ("+jukeController.Browser.Songs.Count+")\n");
             jukeController.SaveHandler.SaveSongs(new XmlSongWriter("library.xml"));
+            Messenger.Post("Library saved\n");
             return Task.FromResult(new StatusReply {IsOk = true});
         }
 

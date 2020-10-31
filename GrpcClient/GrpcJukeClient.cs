@@ -84,7 +84,7 @@ namespace GrpcClient
         public bool AddSongs(string folder)
         {
             logger.Debug("Add songs from "+folder);
-
+            StreamOutput();
             var t = Task.Run(() =>
             {
                 client.Add(new AddRequest {Folder = folder});
@@ -99,9 +99,25 @@ namespace GrpcClient
         {
             Console.WriteLine("Start stream!");
             var streamingCall = client.GetLogStream(new EmptyRequest());
-            await foreach (var data in streamingCall.ResponseStream.ReadAllAsync(new CancellationToken(false)))
+
+            var streamTask = streamingCall.ResponseStream.ReadAllAsync(new CancellationToken(false));
+            var count = 10;
+            try
             {
-                Console.Write(data.Message);
+                while (count>0)
+                {
+                    await foreach (var data in streamTask)
+                    {
+                        Console.Write(data.Message);
+                    }
+                    
+                    await Task.Delay(500);
+                    count--;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
             
             Console.WriteLine("End of stream!");

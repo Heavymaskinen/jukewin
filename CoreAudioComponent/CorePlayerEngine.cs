@@ -10,7 +10,7 @@ namespace CoreAudioComponent
     public class CorePlayerEngine : PlayerEngine
     {
         private NetCoreAudio.Player player;
-        private Task playingTask;
+
         public CorePlayerEngine()
         {
             player = new NetCoreAudio.Player();

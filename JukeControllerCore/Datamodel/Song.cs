@@ -12,6 +12,8 @@ namespace DataModel
         public string Album { get; private set; }
         public string TrackNo { get; private set; }
         public string FilePath { get; private set; }
+        
+        public int ID { get; set; }
 
         public Song() : this("", "", "")
         {
