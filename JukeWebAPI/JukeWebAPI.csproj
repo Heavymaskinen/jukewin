@@ -7,6 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ApiObjects\ApiObjects.csproj" />
       <ProjectReference Include="..\JukeControllerCore\JukeControllerCore.csproj" />
+      <ProjectReference Include="..\XmlLibraryCore\XmlLibraryCore.csproj" />
     </ItemGroup>
 
 

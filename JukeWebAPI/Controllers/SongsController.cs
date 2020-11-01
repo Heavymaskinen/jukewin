@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ApiObjects;
+using DataModel;
 using Juke.Control;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,10 +20,23 @@ namespace JukeWebAPI.Controllers
         public ICollection<ApiSong> GetAllSongs()
         {
             var songs = jukeControl.Browser.Songs;
-            var apiSongs = songs.Select(song => new ApiSong()
-                {Title = song.Name, Album = song.Album, Artist = song.Artist}).ToList();
+            var apiSongs = songs.Select(ConvertToApiSong).ToList();
 
             return apiSongs;
+        }
+
+        [HttpGet]
+        [Route("/{id}")]
+        public ApiSong GetSong(int id)
+        {
+            var song = jukeControl.Browser.GetSongByID(id);
+            return song == null ? null : ConvertToApiSong(song);
+        }
+
+        private static ApiSong ConvertToApiSong(Song song)
+        {
+            return new ApiSong()
+                {Title = song.Name, Album = song.Album, Artist = song.Artist};
         }
     }
 }

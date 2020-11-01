@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Juke.Control;
+using Juke.External.Xml;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +15,8 @@ namespace JukeWebAPI
     {
         public static void Main(string[] args)
         {
+            JukeController.Instance.LoadHandler.LoadSongs(new XmlSongReader("../Files/library.xml"));
+            Console.WriteLine(JukeController.Instance.Browser.Songs.Count+" songs in JUKE");
             CreateHostBuilder(args).Build().Run();
         }
 
