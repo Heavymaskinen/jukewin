@@ -11,20 +11,30 @@ using System.Threading.Tasks;
 
 namespace Juke.Control.Tests
 {
-    public class EventListener
+    public class EventListener : LoadListener
     {
         public bool LoadCompleted { get; set; }
         public bool LoadInitiated { get; private set; }
         public string ProgressNoted { get; set; }
-        public string CollectionChanged { get; private set; }
         public Song SongPlayed { get; set; }
 
         public EventListener()
         {
-            AsyncSongLoader.LoadInitiated += SongLoader_LoadInitiated;
-            AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted1;
-            AsyncSongLoader.LoadProgress += AsyncSongLoader_LoadProgress;
+
+            JukeController.Instance.LoadHandler.LoadInitiated += SongLoader_LoadInitiated;
+            JukeController.Instance.LoadHandler.LoadCompleted += LoadHandler_LoadCompleted;
+            JukeController.Instance.LoadHandler.LoadProgress += LoadHandlerOnLoadProgress;
             Player.SongPlayed += Instance_SongPlayed;
+        }
+
+        private void LoadHandlerOnLoadProgress(object sender, int e)
+        {
+            ProgressNoted = e.ToString();
+        }
+
+        private void LoadHandler_LoadCompleted(object sender, EventArgs e)
+        {
+            LoadCompleted = true;
         }
 
         private void Instance_SongPlayed(object sender, Song e)
@@ -32,29 +42,30 @@ namespace Juke.Control.Tests
             SongPlayed = e;
         }
 
-        public void ListenToCollections(INotifyPropertyChanged coll)
-        {
-            coll.PropertyChanged += Coll_PropertyChanged;
-        }
-
-        private void Coll_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            CollectionChanged = e.PropertyName;
-        }
-        
-        private void AsyncSongLoader_LoadCompleted1(object sender, IList<Song> e)
-        {
-            LoadCompleted = true;
-        }
-
-        private void AsyncSongLoader_LoadProgress(object sender, int e)
-        {
-            ProgressNoted = e.ToString();
-        }
         
         private void SongLoader_LoadInitiated(object sender, int e)
         {
             LoadInitiated = true;
+        }
+
+        public void NotifyNewLoad()
+        {
+            LoadInitiated = true;
+        }
+
+        public void NotifyLoadInitiated(int capacity)
+        {
+            LoadInitiated = true;
+        }
+
+        public void NotifyProgress(int progressed)
+        {
+            ProgressNoted = progressed.ToString();
+        }
+
+        public void NotifyCompleted(IList<Song> loadedSongs)
+        {
+            LoadCompleted = true;
         }
     }
 }

@@ -9,14 +9,13 @@ using Juke.Core;
 
 namespace Juke.IO
 {
-    class SongCatalogue : LoadHandler
+    class SongCatalogue : LoadHandler, LoadListener
     {
         private Library library;
 
         public SongCatalogue(Library library)
         {
             this.library = library;
-            AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
         }
 
         public event EventHandler LibraryUpdated;
@@ -27,7 +26,7 @@ namespace Juke.IO
 
         public void LoadSongs(SongLoader loader)
         {
-            Task.Run(() => UpdateLibrary(loader.LoadSongs(), false));
+            UpdateLibrary(loader.LoadSongs(), false);
         }
 
         public void LoadSongsSync(SongLoader loader)
@@ -41,8 +40,12 @@ namespace Juke.IO
 
         public void LoadSongs(AsyncSongLoader loader)
         {
-            loader.StartNewLoad();
-            //loader.BeginLoading();
+            loader.StartNewLoad(this);
+        }
+
+        public void LoadSongs(AsyncSongLoader loader, LoadListener listener)
+        {
+            loader.StartNewLoad(listener);
         }
 
         public void AddSong(Song song)
@@ -66,16 +69,11 @@ namespace Juke.IO
             NotifyUpdated();
         }
 
-        private void AsyncSongLoader_LoadCompleted(object sender, IList<Song> list)
-        {
-            UpdateLibrary(list, false);
-        }
-
         private void UpdateLibrary(IList<Song> list, bool reload)
         {
             foreach (var song in list)
             {
-                library.AddSong(song, reload);
+                library.AddSong(song);
                 LoadProgress?.Invoke(this, 1);
             }
 
@@ -88,5 +86,25 @@ namespace Juke.IO
             LibraryUpdated?.Invoke(this, EventArgs.Empty);
         }
 
+        public void NotifyNewLoad()
+        {
+            NewLoad?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void NotifyLoadInitiated(int capacity)
+        {
+            LoadInitiated?.Invoke(this, capacity);
+        }
+
+        public void NotifyProgress(int progressed)
+        {
+            LoadProgress?.Invoke(this, progressed);
+        }
+
+        public void NotifyCompleted(IList<Song> loadedSongs)
+        {
+            UpdateLibrary(loadedSongs, false);
+            LoadCompleted?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

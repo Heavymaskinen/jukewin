@@ -5,11 +5,6 @@ namespace Juke.UI.Wpf
 {
     internal class SearchLogicFactory
     {
-
-        public SearchLogicFactory()
-        {
-        }
-
         internal IList<SearchLogic> CreateAll(JukeViewModel viewModel)
         {
             return new List<SearchLogic>

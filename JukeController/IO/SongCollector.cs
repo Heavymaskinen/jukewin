@@ -1,22 +1,21 @@
-﻿using DataModel;
-using Juke.Control;
-using Juke.Core;
-using Juke.IO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataModel;
+using Juke.Control;
+using Juke.Core;
 
-namespace Juke.External.Wmp
+namespace Juke.IO
 {
     // Used to create Song-objects from files
-    public class SongCollector2
+    public class SongCollector
     {
         private int splits;
         private LoadListener listener;
         private readonly TagReaderFactory tagReaderFactory;
         private List<Song> songs;
 
-        public SongCollector2(LoadListener listener, TagReaderFactory tagReaderFactory)
+        public SongCollector(LoadListener listener, TagReaderFactory tagReaderFactory)
         {
             this.listener = listener;
             this.tagReaderFactory = tagReaderFactory;

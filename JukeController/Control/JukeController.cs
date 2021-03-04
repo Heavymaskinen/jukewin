@@ -1,7 +1,6 @@
 ﻿using DataModel;
 using Juke.Core;
 using Juke.IO;
-using System;
 using System.Collections.Generic;
 
 namespace Juke.Control
@@ -84,8 +83,7 @@ namespace Juke.Control
         {
             LoadHandler.LoadSongsSync(loader);
         }
-
-
+        
         private void AsyncSongLoader_LoadCompleted(object sender, IList<Song> loadedSongs)
         {
             foreach (var song in loadedSongs)

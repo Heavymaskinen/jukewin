@@ -18,8 +18,8 @@ namespace Juke.UI.Wpf
             InitializeComponent();
             DataContext = viewModel;
             viewModel.View = this;
-            LoaderFactory.SetLoaderInstance(new IO.AsyncSongLoader(new FileFinderEngine(new TaglibTagReaderFactory())));
-            AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(new TaglibTagReaderFactory())));
+            //AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
         }
 
         private void AsyncSongLoader_LoadCompleted(object sender, System.Collections.Generic.IList<Song> e)

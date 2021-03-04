@@ -13,16 +13,15 @@ namespace WmpComponentTest
         public void ParseOneLevel()
         {
             var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(0, 10) };
-            IList<string> result = DoCollectSync(factory);
-
-            Assert.AreEqual(10, result.Count);
+            var list = PerformAsyncCollect(factory);
+            Assert.AreEqual(10, list.Count);
         }
 
         [TestMethod]
         public void ParseTwoLevels()
         {
             var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(1, 10) };
-            IList<string> result = DoCollectSync(factory);
+            IList<string> result = PerformAsyncCollect(factory);
 
             Assert.AreEqual(20, result.Count);
         }
@@ -31,7 +30,7 @@ namespace WmpComponentTest
         public void ParseThreeLevels()
         {
             var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(2, 10) };
-            IList<string> result = DoCollectSync(factory);
+            IList<string> result = PerformAsyncCollect(factory);
             Assert.AreEqual(10 * 3 + 10 * 2, result.Count);
         }
 
@@ -40,7 +39,7 @@ namespace WmpComponentTest
         {
             //16 sec
             var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(9, 10) };
-            IList<string> result = DoCollectSync(factory);
+            IList<string> result = PerformAsyncCollect(factory);
             Assert.AreEqual(9864100, result.Count);
         }
 
@@ -49,7 +48,7 @@ namespace WmpComponentTest
         {
             //11 sec
             var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(8, 100) };
-            IList<string> result = DoCollectSync(factory);
+            IList<string> result = PerformAsyncCollect(factory);
             Assert.AreEqual(10960100, result.Count);
         }
 
@@ -58,21 +57,22 @@ namespace WmpComponentTest
         {
             //9.4 sec
             var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(700, 10, 10) };
-            IList<string> result = DoCollectSync(factory);
+            IList<string> result = PerformAsyncCollect(factory);
             Assert.IsTrue(result.Count >= 253400, result.Count+" was actual");
         }
 
-        private async static Task<IList<string>> DoCollect(FakeFolderBrowserFactory factory)
+        private static IList<string> PerformAsyncCollect(FakeFolderBrowserFactory factory)
+        {
+            var t = Task.Run<IList<string>>(async () => await DoCollect(factory));
+            t.Wait();
+            var list = t.Result;
+            return list;
+        }
+
+        private static async Task<IList<string>> DoCollect(FakeFolderBrowserFactory factory)
         {
             var engine = new FileCollector(factory);
             var result = await engine.CollectFileNames("path");
-            return result;
-        }
-
-        private static IList<string> DoCollectSync(FakeFolderBrowserFactory factory)
-        {
-            var engine = new FileCollector(factory);
-            var result = engine.CollectFileNamesSync("path");
             return result;
         }
     }

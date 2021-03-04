@@ -23,12 +23,27 @@ namespace Juke.UI.Tests
             FakeSongLoadEngine engine = CreateFakeLoadEngine(CreateSongs(1, 2, 1));
             var listener = new EventListener();
             var viewControl = new FakeViewControl("path");
+            LoaderFactory.SetLoaderInstance(new FakeAsyncSongLoader(engine));
 
             JukeViewModel viewModel = CreateViewModel(viewControl);
             viewModel.LoadSongs.Execute(this);
 
             Assert.AreEqual("path", engine.Path);
             IsTrue(listener.LoadInitiated);
+        }
+
+        [TestMethod()]
+        public void LoadSongs_ViewControlNotifiedOnCompletion()
+        {
+            var engine = CreateFakeLoadEngine(CreateSongs(1, 2, 1));
+
+            var viewControl = new FakeViewControl("path");
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(engine));
+
+            var viewModel = CreateViewModel(viewControl);
+            viewModel.LoadSongs.Execute(this);
+            engine.SignalComplete();
+            IsTrue(viewControl.Completed);
         }
 
         [TestMethod()]
@@ -43,9 +58,7 @@ namespace Juke.UI.Tests
             engine.SignalProgress();
             AreEqual(1, int.Parse(listener.ProgressNoted));
         }
-
-       
-
+        
         [TestMethod()]
         public void LoadSongs_SongsAreAddedOnCompletion()
         {

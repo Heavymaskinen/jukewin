@@ -1,13 +1,5 @@
-﻿using DataModel;
-using Juke.Control;
-using Juke.Core;
-using Juke.IO;
-using System;
+﻿using Juke.Control;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Juke.External.Wmp
@@ -64,8 +56,7 @@ namespace Juke.External.Wmp
                 Messenger.PostMessage("Over 5000 files! This could take a while...", Messenger.TargetType.Frontend);
                 lowFlag = true;
             }
-
-
+            
             lock (files)
             {
                 foreach (var file in folderFiles)
@@ -85,11 +76,8 @@ namespace Juke.External.Wmp
             var first = subFolders.GetRange(0, mid);
             subFolders.RemoveRange(0, mid);
 
-            Task.WaitAll(
-                 RangedLoad(first),
-                 RangedLoad(subFolders)
-                );
-
+            await RangedLoad(first).ConfigureAwait(false);
+            await RangedLoad(subFolders).ConfigureAwait(false);
         }
 
         private async Task RangedLoad(List<IFolderBrowser> browsers)
@@ -99,6 +87,5 @@ namespace Juke.External.Wmp
                 await LoadFromFolderBrowser(folder);
             }
         }
-
     }
 }

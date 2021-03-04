@@ -23,7 +23,6 @@ namespace Juke.UI
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
-        private ViewControl view;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,44 +34,40 @@ namespace Juke.UI
         {
             return controller.Browser.GetSongsByArtist(art);
         }
-
         public ObservableCollection<string> Artists { get; private set; }
-
         public double ProgressMax { get; set; }
         public double Progress { get; set; }
-
         public bool ProgressIndeterminate { get; set; }
-
-
+        
         public string SelectedArtist
         {
-            get { return selectedArtist; }
+            get => selectedArtist;
             set
             {
                 selectedArtist = value;
                 SelectArtist(selectedArtist);
-                RaisePropertyChanged("SelectedArtist");
+                RaisePropertyChanged(nameof(SelectedArtist));
             }
         }
 
         public string SelectedAlbum
         {
-            get { return selectedAlbum; }
+            get => selectedAlbum;
             set
             {
                 selectedAlbum = value;
                 SelectAlbum(selectedAlbum);
-                RaisePropertyChanged("SelectedAlbum");
+                RaisePropertyChanged(nameof(SelectedAlbum));
             }
         }
 
         public Song SelectedSong
         {
-            get { return selectedSong; }
+            get => selectedSong;
             set
             {
                 selectedSong = value;
-                RaisePropertyChanged("SelectedSong");
+                RaisePropertyChanged(nameof(SelectedSong));
             }
         }
 
@@ -91,36 +86,35 @@ namespace Juke.UI
 
         public string SystemMessage { set; get; }
 
-        public ICommand LoadSongs { get { return new LoadSongsCommand(controller, view, this); } }
-        public ICommand LoadLibrary { get { return new LoadLibraryCommand(controller, view, this); } }
-        public ICommand SaveLibrary { get { return new SaveLibraryCommand(controller, view, this); } }
-        public ICommand PlaySong { get { return new PlaySongCommand(controller, view, this); } }
-        public ICommand SkipSong { get { return new SkipSongCommand(controller, view, this); } }
-        public ICommand EditSong { get { return new EditSongCommand(controller, view, this); } }
-        public ICommand EditAlbum { get { return new EditAlbumCommand(controller, view, this); } }
-        public ICommand RenameArtist { get { return new RenameArtistCommand(controller, view, this); } }
-        public ICommand DeleteAlbum { get { return new DeleteAlbumCommand(controller, view, this); } }
-        public ICommand DeleteSong { get { return new DeleteSongCommand(controller, view, this); } }
+        public ICommand LoadSongs => new LoadSongsCommand(controller, View, this);
+        public ICommand LoadLibrary => new LoadLibraryCommand(controller, View, this);
+        public ICommand SaveLibrary => new SaveLibraryCommand(controller, View, this);
+        public ICommand PlaySong => new PlaySongCommand(controller, View, this);
+        public ICommand SkipSong => new SkipSongCommand(controller, View, this);
+        public ICommand EditSong => new EditSongCommand(controller, View, this);
+        public ICommand EditAlbum => new EditAlbumCommand(controller, View, this);
+        public ICommand RenameArtist => new RenameArtistCommand(controller, View, this);
+        public ICommand DeleteAlbum => new DeleteAlbumCommand(controller, View, this);
+        public ICommand DeleteSong => new DeleteSongCommand(controller, View, this);
 
-        public ViewControl View { get => view; set => view = value; }
+        public ViewControl View { get; set; }
 
         public JukeViewModel(ViewControl view, PlayerEngine playerEngine)
         {
             controller = JukeController.Instance;
 
             controller.Player.RegisterPlayerEngine(playerEngine);
-            this.view = view;
+            View = view;
             InitializeCollections();
             Progress = 0;
             ProgressMax = 100;
             ProgressIndeterminate = false;
-            AsyncSongLoader.LoadProgress += AsyncSongLoader_LoadProgress;
-            AsyncSongLoader.LoadInitiated += AsyncSongLoader_LoadInitiated;
-            AsyncSongLoader.NewLoad += AsyncSongLoader_NewLoad;
+
             controller.LoadHandler.LibraryUpdated += LoadHandler_LibraryUpdated;
             controller.LoadHandler.LoadInitiated += AsyncSongLoader_LoadInitiated;
             controller.LoadHandler.NewLoad += AsyncSongLoader_NewLoad;
             controller.LoadHandler.LoadProgress += AsyncSongLoader_LoadProgress;
+            controller.LoadHandler.LoadCompleted += (sender, args) => View.CommandCompleted(null);
             Player.SongPlayed += Player_SongPlayed;
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
         }
@@ -129,11 +123,10 @@ namespace Juke.UI
         {
             controller.Dispose();
         }
-
         private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)
         {
             SystemMessage = message;
-            RaisePropertyChanged("SystemMessage");
+            RaisePropertyChanged(nameof(SystemMessage));
         }
 
         private void AsyncSongLoader_NewLoad(object sender, EventArgs e)
@@ -141,22 +134,20 @@ namespace Juke.UI
             Progress = 0;
             ProgressMax = 0;
             ProgressIndeterminate = true;
-            RaisePropertyChanged("Progress");
-            RaisePropertyChanged("ProgressIndeterminate");
+            RaisePropertyChanged(nameof(Progress));
+            RaisePropertyChanged(nameof(ProgressIndeterminate));
         }
 
         private void AsyncSongLoader_LoadInitiated(object sender, int load)
         {
-            if (load > 0)
-            {
-                ProgressMax = load;
-                Progress = 0;
-                ProgressIndeterminate = false;
-                Console.WriteLine("New max: " + ProgressMax);
-                RaisePropertyChanged("ProgressMax");
-                RaisePropertyChanged("Progress");
-                RaisePropertyChanged("ProgressIndeterminate");
-            }
+            if (load <= 0) return;
+            ProgressMax = load;
+            Progress = 0;
+            ProgressIndeterminate = false;
+            Console.WriteLine("New max: " + ProgressMax);
+            RaisePropertyChanged("ProgressMax");
+            RaisePropertyChanged(nameof(Progress));
+            RaisePropertyChanged(nameof(ProgressIndeterminate));
         }
 
         private void Player_SongPlayed(object sender, Song played)
@@ -173,34 +164,33 @@ namespace Juke.UI
         private void InitializeCollections()
         {
             Artists = new ObservableCollection<string>(controller.Browser.Artists.OrderBy(s => s));
-            RaisePropertyChanged("Artists");
+            RaisePropertyChanged(nameof(Artists));
             RefreshAlbums(controller.Browser.Albums);
             RefreshSongs(controller.Browser.Songs);
             RefreshQueue();
         }
-
         private void RefreshQueue()
         {
             Queue = new ObservableCollection<Song>(controller.Player.Queue.Songs);
-            RaisePropertyChanged("Queue");
+            RaisePropertyChanged(nameof(Queue));
         }
 
         private void RefreshAlbums(IList<string> albums)
         {
             Albums = new ObservableCollection<string>(albums.OrderBy(s => s));
-            RaisePropertyChanged("Albums");
+            RaisePropertyChanged(nameof(Albums));
         }
 
         private void RefreshSongs(IList<Song> songs)
         {
             Songs = new ObservableCollection<Song>(songs);
-            RaisePropertyChanged("Songs");
+            RaisePropertyChanged(nameof(Songs));
         }
 
         private void AsyncSongLoader_LoadProgress(object sender, int progress)
         {
             Progress += progress;
-            RaisePropertyChanged("Progress");
+            RaisePropertyChanged(nameof(Progress));
         }
 
         private void RaisePropertyChanged(string propertyName)
@@ -239,7 +229,5 @@ namespace Juke.UI
 
             RefreshSongs(songs);
         }
-
     }
-
 }

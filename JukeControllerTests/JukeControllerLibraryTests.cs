@@ -4,6 +4,7 @@ using System.Threading;
 using DataModel;
 using Juke.Control;
 using Juke.Control.Tests;
+using Juke.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JukeControllerTests
@@ -48,7 +49,7 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadAsync_NotifiedOfStart()
         {
-            control.LoadHandler.LoadSongs(FakeAsyncLoad(new List<Song> { }));
+            control.LoadHandler.LoadSongs(FakeAsyncLoad(new List<Song> { }), listener);
             Thread.Sleep(1);
             Assert.IsTrue(listener.LoadInitiated);
         }
@@ -63,9 +64,10 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadAsync_NotifiedOfEnd()
         {
-            var loader = FakeAsyncLoad(new List<Song> { });
-            control.LoadHandler.LoadSongs(loader);
-            loader.SignalComplete();
+            var engine = new FakeSongLoadEngine();
+            var loader = new AsyncSongLoader(engine);
+            control.LoadHandler.LoadSongs(loader, listener);
+            engine.SignalComplete();
             Assert.IsTrue(listener.LoadCompleted);
         }
 
@@ -79,9 +81,11 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadAsync_GetNotifiedOfProgress()
         {
-            var loader = FakeAsyncLoad(new List<Song> { });
-            control.LoadHandler.LoadSongs(loader);
-            loader.SignalProgress();
+            var engine = new FakeSongLoadEngine();
+            var loader = new AsyncSongLoader(engine);
+            
+            control.LoadHandler.LoadSongs(loader, listener);
+            engine.SignalProgress();
             Assert.AreEqual("1", listener.ProgressNoted);
         }
 
@@ -425,7 +429,7 @@ namespace JukeControllerTests
 
         private FakeAsyncSongLoader FakeAsyncLoad(List<Song> list)
         {
-            return new FakeAsyncSongLoader(list);
+            return new FakeAsyncSongLoader(new FakeSongLoadEngine(list));
         }
 
         private void FakeLoad(List<Song> songs)

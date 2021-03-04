@@ -9,11 +9,12 @@ namespace Juke.IO
 {
     public interface LoadListener
     {
-        void NotifyNewLoad2();
 
-        void NotifyLoadInitiated2(int capacity);
+        void NotifyNewLoad();
 
-        void NotifyProgress2(int progressed);
-        void NotifyCompleted2(IList<Song> loadedSongs);
+        void NotifyLoadInitiated(int capacity);
+
+        void NotifyProgress(int progressed);
+        void NotifyCompleted(IList<Song> loadedSongs);
     }
 }

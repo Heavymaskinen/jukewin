@@ -30,8 +30,11 @@ namespace Juke.UI.Tests
 
         public void CommandCompleted(JukeCommand command)
         {
+            Completed = true;
             LastCompletedCommand = command;
         }
+
+        public bool Completed { get; set; }
 
         public SongUpdate SongDataToReturn { get; set; }
         public JukeCommand LastCompletedCommand { get; private set; }

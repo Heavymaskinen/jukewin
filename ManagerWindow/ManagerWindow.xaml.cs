@@ -1,5 +1,4 @@
-﻿using Juke.External.Wmp.IO;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -7,20 +6,21 @@ using DataModel;
 using System.IO;
 using Juke.External.Wmp;
 using Juke.UI.Command;
-using System;
+using Juke.IO;
 
 namespace Juke.UI.Wpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, ViewControl
+    public partial class MainWindow : ViewControl
     {
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new JukeViewModel(this, new WmpPlayerEngine());
-            LoaderFactory.SetLoaderInstance(new AsyncFileFinder(""));
+            var wmpTagReaderFactory = new WmpTagReaderFactory();
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(wmpTagReaderFactory), wmpTagReaderFactory));
             (DataContext as JukeViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
 
@@ -39,15 +39,15 @@ namespace Juke.UI.Wpf
         {
             if (e.PropertyName == "Albums")
             {
-                Dispatcher.Invoke(() => UpdateAlbums());
+                Dispatcher.Invoke(UpdateAlbums);
             }
             else if (e.PropertyName == "Songs")
             {
-                Dispatcher.Invoke(() => UpdateSongs());
+                Dispatcher.Invoke(UpdateSongs);
             }
             else if (e.PropertyName == "Artists")
             {
-                Dispatcher.Invoke(() => UpdateArtists());
+                Dispatcher.Invoke(UpdateArtists);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Juke.UI.Wpf
 
             return null;
         }
-
+        
         public SongUpdate PromptSongData(JukeViewModel.InfoType infoType)
         {
             Song song;
@@ -90,14 +90,7 @@ namespace Juke.UI.Wpf
             }
             else if (artistBox.SelectedItem != null)
             {
-                if (albumBox.SelectedItem != null)
-                {
-                    song = new Song(artistBox.SelectedItem.ToString(), albumBox.SelectedItem.ToString(), "");
-                }
-                else
-                {
-                    song = new Song(artistBox.SelectedItem.ToString(), "", "");
-                }
+                song = CreateSongDataFromAlbumAndArtist();
             }
             else
             {
@@ -108,9 +101,7 @@ namespace Juke.UI.Wpf
             {
                 if (song.Album == "<unknown>" || song.Artist == "<unknown>")
                 {
-                    var tagFactory = new WmpTagReaderFactory();
-                    var tag = tagFactory.Create(song.FilePath);
-                    song = new Song(tag.Artist, tag.Album, tag.Title, song.TrackNo, song.FilePath);
+                    song = PopulateSongDataFromTags(song);
                 }
             }
             
@@ -124,6 +115,29 @@ namespace Juke.UI.Wpf
             }
 
             return null;
+        }
+
+        private static Song PopulateSongDataFromTags(Song song)
+        {
+            var tagFactory = new WmpTagReaderFactory();
+            var tag = tagFactory.Create(song.FilePath);
+            song = new Song(tag.Artist, tag.Album, tag.Title, song.TrackNo, song.FilePath);
+            return song;
+        }
+
+        private Song CreateSongDataFromAlbumAndArtist()
+        {
+            Song song;
+            if (albumBox.SelectedItem != null)
+            {
+                song = new Song(artistBox.SelectedItem.ToString(), albumBox.SelectedItem.ToString(), "");
+            }
+            else
+            {
+                song = new Song(artistBox.SelectedItem.ToString(), "", "");
+            }
+
+            return song;
         }
 
         public void CommandCompleted(JukeCommand command)

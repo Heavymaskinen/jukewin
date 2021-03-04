@@ -29,42 +29,10 @@ namespace Juke.UI.Command
             }
         }
 
-        private async void LoadAsync(string path)
+        private void LoadAsync(string path)
         {
             var loader = new LoaderFactory().CreateAsync(path);
             controller.LoadHandler.LoadSongs(loader);
-            return;
-            await Task.Run(async ()=> {
-               
-
-                var done = false;
-                while (!done)
-                {
-                    done = true;
-                    for (var i = 0; i < AsyncSongLoader.tasks.Count; i++)
-                    {
-                        if (AsyncSongLoader.tasks[i].IsCompleted)
-                        {
-                            lock (AsyncSongLoader.tasks)
-                            {
-                                AsyncSongLoader.tasks.RemoveAt(i);
-                                i--;
-                            }
-                        } else
-                        {
-                            done = false;
-                        }
-
-                    }
-
-                    Thread.Sleep(2);
-                }
-               
-                
-                Console.WriteLine("Command completed! " + AsyncSongLoader.tasks.Count);
-                view.CommandCompleted(this);
-            });
-            
         }
     }
 }

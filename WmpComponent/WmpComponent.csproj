@@ -47,8 +47,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASyncFileFinder.cs" />
-    <Compile Include="AsyncFileFinder2.cs" />
     <Compile Include="FileCollector.cs" />
     <Compile Include="FileFinderEngine.cs" />
     <Compile Include="IFolderBrowserFactory.cs" />

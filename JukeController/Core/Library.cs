@@ -32,16 +32,14 @@ namespace Juke.Core
             songCore = new Dictionary<string, Song>();
         }
 
-        public void AddSong(Song song, bool reload)
+        public void AddSong(Song song)
         {
             if (!songCore.ContainsKey(song.ID))
             {
                 songCore.Add(song.ID, song);
             }
         }
-
-        public void AddSong(Song song) => AddSong(song, false);
-
+        
         public void InitialiseParts()
         {
             Albums.Clear();
@@ -66,9 +64,9 @@ namespace Juke.Core
             Songs.Add(CreateSongFromUpdate(edit));
         }
 
-        internal void RemoveById(string ID)
+        internal void RemoveById(string id)
         {
-            songCore.Remove(ID);
+            songCore.Remove(id);
         }
 
         internal void Clear()
@@ -98,14 +96,7 @@ namespace Juke.Core
 
         public IList<Song> GetSongsByAlbum(string albumName)
         {
-            var songList = new List<Song>();
-            foreach (var song in Songs)
-            {
-                if (song.Album == albumName)
-                {
-                    songList.Add(song);
-                }
-            }
+            var songList = Songs.Where(song => song.Album == albumName).ToList();
 
             songList.Sort(Song.Comparison);
             return songList;
@@ -127,16 +118,7 @@ namespace Juke.Core
 
         public IList<Song> GetSongsByTitle(string title)
         {
-            var songList = new List<Song>();
-            foreach (var song in Songs)
-            {
-                if (song.Name == title)
-                {
-                    songList.Add(song);
-                }
-            }
-
-            return songList;
+            return Songs.Where(song => song.Name == title).ToList();
         }
 
         public IList<Song> GetSongsByArtistAndTitle(string artistName, string songTitle)
@@ -144,7 +126,7 @@ namespace Juke.Core
             var songList = new List<Song>();
             foreach (var song in Songs)
             {
-                if (song.Artist == artistName && song.Name == song.Name)
+                if (song.Artist == artistName && song.Name == songTitle)
                 {
                     songList.Add(song);
                 }

@@ -56,6 +56,7 @@
     <Compile Include="Datamodel\SongUpdate.cs" />
     <Compile Include="IO\LoadEngine.cs" />
     <Compile Include="IO\LoadListener.cs" />
+    <Compile Include="IO\SongCollector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\AsyncSongLoader.cs" />
     <Compile Include="IO\LoadHandler.cs" />

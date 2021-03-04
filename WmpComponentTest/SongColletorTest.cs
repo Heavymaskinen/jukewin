@@ -5,10 +5,7 @@ using Juke.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WmpComponentTest
 {
@@ -73,7 +70,6 @@ namespace WmpComponentTest
             collector.Load(list);
             Assert.AreEqual(loadCount - 3, listener.CompletedSongs.Count);
         }
-
 
         [TestMethod]
         public void SongCollector_StressTest()
@@ -180,23 +176,23 @@ namespace WmpComponentTest
         public bool IsNewLoad { get; private set; }
         public bool HasProgress { get; private set; }
 
-        public void NotifyCompleted2(IList<Song> loadedSongs)
+        public void NotifyCompleted(IList<Song> loadedSongs)
         {
             IsCompleted = true;
             CompletedSongs = loadedSongs;
         }
 
-        public void NotifyLoadInitiated2(int capacity)
+        public void NotifyLoadInitiated(int capacity)
         {
             IsInitiated = true;
         }
 
-        public void NotifyNewLoad2()
+        public void NotifyNewLoad()
         {
             IsNewLoad = true;
         }
 
-        public void NotifyProgress2(int progressed)
+        public void NotifyProgress(int progressed)
         {
             HasProgress = true;
         }

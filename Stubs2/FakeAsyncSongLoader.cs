@@ -11,7 +11,11 @@ namespace Juke.Control.Tests
 {
     public class FakeSongLoadEngine : LoadEngine
     {
-        private IList<Song> list;
+        public IList<Song> list;
+
+        public FakeSongLoadEngine() : this(new List<Song>())
+        {
+        }
 
         public FakeSongLoadEngine(IList<Song> list)
         {
@@ -22,36 +26,37 @@ namespace Juke.Control.Tests
         public bool IsInitiated { get; private set; }
 
         private LoadListener listener;
-        public void Load(string path, LoadListener listener)
+        public List<string> Load(string path, LoadListener listener)
         {
             this.Path = path;
             this.listener = listener;
             Initiate();
+            return new List<string>();
         }
 
         public void SignalComplete()
         {
-            listener.NotifyCompleted2(list);
+            listener?.NotifyCompleted(list);
         }
 
         public void SignalProgress()
         {
-            listener.NotifyProgress2(1);
+            listener?.NotifyProgress(1);
         }
 
         public void Initiate()
         {
             IsInitiated = true;
-            listener.NotifyLoadInitiated2(list.Count);
+            listener?.NotifyLoadInitiated(list.Count);
         }
-
-        public Task LoadAsync(string path, LoadListener listener)
+        public Task<List<string>> LoadAsync(string path, LoadListener listener)
         {
-            Task task = Task.Run(() =>
+            var task = Task.Run(() =>
                            {
                                this.Path = path;
                                this.listener = listener;
                                Initiate();
+                               return new List<string>();
                            });
             task.Wait();
             return task;
@@ -61,30 +66,28 @@ namespace Juke.Control.Tests
     public class FakeAsyncSongLoader : AsyncSongLoader
     {
         private IList<Song> list;
+        private FakeSongLoadEngine engine;
 
-        public FakeAsyncSongLoader():this(new List<Song>())
+        public FakeAsyncSongLoader():this(new FakeSongLoadEngine())
         {
         }
 
-        public FakeAsyncSongLoader(IList<Song> list):base(new FakeSongLoadEngine(list) ,new FakeTagReaderFactory())
+        public FakeAsyncSongLoader(FakeSongLoadEngine engine):base(engine ,new FakeTagReaderFactory())
         {
-            this.list = list;
+            this.engine = engine;
+            this.list = engine.list;
         }
 
         public void SignalComplete()
         {
-            NotifyCompleted(list);
+            engine.SignalComplete();
         }
 
         public void SignalProgress()
         {
-            NotifyProgress(1);
+            engine.SignalComplete();
         }
 
-        protected override void InvokeLoad()
-        {
-            NotifyLoadInitiated(10);
-        }
     }
 
     class FakeTagReaderFactory : TagReaderFactory

@@ -13,11 +13,11 @@ namespace Juke.IO
         event EventHandler<int> LoadInitiated;
         event EventHandler<int> LoadProgress;
         event EventHandler LoadCompleted;
-
         event EventHandler LibraryUpdated;
 
         void LoadSongs(SongLoader loader);
         void LoadSongs(AsyncSongLoader loader);
+        void LoadSongs(AsyncSongLoader loader, LoadListener listener);
         void LoadSongsSync(SongLoader loader);
 
         void AddSong(Song song);

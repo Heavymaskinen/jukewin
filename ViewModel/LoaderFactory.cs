@@ -24,8 +24,7 @@ namespace Juke.UI
                 return loaderInstance;
             }
 
-            return null;
+            throw new Exception("AsyncSongLoader not initialised!");
         }
-
     }
 }
