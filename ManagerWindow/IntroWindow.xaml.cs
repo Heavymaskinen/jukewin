@@ -11,22 +11,16 @@ namespace Juke.UI.Wpf
     /// <summary>
     /// Interaction logic for IntroWindow.xaml
     /// </summary>
-    public partial class IntroWindow : Window, ViewControl
+    public partial class IntroWindow : ViewControl
     {
         public IntroWindow(JukeViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
             viewModel.View = this;
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(new TaglibTagReaderFactory())));
-            //AsyncSongLoader.LoadCompleted += AsyncSongLoader_LoadCompleted;
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), new TaglibTagReaderFactory()));
         }
-
-        private void AsyncSongLoader_LoadCompleted(object sender, System.Collections.Generic.IList<Song> e)
-        {
-            Dispatcher.Invoke(() => Close());
-        }
-
+        
         public IntroWindow()
         {
             InitializeComponent();

@@ -69,6 +69,10 @@ namespace WmpComponentTest
 
             var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new SlowTagReader { Fails = 3 } });
             collector.Load(list, listener).Wait();
+            while (!listener.IsCompleted)
+            {
+                Thread.Sleep(4);
+            }
             Assert.AreEqual(loadCount - 3, listener.CompletedSongs.Count);
         }
 
@@ -137,7 +141,7 @@ namespace WmpComponentTest
             set { title = value; }
             get
             {
-                Thread.Sleep(5);
+                Thread.Sleep(2);
                 return title;
             }
         }

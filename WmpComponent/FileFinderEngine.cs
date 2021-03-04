@@ -10,12 +10,10 @@ namespace Juke.External.Wmp
 {
     public class FileFinderEngine : LoadEngine
     {
-        private TagReaderFactory tagReaderFactory;
         private FileCollector fileCollector;
 
-        public FileFinderEngine(TagReaderFactory tagReaderFactory)
+        public FileFinderEngine()
         {
-            this.tagReaderFactory = tagReaderFactory;
             fileCollector = new FileCollector(new WindowsFolderBrowserFactory());
         }
 

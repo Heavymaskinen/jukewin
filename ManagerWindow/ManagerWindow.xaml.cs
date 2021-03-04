@@ -20,7 +20,7 @@ namespace Juke.UI.Wpf
             InitializeComponent();
             DataContext = new JukeViewModel(this, new WmpPlayerEngine());
             var wmpTagReaderFactory = new WmpTagReaderFactory();
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(wmpTagReaderFactory), wmpTagReaderFactory));
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), wmpTagReaderFactory));
             (DataContext as JukeViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
 

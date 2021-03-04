@@ -29,6 +29,7 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
+            Console.WriteLine("Play it: "+ model.SelectedSong);
             controller.Player.PlaySong(model.SelectedSong);
         }
     }

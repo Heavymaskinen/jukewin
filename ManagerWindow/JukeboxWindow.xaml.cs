@@ -10,7 +10,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
@@ -19,7 +18,7 @@ namespace Juke.UI.Wpf
     /// <summary>
     /// Interaction logic for JukeboxWindow.xaml
     /// </summary>
-    public partial class JukeboxWindow : Window, ViewControl
+    public partial class JukeboxWindow : ViewControl
     {
 
         private JukeController jukeController;
@@ -71,12 +70,42 @@ namespace Juke.UI.Wpf
             dispatchTimer.Stop();
         }
 
-        private void ComponentDispatcher_ThreadIdle(object sender, EventArgs e)
+        private void CreateFadeAnimation()
         {
-
+            CreateFadeOutAnimation();
+            CreateFadeInAnimation();
+            CreateEndlessFadeAnimation();
+            CreateHideSearchAnimation();
         }
 
-        private void CreateFadeAnimation()
+        private void CreateHideSearchAnimation()
+        {
+            searchHideAnimation = new DoubleAnimation(1, 0.0, new Duration(TimeSpan.FromSeconds(0.5)))
+            {
+                FillBehavior = FillBehavior.HoldEnd
+            };
+            searchHideAnimation.Completed += SearchHideAnimation_Completed;
+        }
+
+        private void CreateEndlessFadeAnimation()
+        {
+            endlessFadeAnimation = new DoubleAnimation(0, 0.4, new Duration(TimeSpan.FromSeconds(0.5)))
+            {
+                AutoReverse = true
+            };
+            endlessFadeAnimation.Completed += FadeInAnimation_Completed;
+        }
+
+        private void CreateFadeInAnimation()
+        {
+            fadeInAnimation = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromSeconds(2)))
+            {
+                DecelerationRatio = 0.7,
+                FillBehavior = FillBehavior.HoldEnd
+            };
+        }
+
+        private void CreateFadeOutAnimation()
         {
             fadeOutAnimation = new DoubleAnimation(0, new Duration(TimeSpan.FromSeconds(3)))
             {
@@ -84,25 +113,6 @@ namespace Juke.UI.Wpf
                 FillBehavior = FillBehavior.Stop
             };
             fadeOutAnimation.Completed += FadeAnimation_Completed;
-
-            fadeInAnimation = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromSeconds(2)))
-            {
-                DecelerationRatio = 0.7,
-                FillBehavior = FillBehavior.HoldEnd
-            };
-
-            endlessFadeAnimation = new DoubleAnimation(0, 0.4, new Duration(TimeSpan.FromSeconds(0.5)))
-            {
-                AutoReverse = true
-            };
-            endlessFadeAnimation.Completed += FadeInAnimation_Completed;
-
-            searchHideAnimation = new DoubleAnimation(1, 0.0, new Duration(TimeSpan.FromSeconds(0.5)))
-            {
-                FillBehavior = FillBehavior.HoldEnd
-            };
-            searchHideAnimation.Completed += SearchHideAnimation_Completed;
-
         }
 
         private void SearchHideAnimation_Completed(object sender, EventArgs e)
@@ -130,7 +140,8 @@ namespace Juke.UI.Wpf
 
         private void FadeAnimation_Completed(object sender, EventArgs e)
         {
-            if (jukeController.Player.Queue.Count > 0)
+
+            if (viewModel.Queue.Count > 0)
             {
                 queueBox.Opacity = 0;
 
@@ -142,39 +153,41 @@ namespace Juke.UI.Wpf
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             jukeController = JukeController.Instance;
-            jukeController.Player.RegisterPlayerEngine(new WmpPlayerEngine());
-            jukeController.LoadHandler.LibraryUpdated += LoadHandler_LibraryUpdated;
+            
             Player.SongPlayed += Player_SongPlayed;
 
             if (!File.Exists("library.xml"))
             {
-                loadProgress.Visibility = Visibility.Hidden;
-                var window = new IntroWindow(viewModel);
-                Visibility = Visibility.Hidden;
-                window.ShowDialog();
-                Visibility = Visibility.Visible;
-                viewModel.View = this;
-                AddHandler(Window.KeyDownEvent, new KeyEventHandler(Window_KeyDown), true);
-                viewModel.SaveLibrary.Execute(this);
-                
-                loaded = true;
-                logoLabel.BeginAnimation(OpacityProperty, fadeInAnimation, HandoffBehavior.SnapshotAndReplace);
+                CreateLibrary();
             }
             else
             {
-                viewModel.LoadLibrary.Execute(this);
-                logoLabel.BeginAnimation(OpacityProperty, endlessFadeAnimation, HandoffBehavior.SnapshotAndReplace);
+                LoadLibrary();
             }
 
-            ComponentDispatcher.ThreadIdle += ComponentDispatcher_ThreadIdle;
             searchLogics = new SearchLogicFactory().CreateAll(viewModel);
             searchLogic = searchLogics[0];
         }
 
-        private void LoadHandler_LibraryUpdated(object sender, EventArgs e)
+        private void CreateLibrary()
         {
+            loadProgress.Visibility = Visibility.Hidden;
+            var window = new IntroWindow(viewModel);
+            Visibility = Visibility.Hidden;
+            window.ShowDialog();
+            Visibility = Visibility.Visible;
+            viewModel.View = this;
+            AddHandler(Window.KeyDownEvent, new KeyEventHandler(Window_KeyDown), true);
+            viewModel.SaveLibrary.Execute(this);
+            Focus();
+            loaded = true;
+            logoLabel.BeginAnimation(OpacityProperty, fadeInAnimation, HandoffBehavior.SnapshotAndReplace);
+        }
 
-
+        private void LoadLibrary()
+        {
+            viewModel.LoadLibrary.Execute(this);
+            logoLabel.BeginAnimation(OpacityProperty, endlessFadeAnimation, HandoffBehavior.SnapshotAndReplace);
         }
 
         private void Player_SongPlayed(object sender, Song song)
@@ -184,89 +197,125 @@ namespace Juke.UI.Wpf
 
         private void AnimateSongTitles()
         {
-            if (jukeController.Player.Queue.Count > 0)
+            if (viewModel.Queue.Count > 0)
             {
-                queueBox.Items.Clear();
-                foreach (var s in jukeController.Player.Queue.Songs)
-                {
-                    queueBox.Items.Add(s);
-                }
-                queueBox.Opacity = 100;
-                queueBox.BeginAnimation(OpacityProperty, fadeOutAnimation);
+                RenderQueue();
             }
 
             if (jukeController.Player.NowPlaying != null)
             {
-                songLabel.Content = jukeController.Player.NowPlaying.Name + "\r\n" + jukeController.Player.NowPlaying.Album
-                    + "\r\n" + jukeController.Player.NowPlaying.Artist;
-                songLabel.Opacity = 100;
-                songLabel.BeginAnimation(OpacityProperty, fadeOutAnimation);
+                RenderPlayingSong();
             }
+        }
+
+        private void RenderQueue()
+        {
+            queueBox.Items.Clear();
+            foreach (var s in viewModel.Queue)
+            {
+                queueBox.Items.Add(s);
+            }
+
+            queueBox.Opacity = 100;
+            queueBox.BeginAnimation(OpacityProperty, fadeOutAnimation);
+        }
+
+        private void RenderPlayingSong()
+        {
+            
+            songLabel.Content = jukeController.Player.NowPlaying.Name + "\r\n" + jukeController.Player.NowPlaying.Album
+                                + "\r\n" + jukeController.Player.NowPlaying.Artist;
+            songLabel.Opacity = 100;
+            songLabel.BeginAnimation(OpacityProperty, fadeOutAnimation);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                if (e.Key == Key.PageDown)
-                {
-                    var manager = new MainWindow();
-                    manager.ShowDialog();
-                }
-
-                if (e.Key == Key.PageUp)
-                {
-                    jukeController.Player.PlayRandom();
-                }
+                HandleAdminKeys(e);
 
                 return;
             }
+
             if (!searchBox.IsVisible)
             {
-                searchBox.Text = "";
-                searchBox.Visibility = Visibility.Visible;
-                searchBox.Focus();
+                RevealSearchBox();
             }
             else
             {
-                if (e.Key == Key.Up)
-                {
-                    if (songList.SelectedIndex > 0)
-                    {
-                        songList.SelectedIndex--;
-                        songList.ScrollIntoView(songList.SelectedItem);
-                    }
-
-                    return;
-                }
-
-                if (e.Key == Key.Down)
-                {
-                    if (songList.SelectedIndex < songList.Items.Count - 1)
-                    {
-                        songList.SelectedIndex++;
-                        songList.ScrollIntoView(songList.SelectedItem);
-                    }
-
-                    return;
-                }
-
-                if (e.Key == Key.Enter)
-                {
-                    Song song = songList.SelectedItem as Song;
-                    jukeController.Player.PlaySong(song);
-                    searchBox.Visibility = Visibility.Hidden;
-                    songList.Visibility = Visibility.Hidden;
-                    searchBox.Text = "";
-                    return;
-                }
-
+                HandleSearchBoxKeys(e);
             }
+        }
+
+        private void HandleAdminKeys(KeyEventArgs e)
+        {
+            if (e.Key == Key.PageDown)
+            {
+                var manager = new MainWindow();
+                manager.ShowDialog();
+            }
+
+            if (e.Key == Key.PageUp)
+            {
+                jukeController.Player.PlayRandom();
+            }
+        }
+
+        private void RevealSearchBox()
+        {
+            searchBox.Text = "";
+            searchBox.Visibility = Visibility.Visible;
+            searchBox.Focus();
+        }
+
+        private void HandleSearchBoxKeys(KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Up:
+                    MoveListCursorUp();
+                    return;
+                case Key.Down:
+                    MoveListCursorDown();
+                    return;
+                case Key.Enter:
+                    PlaySelectedSongFromList();
+                    return;
+            }
+        }
+
+        private void PlaySelectedSongFromList()
+        {
+            var song = songList.SelectedItem as Song;
+            if (!viewModel.PlaySong.CanExecute(null)) return;
+            //viewModel.SelectedSong = song;
+            viewModel.PlaySong.Execute(null);
+            
+            searchBox.Visibility = Visibility.Hidden;
+            songList.Visibility = Visibility.Hidden;
+            searchBox.Text = "";
+        }
+
+        private void MoveListCursorDown()
+        {
+            if (songList.SelectedIndex >= songList.Items.Count - 1) return;
+            songList.SelectedIndex++;
+            songList.ScrollIntoView(songList.SelectedItem);
+            viewModel.SelectedSong = songList.SelectedItem as Song;
+        }
+
+        private void MoveListCursorUp()
+        {
+            if (songList.SelectedIndex <= 0) return;
+            songList.SelectedIndex--;
+            songList.ScrollIntoView(songList.SelectedItem);
+            viewModel.SelectedSong = songList.SelectedItem as Song;
         }
 
         private void searchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (songList == null || songList.Items == null)
+            if (songList?.Items == null)
             {
                 return;
             }
@@ -274,30 +323,45 @@ namespace Juke.UI.Wpf
             songList.Items.Clear();
             if (searchBox.Text.Length > 0)
             {
-                var output = searchLogic.Search(searchBox.Text);
-                output.Sort(Song.Comparison);
-
-                foreach (var song in output)
-                {
-                    songList.Items.Add(song);
-                }
-
-                if (songList.Items.Count > 0)
-                {
-                    songList.SelectedIndex = 0;
-                    songList.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    songList.Visibility = Visibility.Hidden;
-                }
+                AddSongsFromSearch();
+                ToggleSongListVisibility();
             }
             else
             {
-                searchBox.Text = "";
-                searchBox.Visibility = Visibility.Hidden;
+                ClearSearch();
+            }
+        }
+
+        private void ToggleSongListVisibility()
+        {
+            if (songList.Items.Count > 0)
+            {
+                songList.SelectedIndex = 0;
+                songList.Visibility = Visibility.Visible;
+            }
+            else
+            {
                 songList.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void AddSongsFromSearch()
+        {
+            var output = searchLogic.Search(searchBox.Text);
+            output.Sort(Song.Comparison);
+
+            foreach (var song in output)
+            {
+                songList.Items.Add(song);
+            }
+        }
+
+        private void ClearSearch()
+        {
+            viewModel.SelectedSong = null;
+            searchBox.Text = "";
+            searchBox.Visibility = Visibility.Hidden;
+            songList.Visibility = Visibility.Hidden;
         }
 
         private void searchBox_KeyDown(object sender, KeyEventArgs e)
@@ -307,6 +371,7 @@ namespace Juke.UI.Wpf
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            viewModel.Dispose();
             Environment.Exit(0);
         }
 
@@ -316,7 +381,6 @@ namespace Juke.UI.Wpf
             {
                 DragMove();
             }
-
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
@@ -328,40 +392,41 @@ namespace Juke.UI.Wpf
         {
             throw new NotImplementedException();
         }
-
-        public SongUpdate PromptSongData()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public void CommandCompleted(JukeCommand command)
         {
-            if (command is LoadLibraryCommand)
+            switch (command)
             {
-                AddHandler(Window.KeyDownEvent, new KeyEventHandler(Window_KeyDown), true);
-                loaded = true;
+                case LoadLibraryCommand _:
+                    AddHandler(Window.KeyDownEvent, new KeyEventHandler(Window_KeyDown), true);
+                    loaded = true;
+                    break;
+                case SaveLibraryCommand _:
+                    Console.WriteLine("Library saved!");
+                    break;
             }
-            else if (command is SaveLibraryCommand)
-            {
-                Console.WriteLine("Library saved!");
-            }
-
         }
 
         private void logoLabel_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left)
+            switch (e.ButtonState)
             {
-                AnimateSongTitles();
+                case MouseButtonState.Pressed when e.ChangedButton == MouseButton.Left:
+                    AnimateSongTitles();
+                    break;
+                case MouseButtonState.Pressed when e.ChangedButton == MouseButton.Right:
+                    ShowSearchLogicSelection();
+                    break;
             }
-            else if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Right)
-            {
-                var dialog = new SearchSelectorWindow(searchLogics);
+        }
 
-                if (dialog.ShowDialog() == true)
-                {
-                    searchLogic = dialog.SearchLogic;
-                }
+        private void ShowSearchLogicSelection()
+        {
+            var dialog = new SearchSelectorWindow(searchLogics);
+
+            if (dialog.ShowDialog() == true)
+            {
+                searchLogic = dialog.SearchLogic;
             }
         }
 

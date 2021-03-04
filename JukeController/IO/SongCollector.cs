@@ -94,7 +94,7 @@ namespace Juke.IO
                 }
             } catch (Exception e)
             {
-                Console.WriteLine("Load failed for "+file+": "+e.Message);
+                Console.WriteLine("Load failed for "+file+": "+e.Message+"\n"+e.StackTrace);
             }
         }
     }
