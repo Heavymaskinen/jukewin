@@ -4,6 +4,7 @@ using Juke.Control.Tests;
 using Juke.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using Stubs2;
 using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Juke.UI.Tests
@@ -25,7 +26,7 @@ namespace Juke.UI.Tests
             var viewControl = new FakeViewControl("path");
             LoaderFactory.SetLoaderInstance(new FakeAsyncSongLoader(engine));
 
-            JukeViewModel viewModel = CreateViewModel(viewControl);
+            var viewModel = CreateViewModel(viewControl);
             viewModel.LoadSongs.Execute(this);
 
             Assert.AreEqual("path", engine.Path);
@@ -35,10 +36,11 @@ namespace Juke.UI.Tests
         [TestMethod()]
         public void LoadSongs_ViewControlNotifiedOnCompletion()
         {
-            var engine = CreateFakeLoadEngine(CreateSongs(1, 2, 1));
+            var songs = CreateSongs(1, 2, 1);
+            var engine = CreateFakeLoadEngine(songs);
 
             var viewControl = new FakeViewControl("path");
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(engine));
+            LoaderFactory.SetLoaderInstance(new FakeAsyncSongLoader(engine, new FakeSongCollector(songs)));
 
             var viewModel = CreateViewModel(viewControl);
             viewModel.LoadSongs.Execute(this);
@@ -117,6 +119,7 @@ namespace Juke.UI.Tests
                 });
             viewModel.SelectedArtist = "artist1";
             viewModel.SelectedArtist = null;
+            AreEqual(2, viewModel.Albums.Count);
             AreEqual("album1", viewModel.Albums[0]);
             AreEqual("album2", viewModel.Albums[1]);
         }
@@ -183,7 +186,7 @@ namespace Juke.UI.Tests
             AreEqual(8, viewModel.Songs.Count);
         }
 
-        private JukeViewModel InitializeLoadedViewModel(IList<Song> songs)
+        private JukeViewModel InitializeLoadedViewModel(List<Song> songs)
         {
             var fakeLoader = CreateFakeLoadEngine(songs);
             var viewControl = new FakeViewControl("path");
@@ -193,10 +196,10 @@ namespace Juke.UI.Tests
             return viewModel;
         }
 
-        private static FakeSongLoadEngine CreateFakeLoadEngine(IList<Song> songs)
+        private static FakeSongLoadEngine CreateFakeLoadEngine(List<Song> songs)
         {
             FakeSongLoadEngine engine = new FakeSongLoadEngine(songs);
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(engine));
+            LoaderFactory.SetLoaderInstance(new FakeAsyncSongLoader(engine, new FakeSongCollector(songs)));
             return engine;
         }
 

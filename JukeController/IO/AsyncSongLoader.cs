@@ -5,12 +5,13 @@ using Juke.Core;
 
 namespace Juke.IO
 {
-    public class AsyncSongLoader
+    public class AsyncSongLoader : IAsyncSongLoader
     {
         public static List<Task> tasks = new List<Task>();
 
         private LoadEngine engine;
         protected TagReaderFactory tagReaderFactory;
+        private ISongCollector songCollector;
 
         public string Path { get; set; }
         
@@ -19,28 +20,37 @@ namespace Juke.IO
             this.engine = engine;
         }
 
+        public AsyncSongLoader(LoadEngine engine, ISongCollector songCollector)
+        {
+            this.engine = engine;
+            this.songCollector = songCollector;
+        }
+
         public AsyncSongLoader(LoadEngine engine, TagReaderFactory tagReaderFactory)
         {
             this.engine = engine;
             this.tagReaderFactory = tagReaderFactory;
         }
 
-        public void StartNewLoad(LoadListener listener)
+        public Task StartNewLoad(LoadListener listener)
         {
             if (engine != null)
             {
-                var songCollector = new SongCollector(listener, tagReaderFactory);
-                Task.Run(async () =>
+                if (songCollector == null)
+                {
+                    songCollector = new SongCollector(listener, tagReaderFactory);
+                }
+                
+                return Task.Run(async () =>
                 {
                     var list = await engine.LoadAsync(Path, listener);
-                    await songCollector.Load(list);
+                    await songCollector.Load(list, listener);
                 });
                 
             }
-            else
-            {
-                Console.WriteLine("No engine?");
-            }
+
+            Console.WriteLine("No engine?");
+            return null;
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Juke.IO
         event EventHandler LibraryUpdated;
 
         void LoadSongs(SongLoader loader);
-        void LoadSongs(AsyncSongLoader loader);
-        void LoadSongs(AsyncSongLoader loader, LoadListener listener);
+        Task LoadSongs(IAsyncSongLoader loader);
+        Task LoadSongs(IAsyncSongLoader loader, LoadListener listener);
         void LoadSongsSync(SongLoader loader);
 
         void AddSong(Song song);

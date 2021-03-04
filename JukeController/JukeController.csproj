@@ -54,6 +54,8 @@
     <Compile Include="Core\TagReaderFactory.cs" />
     <Compile Include="Datamodel\Song.cs" />
     <Compile Include="Datamodel\SongUpdate.cs" />
+    <Compile Include="IO\IAsyncSongLoader.cs" />
+    <Compile Include="IO\ISongCollector.cs" />
     <Compile Include="IO\LoadEngine.cs" />
     <Compile Include="IO\LoadListener.cs" />
     <Compile Include="IO\SongCollector.cs" />

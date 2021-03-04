@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace WmpComponentTest
 {
@@ -60,14 +61,14 @@ namespace WmpComponentTest
             //9.4 sec
             var listener = new FakeListener();
             int loadCount = 400;
-            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new SlowTagReader { Fails = 3 } });
             var list = new List<string>();
             for (var i = 0; i < loadCount; i++)
             {
                 list.Add("test" + i);
             }
 
-            collector.Load(list);
+            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new SlowTagReader { Fails = 3 } });
+            collector.Load(list, listener).Wait();
             Assert.AreEqual(loadCount - 3, listener.CompletedSongs.Count);
         }
 
@@ -94,7 +95,7 @@ namespace WmpComponentTest
         private static void CollectWithListener(FakeListener listener)
         {
             var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new FakeTagReader { Title = "MySong" } });
-            collector.Load(new List<string>() { "test" });
+            collector.Load(new List<string>() { "test" }, listener).Wait();
         }
 
         private static void SlowCollectWithListener(FakeListener listener, int loadCount)
@@ -107,7 +108,7 @@ namespace WmpComponentTest
                 list.Add("test" + i);
             }
 
-            collector.Load(list);
+            collector.Load(list, listener).Wait();
         }
     }
 
@@ -145,20 +146,14 @@ namespace WmpComponentTest
 
         public override FakeTagReader New()
         {
-            if (Fails > 0)
-            {
-                count++;
-                if (count % 3 == 0)
-                {
-                    Fails--;
-                    throw new Exception("Test failure! " + Fails);
-                }
-            }
+            count++;
+            if (Fails <= 0) return new SlowTagReader {Title = title+count};
 
-            return new SlowTagReader { Title = title };
+            Fails--;
+            throw new Exception("Test failure! " + Fails);
         }
     }
-
+    
     class FakeTagReaderFactory : TagReaderFactory
     {
         public FakeTagReader FakeTagReader { get; set; }

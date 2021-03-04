@@ -105,6 +105,11 @@ namespace Juke.Core
         public IList<string> GetAlbumsByArtist(string artistName)
         {
             var albumList = new List<string>();
+            if (Songs.Count == 0)
+            {
+                return albumList;
+            }
+
             foreach (var song in Songs)
             {
                 if (song.Artist.Equals(artistName) && !albumList.Contains(song.Album))

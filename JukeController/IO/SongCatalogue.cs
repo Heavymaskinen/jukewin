@@ -38,14 +38,14 @@ namespace Juke.IO
             LoadCompleted?.Invoke(this, EventArgs.Empty);
         }
 
-        public void LoadSongs(AsyncSongLoader loader)
+        public Task LoadSongs(IAsyncSongLoader loader)
         {
-            loader.StartNewLoad(this);
+            return loader.StartNewLoad(this);
         }
 
-        public void LoadSongs(AsyncSongLoader loader, LoadListener listener)
+        public Task LoadSongs(IAsyncSongLoader loader, LoadListener listener)
         {
-            loader.StartNewLoad(listener);
+           return loader.StartNewLoad(listener);
         }
 
         public void AddSong(Song song)

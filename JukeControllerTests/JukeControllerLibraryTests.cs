@@ -6,6 +6,7 @@ using Juke.Control;
 using Juke.Control.Tests;
 using Juke.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Stubs2;
 
 namespace JukeControllerTests
 {
@@ -49,7 +50,7 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadAsync_NotifiedOfStart()
         {
-            control.LoadHandler.LoadSongs(FakeAsyncLoad(new List<Song> { }), listener);
+            control.LoadHandler.LoadSongs(FakeAsyncLoad(new List<Song> { }), listener).Wait();
             Thread.Sleep(1);
             Assert.IsTrue(listener.LoadInitiated);
         }
@@ -65,16 +66,16 @@ namespace JukeControllerTests
         public void LoadAsync_NotifiedOfEnd()
         {
             var engine = new FakeSongLoadEngine();
-            var loader = new AsyncSongLoader(engine);
-            control.LoadHandler.LoadSongs(loader, listener);
-            engine.SignalComplete();
+            IAsyncSongLoader loader = new AsyncSongLoader(engine);
+            WaitedLoad(loader);
+
             Assert.IsTrue(listener.LoadCompleted);
         }
 
         [TestMethod]
         public void LoadAsync_NotCompleteNotNotified()
         {
-            control.LoadHandler.LoadSongs(FakeAsyncLoad(new List<Song> { }));
+            WaitedLoadInternalListener(FakeAsyncLoad(new List<Song> { }));
             Assert.IsFalse(listener.LoadCompleted);
         }
 
@@ -82,9 +83,9 @@ namespace JukeControllerTests
         public void LoadAsync_GetNotifiedOfProgress()
         {
             var engine = new FakeSongLoadEngine();
-            var loader = new AsyncSongLoader(engine);
-            
-            control.LoadHandler.LoadSongs(loader, listener);
+            IAsyncSongLoader loader = new AsyncSongLoader(engine);
+
+            WaitedLoad(loader);
             engine.SignalProgress();
             Assert.AreEqual("1", listener.ProgressNoted);
         }
@@ -93,8 +94,7 @@ namespace JukeControllerTests
         public void LoadAsyncCompleted_SongsAddedToLibrary()
         {
             var loader = FakeAsyncLoad(createSongs(1, 1, 1));
-            control.LoadHandler.LoadSongs(loader);
-            loader.SignalComplete();
+            WaitedLoadInternalListener(loader);
             Assert.AreEqual(1, control.Browser.Songs.Count);
         }
 
@@ -263,12 +263,15 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadAsync_GetAlbumsByArtist_OneResult()
         {
-            var loader = FakeAsyncLoad(new List<Song> { new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1") });
-            control.LoadHandler.LoadSongs(loader);
-            loader.SignalComplete();
+            var songs = new List<Song> { new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1") };
+            var engine = new FakeSongLoadEngine(songs);
+            var loader = FakeAsyncLoad(engine, songs);
+            control.LoadHandler.LoadSongs(loader).Wait();
+
             var albums = control.Browser.GetAlbumsByArtist("artist1");
-            Assert.AreEqual("album1", albums[0]);
+
             Assert.AreEqual(1, albums.Count);
+            Assert.AreEqual("album1", albums[0]);
         }
 
         [TestMethod]
@@ -427,9 +430,24 @@ namespace JukeControllerTests
             Assert.AreEqual(1, control.Browser.Albums.Count);
         }
 
+        private void WaitedLoad(IAsyncSongLoader loader)
+        {
+            control.LoadHandler.LoadSongs(loader, listener).Wait();
+        }
+
+        private void WaitedLoadInternalListener(IAsyncSongLoader loader)
+        {
+            control.LoadHandler.LoadSongs(loader).Wait();
+        }
+
         private FakeAsyncSongLoader FakeAsyncLoad(List<Song> list)
         {
-            return new FakeAsyncSongLoader(new FakeSongLoadEngine(list));
+            return new FakeAsyncSongLoader(new FakeSongLoadEngine(list), new FakeSongCollector(list));
+        }
+
+        private AsyncSongLoader FakeAsyncLoad(FakeSongLoadEngine engine, List<Song> songs)
+        {
+            return new AsyncSongLoader(engine,new FakeSongCollector(songs));
         }
 
         private void FakeLoad(List<Song> songs)
@@ -453,6 +471,5 @@ namespace JukeControllerTests
 
             return songList;
         }
-
     }
 }

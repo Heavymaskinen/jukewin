@@ -46,6 +46,7 @@
     <Compile Include="FakeLoggedInUsersRepo.cs" />
     <Compile Include="FakePlayerEngine.cs" />
     <Compile Include="FakeSongCatalogue.cs" />
+    <Compile Include="FakeSongCollector.cs" />
     <Compile Include="FakeViewControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

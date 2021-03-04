@@ -7,8 +7,7 @@ using Juke.Core;
 
 namespace Juke.IO
 {
-    // Used to create Song-objects from files
-    public class SongCollector
+    public class SongCollector : ISongCollector
     {
         private int splits;
         private LoadListener listener;
@@ -22,8 +21,9 @@ namespace Juke.IO
             songs = new List<Song>();
         }
 
-        public async Task Load(List<string> files)
+        public async Task Load(List<string> files, LoadListener listener)
         {
+            this.listener = listener;
             await Task.Run(() =>
             {
                 lock (songs)

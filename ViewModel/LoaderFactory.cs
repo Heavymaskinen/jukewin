@@ -9,14 +9,14 @@ namespace Juke.UI
 {
     public class LoaderFactory
     {
-        private static AsyncSongLoader loaderInstance;
+        private static IAsyncSongLoader loaderInstance;
 
-        public static void SetLoaderInstance(AsyncSongLoader loader)
+        public static void SetLoaderInstance(IAsyncSongLoader loader)
         {
             loaderInstance = loader;
         }
 
-        public AsyncSongLoader CreateAsync(string path)
+        public IAsyncSongLoader CreateAsync(string path)
         {
             if (loaderInstance !=  null)
             {

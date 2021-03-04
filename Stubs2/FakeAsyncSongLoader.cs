@@ -6,18 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using DataModel;
 using Juke.Core;
+using Stubs2;
 
 namespace Juke.Control.Tests
 {
     public class FakeSongLoadEngine : LoadEngine
     {
-        public IList<Song> list;
+        public List<Song> list;
 
         public FakeSongLoadEngine() : this(new List<Song>())
         {
         }
 
-        public FakeSongLoadEngine(IList<Song> list)
+        public FakeSongLoadEngine(List<Song> list)
         {
             this.list = list;
         }
@@ -56,45 +57,49 @@ namespace Juke.Control.Tests
                                this.Path = path;
                                this.listener = listener;
                                Initiate();
-                               return new List<string>();
+                               listener.NotifyProgress(list.Count);
+                               var list1 = list.Select((e) => e.Name).ToList();
+                               return list1;
                            });
             task.Wait();
             return task;
         }
     }
 
-    public class FakeAsyncSongLoader : AsyncSongLoader
+    /// <summary>
+    /// Wraps an AsyncSongLoader to make in synchronous
+    /// </summary>
+    public class FakeAsyncSongLoader : IAsyncSongLoader
     {
         private IList<Song> list;
-        private FakeSongLoadEngine engine;
+        private AsyncSongLoader innerLoader;
 
-        public FakeAsyncSongLoader():this(new FakeSongLoadEngine())
+        public string Path
+        {
+            get => innerLoader.Path;
+            set => innerLoader.Path = value;
+        }
+
+        public FakeAsyncSongLoader(AsyncSongLoader innerLoader)
+        {
+            this.innerLoader = innerLoader;
+        }
+
+        public FakeAsyncSongLoader(FakeSongLoadEngine engine, ISongCollector songCollector): this(new AsyncSongLoader(engine, songCollector))
         {
         }
 
-        public FakeAsyncSongLoader(FakeSongLoadEngine engine):base(engine ,new FakeTagReaderFactory())
+        public FakeAsyncSongLoader(FakeSongLoadEngine engine)
         {
-            this.engine = engine;
-            this.list = engine.list;
+            innerLoader = new AsyncSongLoader(engine, new FakeSongCollector(engine.list));
         }
 
-        public void SignalComplete()
+        public Task StartNewLoad(LoadListener listener)
         {
-            engine.SignalComplete();
-        }
-
-        public void SignalProgress()
-        {
-            engine.SignalComplete();
-        }
-
-    }
-
-    class FakeTagReaderFactory : TagReaderFactory
-    {
-        public TagReader Create(string filename)
-        {
-            return null;
+            var t = innerLoader.StartNewLoad(listener);
+            t.Wait();
+            return t;
         }
     }
+
 }
