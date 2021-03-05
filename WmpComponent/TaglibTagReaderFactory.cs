@@ -1,9 +1,4 @@
 ﻿using Juke.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TagLib;
 
 namespace Juke.External.Wmp
@@ -29,7 +24,7 @@ namespace Juke.External.Wmp
         {
             get
             {
-                return tag.Title != null ? tag.Title : FindFileName();
+                return tag.Title ?? FindFileName();
             }
         }
 

@@ -54,25 +54,28 @@ namespace Juke.IO
              );
         }
 
-        private async Task LoadPartial(List<string> list)
+        private Task LoadPartial(List<string> list)
         {
-            if (list.Count > 2000)
+            return Task.Run(() =>
             {
-                splits++;
-                Console.WriteLine("Do split! " + splits+" Count "+list.Count);
-                SplitAndLoad(list);
-                splits--;
-                Console.WriteLine("Post split. " + splits);
-                return;
-            }
+                if (list.Count > 2000)
+                {
+                    splits++;
+                    Console.WriteLine("Do split! " + splits + " Count " + list.Count);
+                    SplitAndLoad(list);
+                    splits--;
+                    Console.WriteLine("Post split. " + splits);
+                }
 
-            foreach (var file in list)
-            {
-                await Task.Run(() => LoadSong(file));
-                listener.NotifyProgress(1);
-            }
+                foreach (var file in list)
+                {
+                    LoadSong(file);
+                    listener.NotifyProgress(1);
+                }
 
-            Console.WriteLine("Done chunk! " + splits);
+                Console.WriteLine("Done chunk! " + splits);
+            });
+            
         }
 
         private void LoadSong(string file)
@@ -88,10 +91,7 @@ namespace Juke.IO
                         file
                     );
                 Messenger.PostMessage(reader.Title + " (" + reader.Artist + ")", Messenger.TargetType.Frontend);
-                lock (songs)
-                {
-                    songs.Add(song);
-                }
+                songs.Add(song);
             } catch (Exception e)
             {
                 Console.WriteLine("Load failed for "+file+": "+e.Message+"\n"+e.StackTrace);

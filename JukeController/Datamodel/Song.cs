@@ -18,7 +18,7 @@ namespace DataModel
         public string TrackNo { get; private set; }
         public string FilePath { get; private set; }
 
-        public string ID { get { return Name + Artist + Album + TrackNo; } }
+        public string ID { get { return FilePath ?? Name+Album; } }
         public static Comparison<Song> Comparison
         {
             get

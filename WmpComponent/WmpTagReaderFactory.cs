@@ -18,26 +18,34 @@ namespace Juke.External.Wmp
 
     class WmpTagReader : TagReader
     {
-        private IWMPMedia media;
-
         public WmpTagReader(string filename)
         {
             var player = new WindowsMediaPlayer();
-            media = player.newMedia(filename);
+            var media = player.newMedia(filename);
             player.close();
+
+            title = media.getItemInfo("Title");
+            album = media.getItemInfo("Album");
+            artist = media.getItemInfo("Author");
+            trackNo = media.getItemInfo("OriginalIndex");
         }
 
         public void Dispose()
         {
         }
 
-        public string Title => media.getItemInfo("Title");
+        private string title;
+        private string album;
+        private string artist;
+        private string trackNo;
 
-        public string Album => media.getItemInfo("Album");
+        public string Title => title;
 
-        public string Artist => media.getItemInfo("Author");
+        public string Album => album;
 
-        public string TrackNo => media.getItemInfo("OriginalIndex");
+        public string Artist => artist;
+
+        public string TrackNo => trackNo;
 
         public override string ToString()
         {
