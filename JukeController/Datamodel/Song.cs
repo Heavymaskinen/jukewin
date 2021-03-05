@@ -18,7 +18,8 @@ namespace DataModel
         public string TrackNo { get; private set; }
         public string FilePath { get; private set; }
 
-        public string ID { get { return FilePath ?? Name+Album; } }
+        public string ID => string.IsNullOrEmpty(FilePath) ? Name + Album + Artist + TrackNo: FilePath;
+
         public static Comparison<Song> Comparison
         {
             get

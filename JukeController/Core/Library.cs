@@ -37,7 +37,8 @@ namespace Juke.Core
             if (!songCore.ContainsKey(song.ID))
             {
                 songCore.Add(song.ID, song);
-            } else if (songCore[song.ID].Name != song.Name)
+            }
+            else if (songCore[song.ID].Name != song.Name)
             {
                 songCore[song.ID] = song;
             }

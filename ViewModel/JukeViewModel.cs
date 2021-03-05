@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 
 namespace Juke.UI
@@ -23,6 +24,7 @@ namespace Juke.UI
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
+        public CancellationTokenSource CancelTokenSource { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -96,6 +98,14 @@ namespace Juke.UI
         public ICommand RenameArtist => new RenameArtistCommand(controller, View, this);
         public ICommand DeleteAlbum => new DeleteAlbumCommand(controller, View, this);
         public ICommand DeleteSong => new DeleteSongCommand(controller, View, this);
+        public ICommand CancelLoad => new RelayCommand(
+            (obj) => CancelTokenSource != null && !CancelTokenSource.IsCancellationRequested,
+            (obj) =>
+            {
+                CancelTokenSource.Cancel();
+                CancelTokenSource.Dispose();
+                CancelTokenSource = null;
+            });
 
         public ViewControl View { get; set; }
 
@@ -119,8 +129,19 @@ namespace Juke.UI
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
         }
 
+        public CancellationToken NewCancellationToken()
+        {
+            if (CancelTokenSource == null)
+            {
+                CancelTokenSource = new CancellationTokenSource();
+            }
+
+            return CancelTokenSource.Token;
+        }
+
         public void Dispose()
         {
+            CancelTokenSource?.Dispose();
             controller.Dispose();
         }
         private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)

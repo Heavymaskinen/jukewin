@@ -32,7 +32,7 @@ namespace Juke.UI.Command
         private void LoadAsync(string path)
         {
             var loader = new LoaderFactory().CreateAsync(path);
-            controller.LoadHandler.LoadSongs(loader);
+            controller.LoadHandler.LoadSongs(loader, model.NewCancellationToken());
         }
     }
 }

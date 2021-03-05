@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DataModel;
 using Juke.Core;
@@ -94,9 +95,9 @@ namespace Juke.Control.Tests
             innerLoader = new AsyncSongLoader(engine, new FakeSongCollector(engine.list));
         }
 
-        public Task StartNewLoad(LoadListener listener)
+        public Task StartNewLoad(LoadListener listener, CancellationToken cancelToken)
         {
-            var t = innerLoader.StartNewLoad(listener);
+            var t = innerLoader.StartNewLoad(listener, cancelToken);
             t.Wait();
             return t;
         }

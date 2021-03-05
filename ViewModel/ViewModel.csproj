@@ -66,6 +66,7 @@
     <Compile Include="Command\LoadSongsCommand.cs" />
     <Compile Include="Command\PlayAlbumCommand.cs" />
     <Compile Include="Command\PlaySongCommand.cs" />
+    <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Command\RenameArtistCommand.cs" />
     <Compile Include="Command\SaveLibraryCommand.cs" />
     <Compile Include="Command\StopSongCommand.cs" />

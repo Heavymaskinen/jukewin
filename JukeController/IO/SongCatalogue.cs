@@ -40,12 +40,22 @@ namespace Juke.IO
 
         public Task LoadSongs(IAsyncSongLoader loader)
         {
-            return loader.StartNewLoad(this);
+            return LoadSongs(loader, this);
+        }
+
+        public Task LoadSongs(IAsyncSongLoader loader, CancellationToken cancelToken)
+        {
+            return LoadSongs(loader, this, cancelToken);
         }
 
         public Task LoadSongs(IAsyncSongLoader loader, LoadListener listener)
         {
-           return loader.StartNewLoad(listener);
+           return LoadSongs(loader,listener, CancellationToken.None);
+        }
+
+        public Task LoadSongs(IAsyncSongLoader loader, LoadListener listener, CancellationToken cancelToken)
+        {
+            return loader.StartNewLoad(listener, cancelToken);
         }
 
         public void AddSong(Song song)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Juke.IO
@@ -9,6 +10,6 @@ namespace Juke.IO
     /// </summary>
     public interface ISongCollector
     {
-        Task Load(List<string> files, LoadListener listener);
+        Task Load(List<string> files, LoadListener listener, CancellationToken cancelToken);
     }
 }

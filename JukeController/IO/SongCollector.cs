@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DataModel;
 using Juke.Control;
@@ -13,6 +14,7 @@ namespace Juke.IO
         private LoadListener listener;
         private readonly TagReaderFactory tagReaderFactory;
         private List<Song> songs;
+        private CancellationToken cancelToken;
 
         public SongCollector(LoadListener listener, TagReaderFactory tagReaderFactory)
         {
@@ -21,26 +23,34 @@ namespace Juke.IO
             songs = new List<Song>();
         }
 
-        public async Task Load(List<string> files, LoadListener listener)
+        public async Task Load(List<string> files, LoadListener listener, CancellationToken cancelToken)
         {
             this.listener = listener;
-            await Task.Run(() =>
+            this.cancelToken = cancelToken;
+            lock (songs)
             {
-                lock (songs)
-                {
-                    songs.Clear();
-                }
-
-                splits = 0;
-                listener.NotifyLoadInitiated(files.Count);
-                SplitAndLoad(files);
-
-                lock (songs)
-                {
-                    listener.NotifyCompleted(songs);
-                }
-            });
+                songs.Clear();
             }
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    splits = 0;
+                    listener.NotifyLoadInitiated(files.Count);
+                    SplitAndLoad(files);
+                }, cancelToken);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Canceled!");
+            }
+            
+            lock (songs)
+            {
+                listener.NotifyCompleted(songs);
+            }
+        }
 
         private void SplitAndLoad(List<string> files)
         {
@@ -49,8 +59,8 @@ namespace Juke.IO
             files.RemoveRange(0, mid);
 
             Task.WaitAll(
-                Task.Run(async () => await LoadPartial(first)),
-                Task.Run(async () => await LoadPartial(files))
+                Task.Run( async () =>  await LoadPartial(first), cancelToken),
+                Task.Run( async () =>  await LoadPartial(files), cancelToken)
              );
         }
 
@@ -65,17 +75,18 @@ namespace Juke.IO
                     SplitAndLoad(list);
                     splits--;
                     Console.WriteLine("Post split. " + splits);
+                    return;
                 }
 
                 foreach (var file in list)
                 {
+                    cancelToken.ThrowIfCancellationRequested();
                     LoadSong(file);
                     listener.NotifyProgress(1);
                 }
 
                 Console.WriteLine("Done chunk! " + splits);
-            });
-            
+            }, cancelToken);
         }
 
         private void LoadSong(string file)
@@ -83,19 +94,29 @@ namespace Juke.IO
             try
             {
                 var reader = tagReaderFactory.Create(file);
-                var song = new Song(
-                        reader.Artist,
-                        reader.Album,
-                        reader.Title,
-                        reader.TrackNo,
-                        file
-                    );
+                var song = CreateSongFromTags(file, reader);
                 Messenger.PostMessage(reader.Title + " (" + reader.Artist + ")", Messenger.TargetType.Frontend);
-                songs.Add(song);
+                lock (songs)
+                {
+                    songs.Add(song);
+                }
             } catch (Exception e)
             {
                 Console.WriteLine("Load failed for "+file+": "+e.Message+"\n"+e.StackTrace);
             }
+        }
+
+        private static Song CreateSongFromTags(string file, TagReader reader)
+        {
+            var song = new Song(
+                reader.Artist,
+                reader.Album,
+                reader.Title,
+                reader.TrackNo,
+                file
+            );
+
+            return song;
         }
     }
 }

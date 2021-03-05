@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Juke.Core;
 
@@ -32,7 +33,7 @@ namespace Juke.IO
             this.tagReaderFactory = tagReaderFactory;
         }
 
-        public Task StartNewLoad(LoadListener listener)
+        public Task StartNewLoad(LoadListener listener, CancellationToken cancelToken)
         {
             if (engine != null)
             {
@@ -44,7 +45,7 @@ namespace Juke.IO
                 return Task.Run(async () =>
                 {
                     var list = await engine.LoadAsync(Path, listener);
-                    await songCollector.Load(list, listener);
+                    await songCollector.Load(list, listener, cancelToken);
                 });
                 
             }
