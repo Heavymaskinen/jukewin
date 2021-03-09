@@ -13,17 +13,13 @@ using System.Windows.Input;
 
 namespace Juke.UI
 {
-    public class JukeViewModel : INotifyPropertyChanged
+    public partial class JukeViewModel : SelectionModel
     {
-        public enum InfoType
-        {
-            Song, Album, Artist
-        }
-
         private JukeController controller;
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
+
         public CancellationTokenSource CancelTokenSource { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -92,7 +88,8 @@ namespace Juke.UI
         public ICommand LoadLibrary => new LoadLibraryCommand(controller, View, this);
         public ICommand SaveLibrary => new SaveLibraryCommand(controller, View, this);
         public ICommand PlaySong => new PlaySongCommand(controller, View, this);
-        public ICommand SkipSong => new SkipSongCommand(controller, View, this);
+        public ICommand StopSong => new StopSongCommand(controller, View, this);
+        public ICommand SkipSong => new StopSongCommand(controller, View, this);
         public ICommand EditSong => new EditSongCommand(controller, View, this);
         public ICommand EditAlbum => new EditAlbumCommand(controller, View, this);
         public ICommand RenameArtist => new RenameArtistCommand(controller, View, this);
@@ -131,17 +128,12 @@ namespace Juke.UI
 
         public CancellationToken NewCancellationToken()
         {
-            if (CancelTokenSource == null)
-            {
-                CancelTokenSource = new CancellationTokenSource();
-            }
-
-            return CancelTokenSource.Token;
+            return LoaderCancellationTokenProvider.Token;
         }
 
         public void Dispose()
         {
-            CancelTokenSource?.Dispose();
+            LoaderCancellationTokenProvider.Dispose();
             controller.Dispose();
         }
         private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)

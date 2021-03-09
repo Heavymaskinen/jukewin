@@ -6,7 +6,7 @@ namespace Juke.UI.Command
 {
     public class SaveLibraryCommand : JukeCommand
     {
-        public SaveLibraryCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public SaveLibraryCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 

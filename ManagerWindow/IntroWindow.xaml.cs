@@ -18,7 +18,7 @@ namespace Juke.UI.Wpf
             InitializeComponent();
             DataContext = viewModel;
             viewModel.View = this;
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), new TaglibTagReaderFactory()));
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), new TaglibTagReaderFactory() { BackupFactory = new WmpTagReaderFactory() }));
         }
         
         public IntroWindow()
@@ -45,7 +45,7 @@ namespace Juke.UI.Wpf
             Dispatcher.Invoke(() => Close());
         }
 
-        public SongUpdate PromptSongData(JukeViewModel.InfoType infoType)
+        public SongUpdate PromptSongData(InfoType infoType)
         {
             throw new NotImplementedException();
         }

@@ -73,6 +73,10 @@
       <Project>{33cf6bf0-cbe8-468a-bf88-1f69924c76b4}</Project>
       <Name>Stubs2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ViewModelCommands\ViewModelCommands.csproj">
+      <Project>{FF709AB5-21F6-4B0C-B872-B6AABFF715E8}</Project>
+      <Name>ViewModelCommands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{9383DB45-264B-4D71-9CA1-8A72F10AF6B0}</Project>
       <Name>ViewModel</Name>

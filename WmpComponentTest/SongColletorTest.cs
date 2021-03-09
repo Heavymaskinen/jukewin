@@ -205,9 +205,11 @@ namespace WmpComponentTest
         }
     }
     
-    class FakeTagReaderFactory : TagReaderFactory
+    class FakeTagReaderFactory :    TagReaderFactory
     {
         public FakeTagReader FakeTagReader { get; set; }
+        public TagReaderFactory BackupFactory { get; set; }
+
         public TagReader Create(string filename)
         {
             return FakeTagReader.New();

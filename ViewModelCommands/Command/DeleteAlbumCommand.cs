@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Juke.UI.Command
 {
-    internal class DeleteAlbumCommand : JukeCommand
+    public class DeleteAlbumCommand : JukeCommand
     {
-        public DeleteAlbumCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public DeleteAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 

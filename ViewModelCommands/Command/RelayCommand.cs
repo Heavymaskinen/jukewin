@@ -31,7 +31,7 @@ namespace Juke.UI.Command
                 CanExecuteChanged?.Invoke(this,EventArgs.Empty);
             }
 
-            return val;
+            return true;
         }
 
         public void Execute(object parameter)

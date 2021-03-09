@@ -8,9 +8,9 @@ namespace Juke.UI.Command
     {
         protected JukeController controller;
         protected ViewControl view;
-        protected JukeViewModel model;
+        protected SelectionModel model;
 
-        protected JukeCommand(JukeController controller, ViewControl view, JukeViewModel model)
+        protected JukeCommand(JukeController controller, ViewControl view, SelectionModel model)
         {
             this.controller = controller;
             this.view = view;

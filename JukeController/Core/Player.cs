@@ -34,6 +34,15 @@ namespace Juke.Core
             engine.SongFinished += Engine_SongFinished;
         }
 
+        public void PlayAlbum(string selectedAlbum)
+        {
+            Queue.EnqueueAlbum(selectedAlbum);
+            if (NowPlaying == null)
+            {
+                PlayNext();
+            }
+        }
+
         public void PlaySong(Song song)
         {
             if (NowPlaying == null)
@@ -57,6 +66,11 @@ namespace Juke.Core
         private void Engine_SongFinished(object sender, EventArgs e)
         {
             NowPlaying = null;
+            PlayNext();
+        }
+
+        private void PlayNext()
+        {
             PlaySong(Queue.Dequeue());
         }
 

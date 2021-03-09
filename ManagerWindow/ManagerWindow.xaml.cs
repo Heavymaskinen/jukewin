@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using DataModel;
@@ -19,8 +18,15 @@ namespace Juke.UI.Wpf
         {
             InitializeComponent();
             DataContext = new JukeViewModel(this, new WmpPlayerEngine());
-            var wmpTagReaderFactory = new WmpTagReaderFactory();
+            var wmpTagReaderFactory = new TaglibTagReaderFactory() { BackupFactory = new WmpTagReaderFactory()};
             LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), wmpTagReaderFactory));
+            (DataContext as JukeViewModel).PropertyChanged += MainWindow_PropertyChanged;
+        }
+
+        public MainWindow(JukeViewModel viewModel)
+        {
+            InitializeComponent();
+            DataContext = viewModel;
             (DataContext as JukeViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
 
@@ -80,7 +86,7 @@ namespace Juke.UI.Wpf
             return null;
         }
         
-        public SongUpdate PromptSongData(JukeViewModel.InfoType infoType)
+        public SongUpdate PromptSongData(InfoType infoType)
         {
             Song song;
 
@@ -97,7 +103,7 @@ namespace Juke.UI.Wpf
                 return null;
             }
 
-            if (infoType == JukeViewModel.InfoType.Song)
+            if (infoType == InfoType.Song)
             {
                 if (song.Album == "<unknown>" || song.Artist == "<unknown>")
                 {

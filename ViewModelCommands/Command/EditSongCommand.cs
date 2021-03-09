@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Juke.Control;
+﻿using Juke.Control;
 using DataModel;
 
 namespace Juke.UI.Command
 {
-    class EditSongCommand : JukeCommand
+    public class EditSongCommand : JukeCommand
     {
-        public EditSongCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public EditSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 
@@ -21,7 +16,7 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            SongUpdate update = view.PromptSongData(JukeViewModel.InfoType.Song);
+            SongUpdate update = view.PromptSongData(InfoType.Song);
             if (update != null)
             {
                 controller.LoadHandler.UpdateSong(update);

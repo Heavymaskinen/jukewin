@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Juke.UI.Command
 {
-    class AsyncLoadSongsCommand : AsyncJukeCommand
+    public class AsyncLoadSongsCommand : AsyncJukeCommand
     {
-        public AsyncLoadSongsCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public AsyncLoadSongsCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 

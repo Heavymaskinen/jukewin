@@ -1,7 +1,6 @@
 ﻿using DataModel;
 using Juke.Control;
 using Juke.Control.Tests;
-using Juke.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Stubs2;

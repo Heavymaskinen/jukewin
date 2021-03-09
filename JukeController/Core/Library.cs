@@ -38,9 +38,9 @@ namespace Juke.Core
             {
                 songCore.Add(song.ID, song);
             }
-            else if (songCore[song.ID].Name != song.Name)
+            else if (!songCore[song.ID].Equals(song))
             {
-                songCore[song.ID] = song;
+                songCore[song.ID].Merge(song);
             }
         }
         

@@ -10,6 +10,8 @@ namespace Juke.External.Wmp
 {
     public class WmpTagReaderFactory : TagReaderFactory
     {
+        public TagReaderFactory BackupFactory { get; set; }
+
         public TagReader Create(string filename)
         {
             return new WmpTagReader(filename);

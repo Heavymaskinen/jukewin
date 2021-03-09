@@ -45,9 +45,10 @@ namespace Juke.IO
             {
                 Console.WriteLine("Canceled!");
             }
-            
+
             lock (songs)
             {
+                Console.WriteLine("Collected songs: " + songs.Count);
                 listener.NotifyCompleted(songs);
             }
         }
@@ -59,8 +60,8 @@ namespace Juke.IO
             files.RemoveRange(0, mid);
 
             Task.WaitAll(
-                Task.Run( async () =>  await LoadPartial(first), cancelToken),
-                Task.Run( async () =>  await LoadPartial(files), cancelToken)
+                Task.Run(async () => await LoadPartial(first), cancelToken),
+                Task.Run(async () => await LoadPartial(files), cancelToken)
              );
         }
 
@@ -95,23 +96,52 @@ namespace Juke.IO
             {
                 var reader = tagReaderFactory.Create(file);
                 var song = CreateSongFromTags(file, reader);
+                song = EnsureSongRead(file, song);
                 Messenger.PostMessage(reader.Title + " (" + reader.Artist + ")", Messenger.TargetType.Frontend);
                 lock (songs)
                 {
                     songs.Add(song);
                 }
-            } catch (Exception e)
-            {
-                Console.WriteLine("Load failed for "+file+": "+e.Message+"\n"+e.StackTrace);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("Load failed for " + file + ": " + e.Message + "\n" + e.StackTrace);
+                try
+                {
+                    if (tagReaderFactory.BackupFactory != null)
+                    {
+                        var song = EnsureSongRead(file, new Song());
+                        lock (songs)
+                        {
+                            songs.Add(song);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed again! " + ex.Message);
+                }
+            }
+        }
+
+        private Song EnsureSongRead(string file, Song song)
+        {
+            if (tagReaderFactory.BackupFactory != null && (song.Album == "<unknown>" || song.Artist == "<unknown>"))
+            {
+                Console.WriteLine("Retrying for " + song.Name + ", " + file);
+                song = CreateSongFromTags(file, tagReaderFactory.BackupFactory.Create(file));
+                Console.WriteLine("Read from backup: " + song.Name + " " + song.Album + " " + song.Artist);
+            }
+
+            return song;
         }
 
         private static Song CreateSongFromTags(string file, TagReader reader)
         {
             var song = new Song(
-                reader.Artist,
-                reader.Album,
-                reader.Title,
+                reader.Artist?.Trim(),
+                reader.Album?.Trim(),
+                reader.Title?.Trim(),
                 reader.TrackNo,
                 file
             );

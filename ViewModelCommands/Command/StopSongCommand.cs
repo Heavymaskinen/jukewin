@@ -1,15 +1,15 @@
-﻿using Juke.Control;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Juke.Control;
 
 namespace Juke.UI.Command
 {
-    internal class DeleteSongCommand : JukeCommand
+    public class StopSongCommand : JukeCommand
     {
-        public DeleteSongCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public StopSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 
@@ -20,8 +20,8 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            if (model.SelectedSong == null) return;
-            controller.LoadHandler.DeleteSong(model.SelectedSong);
+            Console.WriteLine("stop it!");
+            controller.Player.Stop();
         }
     }
 }

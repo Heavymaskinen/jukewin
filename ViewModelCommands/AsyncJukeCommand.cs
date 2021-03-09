@@ -8,15 +8,15 @@ using System.Windows.Input;
 
 namespace Juke.UI
 {
-    abstract class AsyncJukeCommand : ICommand
+    public abstract class AsyncJukeCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
         protected JukeController controller;
         protected ViewControl view;
-        protected JukeViewModel model;
+        protected SelectionModel model;
 
-        protected AsyncJukeCommand(JukeController controller, ViewControl view, JukeViewModel model)
+        protected AsyncJukeCommand(JukeController controller, ViewControl view, SelectionModel model)
         {
             this.controller = controller;
             this.view = view;

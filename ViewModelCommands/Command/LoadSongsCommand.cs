@@ -9,9 +9,9 @@ using Juke.IO;
 
 namespace Juke.UI.Command
 {
-    class LoadSongsCommand : JukeCommand
+    public class LoadSongsCommand : JukeCommand
     {
-        public LoadSongsCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public LoadSongsCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 
@@ -32,7 +32,7 @@ namespace Juke.UI.Command
         private void LoadAsync(string path)
         {
             var loader = new LoaderFactory().CreateAsync(path);
-            controller.LoadHandler.LoadSongs(loader, model.NewCancellationToken());
+            controller.LoadHandler.LoadSongs(loader, LoaderCancellationTokenProvider.Token);
         }
     }
 }

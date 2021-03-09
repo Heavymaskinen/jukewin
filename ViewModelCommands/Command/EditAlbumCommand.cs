@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Juke.UI.Command
 {
-    internal class EditAlbumCommand : JukeCommand
+    public class EditAlbumCommand : JukeCommand
     {
-        public EditAlbumCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public EditAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 
@@ -21,7 +21,7 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            var updateData = view.PromptSongData(JukeViewModel.InfoType.Album);
+            var updateData = view.PromptSongData(InfoType.Album);
             if (updateData == null) return;
 
             var albumSongs = controller.Browser.GetSongsByAlbum(updateData.SongSource.Album);

@@ -252,8 +252,10 @@ namespace Juke.UI.Wpf
         {
             if (e.Key == Key.PageDown)
             {
-                var manager = new MainWindow();
+                var manager = new MainWindow(viewModel);
+                viewModel.View = manager;
                 manager.ShowDialog();
+                viewModel.View = this;
             }
 
             if (e.Key == Key.PageUp)
@@ -430,7 +432,7 @@ namespace Juke.UI.Wpf
             }
         }
 
-        public SongUpdate PromptSongData(JukeViewModel.InfoType infoType)
+        public SongUpdate PromptSongData(InfoType infoType)
         {
             throw new NotImplementedException();
         }

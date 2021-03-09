@@ -20,6 +20,22 @@ namespace DataModel
 
         public string ID => string.IsNullOrEmpty(FilePath) ? Name + Album + Artist + TrackNo: FilePath;
 
+        public void Merge(Song other)
+        {
+            if (other.ID == ID)
+            {
+                Name = Name.Contains(".mp3") || (Name.StartsWith("0") &&  !string.IsNullOrEmpty(other.Name)) ? other.Name : Name;
+                Artist = Artist == "<unknown>" ? other.Artist : Artist;
+                Album = Album == "<unknown>" ? other.Album : Album;
+                TrackNo = string.IsNullOrEmpty(TrackNo) ? other.TrackNo : TrackNo;
+
+                Console.WriteLine("Merged to" + Name + " - " + Artist + " " + Album);
+            } else
+            {
+                Console.WriteLine("Merged with different ID?");
+            }
+        }
+
         public static Comparison<Song> Comparison
         {
             get

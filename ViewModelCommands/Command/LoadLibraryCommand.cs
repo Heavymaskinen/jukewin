@@ -11,7 +11,7 @@ namespace Juke.UI.Command
 {
     public class LoadLibraryCommand : JukeCommand
     {
-        public LoadLibraryCommand(JukeController controller, ViewControl view, JukeViewModel model) : base(controller, view, model)
+        public LoadLibraryCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
         }
 

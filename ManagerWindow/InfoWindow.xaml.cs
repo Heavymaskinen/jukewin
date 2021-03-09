@@ -27,17 +27,17 @@ namespace Juke.UI.Wpf
             InitializeComponent();
         }
 
-        public InfoWindow(SongUpdate song, JukeViewModel.InfoType info)
+        public InfoWindow(SongUpdate song, InfoType info)
         {
             InitializeComponent();
             DataContext = song;
 
-            if (info == JukeViewModel.InfoType.Album)
+            if (info == InfoType.Album)
             {
                 songBox.IsEnabled = false;
             }
 
-            if (info == JukeViewModel.InfoType.Artist)
+            if (info == InfoType.Artist)
             {
                 songBox.IsEnabled = false;
                 albumBox.IsEnabled = false;

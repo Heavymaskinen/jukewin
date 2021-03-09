@@ -50,7 +50,15 @@ namespace Juke.Core
             {
                 queue.Enqueue(song);
             }
-            
+        }
+
+        public void EnqueueAlbum(string albumName)
+        {
+            var songs =browser.GetSongsByAlbum(albumName);
+            foreach ( var s in songs)
+            {
+                Enqueue(s);
+            }
         }
 
         public Song Dequeue()

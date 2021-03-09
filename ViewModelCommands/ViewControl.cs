@@ -12,7 +12,7 @@ namespace Juke.UI
     {
         string PromptPath();
 
-        SongUpdate PromptSongData(JukeViewModel.InfoType infoType);
+        SongUpdate PromptSongData(InfoType infoType);
 
         void CommandCompleted(JukeCommand command);
     }
