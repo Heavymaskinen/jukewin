@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
+using UiComponents;
 
 namespace Juke.UI.Admin
 {
@@ -19,6 +20,8 @@ namespace Juke.UI.Admin
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
+        private ProgressTracker progressTracker;
+
         public CancellationTokenSource CancelTokenSource { get; set; }
         public ObservableCollection<Song> Queue { get; private set; }
         public ObservableCollection<Song> Songs { get; private set; }
@@ -43,9 +46,23 @@ namespace Juke.UI.Admin
                 CancelTokenSource.Dispose();
                 CancelTokenSource = null;
             });
-        public double ProgressMax { get; set; }
-        public double Progress { get; set; }
-        public bool ProgressIndeterminate { get; set; }
+        public ProgressTracker ProgressTracker => progressTracker;
+
+        public double ProgressMax => ProgressTracker.ProgressMax;
+
+        public double Progress
+        {
+            get
+            {
+                return progressTracker.Progress;
+            }
+            set
+            {
+                progressTracker.Progress = value;
+            }
+        }
+
+        public bool ProgressIndeterminate => progressTracker.IsIndeterminate;
         public string SelectedArtist
         {
             get => selectedArtist;
@@ -97,8 +114,15 @@ namespace Juke.UI.Admin
         {
             View = viewControl;
             controller = JukeController.Instance;
+            progressTracker = new ProgressTracker(controller.LoadHandler);
+            progressTracker.Changed += ProgressTracker_Changed;
             InitializeCollections();
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
+        }
+
+        private void ProgressTracker_Changed(object sender, System.EventArgs e)
+        {
+            RaisePropertyChanged(nameof(ProgressTracker));
         }
 
         private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)

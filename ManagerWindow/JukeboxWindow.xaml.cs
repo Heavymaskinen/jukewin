@@ -95,7 +95,7 @@ namespace Juke.UI.Wpf
 
         private void CreateEndlessFadeAnimation()
         {
-            endlessFadeAnimation = new DoubleAnimation(0, 0.4, new Duration(TimeSpan.FromSeconds(0.5)))
+            endlessFadeAnimation = new DoubleAnimation(0, 0.4, new Duration(TimeSpan.FromSeconds(0.2)))
             {
                 AutoReverse = true
             };
@@ -193,8 +193,8 @@ namespace Juke.UI.Wpf
 
         private void LoadLibrary()
         {
-            viewModel.LoadLibrary.Execute(this);
             logoLabel.BeginAnimation(OpacityProperty, endlessFadeAnimation, HandoffBehavior.SnapshotAndReplace);
+            viewModel.LoadLibrary.Execute(this);
         }
 
         private void Player_SongPlayed(object sender, Song song)

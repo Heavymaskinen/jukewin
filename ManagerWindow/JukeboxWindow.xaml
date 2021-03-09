@@ -34,7 +34,7 @@
                 </Label>
                 <ListBox x:Name="queueBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.PanningMode="HorizontalFirst" HorizontalContentAlignment="Left" ItemContainerStyle="{StaticResource selectedStyle}" BorderThickness="2" Opacity="0" HorizontalAlignment="Left" Height="357" Margin="474,64,0,0" VerticalAlignment="Top" Width="292" Grid.RowSpan="2"/>
 
-                <ProgressBar x:Name="loadProgress" Height="20"  Background="Gray" Foreground="White"  Maximum="{Binding ProgressMax}" Minimum="0" Value="{Binding Progress}" Margin="0,459.854,0,10" BorderThickness="0" BorderBrush="White" Grid.Row="1" />
+                <ProgressBar x:Name="loadProgress" Height="20"  Background="Gray" Foreground="White"  Maximum="{Binding ProgressTracker.ProgressMax}" Minimum="0" Value="{Binding ProgressTracker.Progress}" Margin="0,459.854,0,10" BorderThickness="0" BorderBrush="White" Grid.Row="1" />
             </Grid>
         </Border>
     </Border>

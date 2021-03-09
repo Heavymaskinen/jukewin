@@ -51,7 +51,7 @@
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <ThicknessAnimation From="0" To="99" Duration="0:0:2" Storyboard.TargetProperty = "BorderThickness"/>
+                                <ThicknessAnimation From="0" To="99" Duration="0:0:1" Storyboard.TargetProperty = "BorderThickness"/>
                                 <StringAnimationUsingKeyFrames Storyboard.TargetProperty="Content">
                                     <StringAnimationUsingKeyFrames.KeyFrames>
                                         <StringKeyFrameCollection>
@@ -59,7 +59,7 @@
                                         </StringKeyFrameCollection>
                                     </StringAnimationUsingKeyFrames.KeyFrames>
                                 </StringAnimationUsingKeyFrames>
-                                <ThicknessAnimation BeginTime="0:0:2" From="99" To="0" Duration="0:0:1" Storyboard.TargetProperty = "BorderThickness"/>
+                                <ThicknessAnimation BeginTime="0:0:1" From="99" To="0" Duration="0:0:1" Storyboard.TargetProperty = "BorderThickness"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
+using UiComponents;
 
 namespace Juke.UI
 {
@@ -32,9 +33,24 @@ namespace Juke.UI
             return controller.Browser.GetSongsByArtist(art);
         }
         public ObservableCollection<string> Artists { get; private set; }
-        public double ProgressMax { get; set; }
-        public double Progress { get; set; }
-        public bool ProgressIndeterminate { get; set; }
+
+        public ProgressTracker ProgressTracker => progressTracker;
+        
+        public double ProgressMax => progressTracker.ProgressMax;
+
+        public double Progress
+        {
+            get
+            {
+                return progressTracker.Progress;
+            }
+            set
+            {
+                progressTracker.Progress = value;
+            }
+        }
+
+        public bool ProgressIndeterminate => progressTracker.IsIndeterminate;
         
         public string SelectedArtist
         {
@@ -105,25 +121,27 @@ namespace Juke.UI
 
         public ViewControl View { get; set; }
 
+        private ProgressTracker progressTracker;
+
         public JukeViewModel(ViewControl view)
         {
             controller = JukeController.Instance;
-
+            progressTracker = new ProgressTracker(controller.LoadHandler);
+            progressTracker.Changed += ProgressTracker_Changed;
             View = view;
             InitializeCollections();
-            Progress = 0;
-            ProgressMax = 100;
-            ProgressIndeterminate = false;
-
+            
             controller.LoadHandler.LibraryUpdated += LoadHandler_LibraryUpdated;
-            controller.LoadHandler.LoadInitiated += AsyncSongLoader_LoadInitiated;
-            controller.LoadHandler.NewLoad += AsyncSongLoader_NewLoad;
-            controller.LoadHandler.LoadProgress += AsyncSongLoader_LoadProgress;
             controller.LoadHandler.LoadCompleted += (sender, args) => View.CommandCompleted(null);
             Player.SongPlayed += Player_SongPlayed;
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
         }
-        
+
+        private void ProgressTracker_Changed(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(nameof(ProgressTracker));
+        }
+
         public void Dispose()
         {
             LoaderCancellationTokenProvider.Dispose();
@@ -133,27 +151,6 @@ namespace Juke.UI
         {
             SystemMessage = message;
             RaisePropertyChanged(nameof(SystemMessage));
-        }
-
-        private void AsyncSongLoader_NewLoad(object sender, EventArgs e)
-        {
-            Progress = 0;
-            ProgressMax = 0;
-            ProgressIndeterminate = true;
-            RaisePropertyChanged(nameof(Progress));
-            RaisePropertyChanged(nameof(ProgressIndeterminate));
-        }
-
-        private void AsyncSongLoader_LoadInitiated(object sender, int load)
-        {
-            if (load <= 0) return;
-            ProgressMax = load;
-            Progress = 0;
-            ProgressIndeterminate = false;
-            Messenger.Log("Load initiated - New max: " + ProgressMax);
-            RaisePropertyChanged(nameof(ProgressMax));
-            RaisePropertyChanged(nameof(Progress));
-            RaisePropertyChanged(nameof(ProgressIndeterminate));
         }
 
         private void Player_SongPlayed(object sender, Song played)
@@ -195,7 +192,7 @@ namespace Juke.UI
 
         private void AsyncSongLoader_LoadProgress(object sender, int progress)
         {
-            Progress += progress;
+            //Progress += progress;
             RaisePropertyChanged(nameof(Progress));
         }
 

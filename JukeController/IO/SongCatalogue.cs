@@ -92,7 +92,7 @@ namespace Juke.IO
                 LoadProgress?.Invoke(this, 1);
             }
 
-            //library.InitialiseParts();
+            library.InitialiseParts();
             NotifyUpdated();
         }
 

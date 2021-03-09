@@ -6,7 +6,6 @@ using System.IO;
 using Juke.Control;
 using Juke.External.Wmp;
 using Juke.UI.Command;
-using Juke.IO;
 using Juke.UI.Admin;
 
 namespace Juke.UI.Wpf
@@ -20,7 +19,7 @@ namespace Juke.UI.Wpf
         {
             InitializeComponent();
             DataContext = new AdminViewModel(this);
-            var wmpTagReaderFactory = new TaglibTagReaderFactory() { BackupFactory = new WmpTagReaderFactory()};
+            //var wmpTagReaderFactory = new TaglibTagReaderFactory() { BackupFactory = new WmpTagReaderFactory()};
             //LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), wmpTagReaderFactory));
             (DataContext as AdminViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
