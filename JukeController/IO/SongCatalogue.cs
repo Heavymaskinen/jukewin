@@ -34,7 +34,8 @@ namespace Juke.IO
             NewLoad?.Invoke(this, EventArgs.Empty);
             var songs = loader.LoadSongs();
             LoadInitiated?.Invoke(this, songs.Count);
-            UpdateLibrary(songs, true);
+            UpdateLibrary(songs, false);
+            library.InitialiseParts();
             LoadCompleted?.Invoke(this, EventArgs.Empty);
         }
 
@@ -61,7 +62,7 @@ namespace Juke.IO
         public void AddSong(Song song)
         {
             library.AddSong(song);
-            library.InitialiseParts();
+            //library.InitialiseParts();
             NotifyUpdated();
         }
 
@@ -69,7 +70,7 @@ namespace Juke.IO
         {
             library.RemoveById(songUpdate.SongSource.ID);
             library.AddSong(songUpdate.ToSong());
-            library.InitialiseParts();
+           // library.InitialiseParts();
             NotifyUpdated();
         }
 
@@ -81,13 +82,17 @@ namespace Juke.IO
 
         private void UpdateLibrary(IList<Song> list, bool reload)
         {
+            if (reload)
+            {
+                library.Clear();
+            }
             foreach (var song in list)
             {
                 library.AddSong(song);
                 LoadProgress?.Invoke(this, 1);
             }
 
-            library.InitialiseParts();
+            //library.InitialiseParts();
             NotifyUpdated();
         }
 
@@ -113,7 +118,7 @@ namespace Juke.IO
 
         public void NotifyCompleted(IList<Song> loadedSongs)
         {
-            UpdateLibrary(loadedSongs, false);
+            UpdateLibrary(loadedSongs, true);
             LoadCompleted?.Invoke(this, EventArgs.Empty);
         }
     }

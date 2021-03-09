@@ -3,9 +3,11 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using DataModel;
 using System.IO;
+using Juke.Control;
 using Juke.External.Wmp;
 using Juke.UI.Command;
 using Juke.IO;
+using Juke.UI.Admin;
 
 namespace Juke.UI.Wpf
 {
@@ -17,17 +19,17 @@ namespace Juke.UI.Wpf
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new JukeViewModel(this, new WmpPlayerEngine());
+            DataContext = new AdminViewModel(this);
             var wmpTagReaderFactory = new TaglibTagReaderFactory() { BackupFactory = new WmpTagReaderFactory()};
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), wmpTagReaderFactory));
-            (DataContext as JukeViewModel).PropertyChanged += MainWindow_PropertyChanged;
+            //LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), wmpTagReaderFactory));
+            (DataContext as AdminViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
 
-        public MainWindow(JukeViewModel viewModel)
+        public MainWindow(AdminViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
-            (DataContext as JukeViewModel).PropertyChanged += MainWindow_PropertyChanged;
+            (DataContext as AdminViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
 
         private static BitmapImage CreateBitmapFromBytes(byte[] bytes)
@@ -77,9 +79,11 @@ namespace Juke.UI.Wpf
 
         public string PromptPath()
         {
+            Messenger.Log("Prompt for path");
             var dlg = new FolderBrowserDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                Messenger.Log("Path selected: "+ dlg.SelectedPath);
                 return dlg.SelectedPath;
             }
 

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Juke.Control;
 using Juke.External.Xml;
@@ -27,14 +23,9 @@ namespace Juke.UI.Command
 
         private async void AsyncExecute()
         {
-            await Task.Run(() =>
-            {
-                controller.LoadHandler.LoadSongsSync(new XmlSongReader("library.xml"));
-                Console.WriteLine("Back from loadLibrary");
-                Console.WriteLine("SEnd complete to " + view.GetType());
-                view.CommandCompleted(this);
-            });
-            
+            await controller.LoadHandler.LoadSongs(new XmlSongReader("library.xml"));
+            Messenger.Log("Done loading library");
+            view.CommandCompleted(this);
         }
     }
 }

@@ -19,6 +19,11 @@ namespace Juke.Control
         public static event MessageHandler LogMessagePosted;
         public static event MessageHandler FrontendMessagePosted;
 
+        public static void Log(string message)
+        {
+            PostMessage(message, TargetType.Log);
+        }
+
         public static void PostMessage(string message, TargetType target)
         {
             if (target == TargetType.Frontend)

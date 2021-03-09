@@ -63,7 +63,7 @@ namespace Juke.Core
 
         public Song Dequeue()
         {
-            if (queue.Count >0)
+            if (queue.Count > 0)
             {
                 var song = queue.Dequeue();
                 randomizer.Add(song);

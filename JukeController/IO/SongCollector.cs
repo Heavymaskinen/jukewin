@@ -43,12 +43,12 @@ namespace Juke.IO
             }
             catch (Exception e)
             {
-                Console.WriteLine("Canceled!");
+                Messenger.Log("Canceled!");
             }
 
             lock (songs)
             {
-                Console.WriteLine("Collected songs: " + songs.Count);
+                Messenger.Log("Collected songs: " + songs.Count);
                 listener.NotifyCompleted(songs);
             }
         }
@@ -72,10 +72,10 @@ namespace Juke.IO
                 if (list.Count > 2000)
                 {
                     splits++;
-                    Console.WriteLine("Do split! " + splits + " Count " + list.Count);
+                    Messenger.Log("Do split! " + splits + " Count " + list.Count);
                     SplitAndLoad(list);
                     splits--;
-                    Console.WriteLine("Post split. " + splits);
+                    Messenger.Log("Post split. " + splits);
                     return;
                 }
 
@@ -86,7 +86,7 @@ namespace Juke.IO
                     listener.NotifyProgress(1);
                 }
 
-                Console.WriteLine("Done chunk! " + splits);
+                Messenger.Log("Done chunk! " + splits);
             }, cancelToken);
         }
 
@@ -105,7 +105,7 @@ namespace Juke.IO
             }
             catch (Exception e)
             {
-                Console.WriteLine("Load failed for " + file + ": " + e.Message + "\n" + e.StackTrace);
+                Messenger.Log("Load failed for " + file + ": " + e.Message + "\n" + e.StackTrace);
                 try
                 {
                     if (tagReaderFactory.BackupFactory != null)
@@ -119,7 +119,7 @@ namespace Juke.IO
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Failed again! " + ex.Message);
+                    Messenger.Log("Failed again! " + ex.Message);
                 }
             }
         }
@@ -128,9 +128,9 @@ namespace Juke.IO
         {
             if (tagReaderFactory.BackupFactory != null && (song.Album == "<unknown>" || song.Artist == "<unknown>"))
             {
-                Console.WriteLine("Retrying for " + song.Name + ", " + file);
+                Messenger.Log("Retrying for " + song.Name + ", " + file);
                 song = CreateSongFromTags(file, tagReaderFactory.BackupFactory.Create(file));
-                Console.WriteLine("Read from backup: " + song.Name + " " + song.Album + " " + song.Artist);
+                Messenger.Log("Read from backup: " + song.Name + " " + song.Album + " " + song.Artist);
             }
 
             return song;

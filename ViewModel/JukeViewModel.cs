@@ -13,13 +13,12 @@ using System.Windows.Input;
 
 namespace Juke.UI
 {
-    public partial class JukeViewModel : SelectionModel
+    public class JukeViewModel : SelectionModel
     {
         private JukeController controller;
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
-
         public CancellationTokenSource CancelTokenSource { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -106,11 +105,10 @@ namespace Juke.UI
 
         public ViewControl View { get; set; }
 
-        public JukeViewModel(ViewControl view, PlayerEngine playerEngine)
+        public JukeViewModel(ViewControl view)
         {
             controller = JukeController.Instance;
 
-            controller.Player.RegisterPlayerEngine(playerEngine);
             View = view;
             InitializeCollections();
             Progress = 0;
@@ -125,12 +123,7 @@ namespace Juke.UI
             Player.SongPlayed += Player_SongPlayed;
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
         }
-
-        public CancellationToken NewCancellationToken()
-        {
-            return LoaderCancellationTokenProvider.Token;
-        }
-
+        
         public void Dispose()
         {
             LoaderCancellationTokenProvider.Dispose();
@@ -157,8 +150,8 @@ namespace Juke.UI
             ProgressMax = load;
             Progress = 0;
             ProgressIndeterminate = false;
-            Console.WriteLine("New max: " + ProgressMax);
-            RaisePropertyChanged("ProgressMax");
+            Messenger.Log("Load initiated - New max: " + ProgressMax);
+            RaisePropertyChanged(nameof(ProgressMax));
             RaisePropertyChanged(nameof(Progress));
             RaisePropertyChanged(nameof(ProgressIndeterminate));
         }

@@ -57,6 +57,7 @@
     <Compile Include="JukeControllerLibraryTests.cs" />
     <Compile Include="JukeControllerPlayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomizerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JukeController\JukeController.csproj">

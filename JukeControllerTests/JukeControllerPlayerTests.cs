@@ -28,15 +28,14 @@ namespace Juke.Control.Tests
             Assert.AreEqual(null, control.Player.NowPlaying);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PlaySong_IsNowPlaying()
         {
-            control.Player.RegisterPlayerEngine(new FakePlayerEngine());
             control.Player.PlaySong(new Song("artist", "song", "song1"));
             Assert.AreEqual("song1", control.Player.NowPlaying.Name);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SongPlayed_ListenerNotified()
         {
             var listener = new EventListener();
@@ -45,18 +44,17 @@ namespace Juke.Control.Tests
             Assert.AreEqual(song, listener.SongPlayed);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PlaySong_PlayedInEngine()
         {
             var engine = new FakePlayerEngine();
-            PlayerEngineFactory.Engine = engine;
             control.Player.RegisterPlayerEngine(engine);
             var song = new Song("artist", "album", "song", "1", "path");
             control.Player.PlaySong(song);
             Assert.AreEqual(song, engine.PlayedSong);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SongFinished_PlayNextFromQueue()
         {
             var engine = new FakePlayerEngine();
@@ -71,20 +69,18 @@ namespace Juke.Control.Tests
             Assert.AreEqual(song2, control.Player.NowPlaying);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SongFinished_EmptyQueue_EmptyLibrary_PlayNothing()
         {
             var engine = new FakePlayerEngine();
             control.Player.RegisterPlayerEngine(engine);
-            PlayerEngineFactory.Engine = engine;
             var song = new Song("artist", "album", "song", "1", "path");
             control.Player.PlaySong(song);
             engine.Finish();
-            Assert.AreEqual(null, engine.PlayedSong);
             Assert.AreEqual(null, control.Player.NowPlaying);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PlaySongWhilePlaying_KeepPlayingCurrent()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -92,7 +88,16 @@ namespace Juke.Control.Tests
             Assert.AreEqual("song1", control.Player.NowPlaying.Name);
         }
 
-        [TestMethod()]
+        [TestMethod]
+        public void SkipSong_PlayNext()
+        {
+            control.Player.PlaySong(new Song("artist", "song", "song1"));
+            control.Player.PlaySong(new Song("artist", "song", "song2"));
+            control.Player.Skip();
+            Assert.AreEqual("song2", control.Player.NowPlaying?.Name);
+        }
+
+        [TestMethod]
         public void StopSong_ReactsAsFinished()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -100,20 +105,20 @@ namespace Juke.Control.Tests
             Assert.IsNull(control.Player.NowPlaying);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void InitialState_QueueEmpty()
         {
             control.Player.PlaySong(new Song("artist", "song", "song2"));
             Assert.AreEqual(0, control.Player.Queue.Count);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void InitialState_QueueNextIsNull()
         {
             Assert.IsNull(control.Player.Queue.Next);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PlaySongWhilePlaying_EnqueueSecond()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -121,7 +126,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual("song2", control.Player.Queue.Next.Name);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PlaySongsWhilePlaying_QueueIncreases()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -130,7 +135,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(2, control.Player.Queue.Count);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void CantEnqueueDuplicates()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -139,7 +144,7 @@ namespace Juke.Control.Tests
             Assert.AreEqual(1, control.Player.Queue.Count);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void CantEnqueueCurrentlyPlaying()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
@@ -148,12 +153,25 @@ namespace Juke.Control.Tests
             Assert.AreEqual(1, control.Player.Queue.Count);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void EnqueuedSongsInList()
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
             control.Player.PlaySong(new Song("artist", "song", "song2"));
             Assert.AreEqual(control.Player.Queue.Songs[0].Name, "song2");
+        }
+
+        [TestMethod]
+        public void PlayAlbum_EnqueuesEntireAlbum_PlaysFirstSong()
+        {
+            var songs = createSongs(1, 2, 10);
+            FakeLoad(songs);
+            control.Player.PlayAlbum("album1");
+            Assert.AreEqual("song1", control.Player.NowPlaying.Name);
+            Assert.AreEqual("album1", control.Player.NowPlaying.Album);
+            Assert.AreEqual("song2", control.Player.Queue.Songs[0].Name);
+            Assert.AreEqual("album1", control.Player.Queue.Songs[0].Album);
+            Assert.AreEqual(9, control.Player.Queue.Songs.Count);
         }
 
         private void FakeLoad(List<Song> songs)

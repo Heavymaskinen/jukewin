@@ -47,12 +47,6 @@ namespace Juke.Control
             Player.Dispose();
         }
 
-        public void ClearLibrary()
-        {
-            library.Clear();
-            Player.Queue.Clear();
-        }
-
         public LibraryBrowser Browser
         {
             get { return library; }
@@ -65,33 +59,14 @@ namespace Juke.Control
 
         public Player Player { get; set; }
 
-        public void UpdateSong(SongUpdate edit)
-        {
-            library.UpdateSong(edit);
-        }
-
         public void SaveLibrary(SongWriter writer)
         {
             writer.Write(library.Songs);
         }
 
-        public void LoadLibrary(SongLoader loader)
-        {
-            LoadHandler.LoadSongs(loader);
-        }
         public void LoadLibrarySync(SongLoader loader)
         {
             LoadHandler.LoadSongsSync(loader);
         }
-        
-        private void AsyncSongLoader_LoadCompleted(object sender, IList<Song> loadedSongs)
-        {
-            foreach (var song in loadedSongs)
-            {
-                library.AddSong(song);
-            }
-
         }
-
-    }
 }

@@ -93,6 +93,29 @@ namespace Juke.UI.Admin
 
         public string SystemMessage { set; get; }
 
+        public AdminViewModel(ViewControl viewControl)
+        {
+            View = viewControl;
+            controller = JukeController.Instance;
+            InitializeCollections();
+            Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
+        }
+
+        private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)
+        {
+            SystemMessage = message;
+            RaisePropertyChanged(nameof(SystemMessage));
+        }
+
+        private void InitializeCollections()
+        {
+            Artists = new ObservableCollection<string>(controller.Browser.Artists.OrderBy(s => s));
+            RaisePropertyChanged(nameof(Artists));
+            RefreshAlbums(controller.Browser.Albums);
+            RefreshSongs(controller.Browser.Songs);
+            RefreshQueue();
+        }
+
         private void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -140,6 +163,12 @@ namespace Juke.UI.Admin
         {
             Albums = new ObservableCollection<string>(albums.OrderBy(s => s));
             RaisePropertyChanged(nameof(Albums));
+        }
+
+        private void RefreshQueue()
+        {
+            Queue = new ObservableCollection<Song>(controller.Player.Queue.Songs);
+            RaisePropertyChanged(nameof(Queue));
         }
     }
 }

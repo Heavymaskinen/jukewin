@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Juke.Control;
 
 namespace Juke.UI
 {
@@ -24,6 +25,7 @@ namespace Juke.UI
                 return loaderInstance;
             }
 
+            Messenger.Log("AsyncSongLoader not initialised!");
             throw new Exception("AsyncSongLoader not initialised!");
         }
     }

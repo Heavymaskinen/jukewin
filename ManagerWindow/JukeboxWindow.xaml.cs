@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Juke.UI.Admin;
 
 namespace Juke.UI.Wpf
 {
@@ -35,17 +36,21 @@ namespace Juke.UI.Wpf
         private SearchLogic searchLogic;
         private IList<SearchLogic> searchLogics;
 
+        private WindowRouter windowRouter;
+
         public JukeboxWindow()
         {
             InitializeComponent();
+            Messenger.Log("Starting UI");
             CreateFadeAnimation();
-            borderOutAnimation = new ThicknessAnimation(new Thickness(99.0), new Thickness(0.0), new Duration(TimeSpan.FromSeconds(5)));
-            borderOutAnimation.DecelerationRatio = 0.7;
-            borderInAnimation = new ThicknessAnimation(new Thickness(0.0), new Thickness(99.0), new Duration(TimeSpan.FromSeconds(5)));
-            borderInAnimation.DecelerationRatio = 0.7;
-            viewModel = new JukeViewModel(this, new WmpPlayerEngine());
+            borderOutAnimation = new ThicknessAnimation(new Thickness(99.0), new Thickness(0.0),
+                new Duration(TimeSpan.FromSeconds(5))) {DecelerationRatio = 0.7};
+            borderInAnimation = new ThicknessAnimation(new Thickness(0.0), new Thickness(99.0),
+                new Duration(TimeSpan.FromSeconds(5))) {DecelerationRatio = 0.7};
+            viewModel = new JukeViewModel(this);
             DataContext = viewModel;
             loaded = false;
+            windowRouter = new WindowRouter(this);
 
             dispatchTimer = new DispatcherTimer(
                 TimeSpan.FromSeconds(3),
@@ -66,6 +71,7 @@ namespace Juke.UI.Wpf
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
+            Messenger.Log("Closing J.U.K.E.");
             viewModel.Dispose();
             dispatchTimer.Stop();
         }
@@ -126,6 +132,7 @@ namespace Juke.UI.Wpf
         {
             if (loaded)
             {
+                Messenger.Log("FadeIn /Load completed");
                 logoLabel.BeginAnimation(OpacityProperty, fadeInAnimation, HandoffBehavior.SnapshotAndReplace);
                 loadProgress.Visibility = Visibility.Collapsed;
             }
@@ -140,11 +147,9 @@ namespace Juke.UI.Wpf
 
         private void FadeAnimation_Completed(object sender, EventArgs e)
         {
-
             if (viewModel.Queue.Count > 0)
             {
                 queueBox.Opacity = 0;
-
             }
 
             songLabel.Opacity = 0;
@@ -158,24 +163,26 @@ namespace Juke.UI.Wpf
 
             if (!File.Exists("library.xml"))
             {
+                Messenger.Log("Library doesn't exist. Create new one.");
                 CreateLibrary();
             }
             else
             {
+                Messenger.Log("Loading existing library");
                 LoadLibrary();
             }
 
             searchLogics = new SearchLogicFactory().CreateAll(viewModel);
             searchLogic = searchLogics[0];
+            Messenger.Log("Main window loaded");
         }
 
         private void CreateLibrary()
         {
             loadProgress.Visibility = Visibility.Hidden;
             var window = new IntroWindow(viewModel);
-            Visibility = Visibility.Hidden;
-            window.ShowDialog();
-            Visibility = Visibility.Visible;
+            windowRouter.ShowDialog(window);
+            Messenger.Log("Intro Window closed");
             viewModel.View = this;
             AddHandler(Window.KeyDownEvent, new KeyEventHandler(Window_KeyDown), true);
             viewModel.SaveLibrary.Execute(this);
@@ -222,7 +229,6 @@ namespace Juke.UI.Wpf
 
         private void RenderPlayingSong()
         {
-            
             songLabel.Content = jukeController.Player.NowPlaying.Name + "\r\n" + jukeController.Player.NowPlaying.Album
                                 + "\r\n" + jukeController.Player.NowPlaying.Artist;
             songLabel.Opacity = 100;
@@ -252,10 +258,8 @@ namespace Juke.UI.Wpf
         {
             if (e.Key == Key.PageDown)
             {
-                var manager = new MainWindow(viewModel);
-                viewModel.View = manager;
-                manager.ShowDialog();
-                viewModel.View = this;
+                var manager = new MainWindow();
+                windowRouter.ShowDialog(manager);
             }
 
             if (e.Key == Key.PageUp)
@@ -404,7 +408,7 @@ namespace Juke.UI.Wpf
                     loaded = true;
                     break;
                 case SaveLibraryCommand _:
-                    Console.WriteLine("Library saved!");
+                    Messenger.Log("Library saved!");
                     break;
             }
         }

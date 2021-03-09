@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DataModel;
 using System.Xml;
 using System.Xml.Serialization;
+using Juke.Control;
 
 namespace Juke.External.Xml
 {
@@ -22,9 +23,8 @@ namespace Juke.External.Xml
 
         public void Write(IList<Song> songs)
         {
-            Console.WriteLine("Writing: " + songs.Count+" to "+filename);
-            var xmlWriterSettings = new XmlWriterSettings();
-            using (XmlWriter writer = XmlWriter.Create(filename))
+            Messenger.Log("Writing: " + songs.Count+" to "+filename);
+            using (var writer = XmlWriter.Create(filename))
             {
                 var persistableSongs = new SongConverter().ConvertSongs(songs);
                 serializerInstance.Serialize(writer, persistableSongs.ToArray());

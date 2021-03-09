@@ -12,7 +12,7 @@ namespace Juke.Core
         private Queue<Song> usedSongs;
         private LibraryBrowser library;
 
-        internal Randomizer(LibraryBrowser library)
+        public Randomizer(LibraryBrowser library)
         {
             this.library = library;
             usedSongs = new Queue<Song>(10);
@@ -21,10 +21,6 @@ namespace Juke.Core
         internal Song Next()
         {
             var rand = new Random(Environment.TickCount);
-            if (usedSongs.Count == library.Songs.Count)
-            {
-                return null;
-            }
 
             Song nextSong = usedSongs.Count > 0? usedSongs.Peek() : null;
             while (nextSong == null || usedSongs.Contains(nextSong))
@@ -34,7 +30,7 @@ namespace Juke.Core
             }
 
             usedSongs.Enqueue(nextSong);
-            if (usedSongs.Count >= 10)
+            if (usedSongs.Count >= 10 || usedSongs.Count >= library.Songs.Count)
             {
                 usedSongs.Dequeue();
             }

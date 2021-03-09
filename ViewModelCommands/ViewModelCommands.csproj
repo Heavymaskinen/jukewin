@@ -47,6 +47,7 @@
     <Compile Include="Command\DeleteSongCommand.cs" />
     <Compile Include="Command\EditAlbumCommand.cs" />
     <Compile Include="Command\EditSongCommand.cs" />
+    <Compile Include="Command\SkipSongCommand.cs" />
     <Compile Include="InfoType.cs" />
     <Compile Include="JukeCommand.cs" />
     <Compile Include="Command\LoadLibraryCommand.cs" />

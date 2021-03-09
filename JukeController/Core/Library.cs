@@ -1,14 +1,10 @@
 ﻿using DataModel;
-using Juke.IO;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Juke.Core
 {
-    class Library : LibraryBrowser
+    public class Library : LibraryBrowser
     {
         public IList<Song> Songs
         {
@@ -37,10 +33,12 @@ namespace Juke.Core
             if (!songCore.ContainsKey(song.ID))
             {
                 songCore.Add(song.ID, song);
+                LoadAlbumAndArtists();
             }
             else if (!songCore[song.ID].Equals(song))
             {
                 songCore[song.ID].Merge(song);
+                LoadAlbumAndArtists();
             }
         }
         
@@ -48,6 +46,11 @@ namespace Juke.Core
         {
             Albums.Clear();
             Artists.Clear();
+            LoadAlbumAndArtists();
+        }
+
+        private void LoadAlbumAndArtists()
+        {
             foreach (var song in Songs)
             {
                 if (!Albums.Contains(song.Album))
@@ -64,20 +67,15 @@ namespace Juke.Core
 
         public void UpdateSong(SongUpdate edit)
         {
-            Songs.Remove(edit.SongSource);
-            Songs.Add(CreateSongFromUpdate(edit));
+            DeleteSong(edit.SongSource);
+            AddSong(CreateSongFromUpdate(edit));
         }
 
         internal void RemoveById(string id)
         {
             songCore.Remove(id);
         }
-
-        internal void Clear()
-        {
-            Songs.Clear();
-        }
-
+        
         public void DeleteSong(Song song)
         {
             RemoveById(song.ID);
@@ -86,23 +84,14 @@ namespace Juke.Core
 
         public IList<Song> GetSongsByArtist(string artistName)
         {
-            var foundSongs = new List<Song>();
-            foreach (var song in Songs)
-            {
-                if (song.Artist == artistName)
-                {
-                    foundSongs.Add(song);
-                }
-            }
-
-            return foundSongs;
+            return Songs.Where(song => song.Artist == artistName).ToList();
         }
 
         public IList<Song> GetSongsByAlbum(string albumName)
         {
             var songList = Songs.Where(song => song.Album == albumName).ToList();
-
             songList.Sort(Song.Comparison);
+
             return songList;
         }
 
@@ -142,6 +131,11 @@ namespace Juke.Core
             }
 
             return songList;
+        }
+
+        public void Clear()
+        {
+            songCore.Clear();
         }
 
         private Song CreateSongFromUpdate(SongUpdate edit)

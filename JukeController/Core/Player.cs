@@ -1,9 +1,6 @@
 ﻿using DataModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Juke.Control;
 
 namespace Juke.Core
 {
@@ -13,17 +10,12 @@ namespace Juke.Core
 
         private PlayerEngine engine;
 
-        public SongQueue Queue { get; private set; }
+        public SongQueue Queue { get; }
         
 
         public Player(LibraryBrowser browser)
         {
             Queue = new SongQueue(browser);
-        }
-
-        public Player(PlayerEngine engine)
-        {
-            RegisterPlayerEngine(engine);
         }
 
         public Song NowPlaying { get; private set; }
@@ -45,14 +37,22 @@ namespace Juke.Core
 
         public void PlaySong(Song song)
         {
+            if (song == null)
+            {
+                Messenger.Log("PlaySong called with null");
+                return;
+            }
+
             if (NowPlaying == null)
             {
                 NowPlaying = song;
                 engine.Play(song);
+                Messenger.Log("Playing "+song);
             }
             else if (!song.Equals(NowPlaying))
             {
                 Queue.Enqueue(song);
+                Messenger.Log("Enqueued " + song);
             }
 
             SongPlayed?.Invoke(this, song);
@@ -82,6 +82,11 @@ namespace Juke.Core
         public void PlayRandom()
         {
             PlaySong(Queue.Random);
+        }
+
+        public void Skip()
+        {
+            engine.Stop();
         }
     }
 }

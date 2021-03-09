@@ -74,7 +74,7 @@
     <Compile Include="SearchSelectorWindow.xaml.cs">
       <DependentUpon>SearchSelectorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SineDataGenerator.cs" />
+    <Compile Include="WindowRouter.cs" />
     <Page Include="3dButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +142,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AdminGui\AdminGui.csproj">
+      <Project>{125FB0A0-7158-4270-AF1A-19D55F68317A}</Project>
+      <Name>AdminGui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataModel\DataModel.csproj">
       <Project>{f3727a39-b6cc-4a8f-8168-6ad2aeccad7e}</Project>
       <Name>DataModel</Name>

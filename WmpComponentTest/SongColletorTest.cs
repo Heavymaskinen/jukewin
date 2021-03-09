@@ -56,6 +56,24 @@ namespace WmpComponentTest
         }
 
         [TestMethod]
+        public void TagReaderMissingInformation_UseBackup()
+        {
+            var list = new List<string>();
+            for (var i = 0; i < 1; i++)
+            {
+                list.Add("test" + i);
+            }
+
+            var listener = new FakeListener();
+            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new FakeTagReader { Album = "<unknown>", Artist = "<unknown>", Title = "song.mp3" },
+                BackupFactory = new FakeTagReaderFactory{FakeTagReader = new FakeTagReader{Album = "album", Artist = "artist", Title = "title"}}});
+            PerformSyncSongCollect(collector, list, listener);
+            Assert.AreEqual("title", listener.CompletedSongs[0].Name);
+            Assert.AreEqual("artist", listener.CompletedSongs[0].Artist);
+            Assert.AreEqual("album", listener.CompletedSongs[0].Album);
+        }
+
+        [TestMethod]
         public void SongCollector_CatchExceptions_SongsNotIncluded()
         {
             //9.4 sec
@@ -175,7 +193,15 @@ namespace WmpComponentTest
 
         public virtual FakeTagReader New()
         {
-            return new FakeTagReader { Title = this.Title };
+            return new FakeTagReader { Title = this.Title, Album = this.Album, Artist = this.Artist, TrackNo = this.TrackNo};
+        }
+    }
+
+    class UnknownTagReader : FakeTagReader
+    {
+        public override FakeTagReader New()
+        {
+            return new FakeTagReader { Title = "song.mp3", Album = "<unknown>", Artist = "<unknown>" };
         }
     }
 

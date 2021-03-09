@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using Juke.Control;
 using Juke.External.Wmp;
+using Juke.IO;
+using Juke.Log;
 
 namespace Juke.UI.Wpf
 {
@@ -19,6 +15,9 @@ namespace Juke.UI.Wpf
         {
             base.OnStartup(e);
             JukeController.Instance.Player.RegisterPlayerEngine(new WmpPlayerEngine());
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
+            Logger.Start("juke.log").EnableFrontendLog();
+            Messenger.Log("Starting J.U.K.E.");
         }
     }
 }

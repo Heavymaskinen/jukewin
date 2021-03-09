@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Juke.Control;
 
 namespace DataModel
 {
@@ -29,10 +26,11 @@ namespace DataModel
                 Album = Album == "<unknown>" ? other.Album : Album;
                 TrackNo = string.IsNullOrEmpty(TrackNo) ? other.TrackNo : TrackNo;
 
-                Console.WriteLine("Merged to" + Name + " - " + Artist + " " + Album);
-            } else
+                Messenger.Log("Merged to" + Name + " - " + Artist + " " + Album);
+            }
+            else
             {
-                Console.WriteLine("Merged with different ID?");
+                Messenger.Log("Merged with different ID?");
             }
         }
 
