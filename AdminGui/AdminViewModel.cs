@@ -1,4 +1,5 @@
-﻿using DataModel;
+﻿using System;
+using DataModel;
 using Juke.Control;
 using Juke.UI.Command;
 using System.Collections.Generic;
@@ -98,7 +99,13 @@ namespace Juke.UI.Admin
             View = viewControl;
             controller = JukeController.Instance;
             InitializeCollections();
+            controller.LoadHandler.LibraryUpdated += LoadHandlerOnLibraryUpdated;
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
+        }
+
+        private void LoadHandlerOnLibraryUpdated(object sender, EventArgs e)
+        {
+            InitializeCollections();
         }
 
         private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)
@@ -109,11 +116,16 @@ namespace Juke.UI.Admin
 
         private void InitializeCollections()
         {
-            Artists = new ObservableCollection<string>(controller.Browser.Artists.OrderBy(s => s));
-            RaisePropertyChanged(nameof(Artists));
+            RefreshArtists();
             RefreshAlbums(controller.Browser.Albums);
             RefreshSongs(controller.Browser.Songs);
             RefreshQueue();
+        }
+
+        private void RefreshArtists()
+        {
+            Artists = new ObservableCollection<string>(controller.Browser.Artists.OrderBy(s => s));
+            RaisePropertyChanged(nameof(Artists));
         }
 
         private void RaisePropertyChanged(string propertyName)
@@ -162,6 +174,10 @@ namespace Juke.UI.Admin
         private void RefreshAlbums(IList<string> albums)
         {
             Albums = new ObservableCollection<string>(albums.OrderBy(s => s));
+            if (Albums.Count > 1)
+            {
+                Albums.Insert(0,Song.ALL_ALBUMS);
+            }
             RaisePropertyChanged(nameof(Albums));
         }
 

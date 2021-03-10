@@ -22,7 +22,7 @@ namespace Juke.UI.Command
         protected override void ControlledExecute(object parameter)
         {
             if (model.SelectedAlbum == null || model.SelectedAlbum == Song.ALL_ALBUMS) return;
-
+            Messenger.Log("Delete album: "+model.SelectedAlbum);
             var songs = controller.Browser.GetSongsByAlbum(model.SelectedAlbum);
             foreach ( var song in songs)
             {

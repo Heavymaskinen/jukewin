@@ -258,7 +258,7 @@ namespace Juke.UI.Wpf
         {
             if (e.Key == Key.PageDown)
             {
-                var manager = new MainWindow();
+                var manager = new AdminWindow();
                 windowRouter.ShowDialog(manager);
             }
 

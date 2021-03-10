@@ -77,6 +77,7 @@ namespace Juke.IO
         public void DeleteSong(Song song)
         {
             library.DeleteSong(song);
+            library.InitialiseParts();
             NotifyUpdated();
         }
 
