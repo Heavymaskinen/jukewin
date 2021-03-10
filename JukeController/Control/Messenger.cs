@@ -35,5 +35,10 @@ namespace Juke.Control
                 LogMessagePosted?.Invoke(message, target);
             }
         }
+
+        public static void Post(string message)
+        {
+            PostMessage(message, TargetType.Frontend);
+        }
     }
 }

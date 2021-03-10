@@ -23,7 +23,7 @@ namespace Juke.UI.Command
 
         private async void AsyncExecute()
         {
-            await controller.LoadHandler.LoadSongs(new XmlSongReader("library.xml"));
+            await controller.LoadHandler.LoadSongs(new XmlSongReader("library.xml"), model.ProgressTracker);
             Messenger.Log("Done loading library");
             view.CommandCompleted(this);
         }

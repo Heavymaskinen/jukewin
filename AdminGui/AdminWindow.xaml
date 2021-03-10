@@ -48,7 +48,7 @@
         <Button Content="Stop" Command="{Binding StopSong}" Canvas.Left="835" Canvas.Top="48" Width="44"/>
         <Button x:Name="skipButton" Content="Skip" Command="{Binding SkipSong}" Canvas.Left="933" Canvas.Top="48" Width="41"/>
         <Image x:Name="testImage" Height="84" Canvas.Left="379" Canvas.Top="564" Width="100"/>
-        <ProgressBar x:Name="progressBar" Background="DarkGray" Maximum="{Binding ProgressMax}" Value="{Binding Progress}" Height="17" Canvas.Left="21" Canvas.Top="631" Width="452"/>
+        <ProgressBar x:Name="progressBar" Background="DarkGray" Maximum="{Binding ProgressTracker.ProgressMax}" Value="{Binding ProgressTracker.Progress}" IsIndeterminate="{Binding ProgressTracker.IsIndeterminate}" Height="17" Canvas.Left="21" Canvas.Top="631" Width="452"/>
         <Button Content="Edit" Command="{Binding EditSong}" CommandParameter="{Binding SelectedSong}" Height="19" Canvas.Left="659" Canvas.Top="48" Width="43"/>
         <Button Content="Edit" Command="{Binding EditAlbum}" Height="19" Canvas.Left="424" Canvas.Top="48" Width="52" RenderTransformOrigin="0.45,-0.137"/>
         <Button Content="Rename" Command="{Binding RenameArtist}" Height="19" Canvas.Left="136" Canvas.Top="48" Width="72"/>

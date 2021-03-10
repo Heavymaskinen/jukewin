@@ -1,11 +1,11 @@
 ﻿using DataModel;
 using System.ComponentModel;
+using UiComponents;
 
 namespace Juke.UI
 {
     public interface SelectionModel : INotifyPropertyChanged
     {
-
         string SelectedArtist
         {
             get;set;
@@ -20,5 +20,7 @@ namespace Juke.UI
         {
             get;set;
         }
+
+        ProgressTracker ProgressTracker { get; }
     }
 }

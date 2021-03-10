@@ -49,21 +49,6 @@ namespace Juke.UI.Admin
             });
         public ProgressTracker ProgressTracker => progressTracker;
 
-        public double ProgressMax => ProgressTracker.ProgressMax;
-
-        public double Progress
-        {
-            get
-            {
-                return progressTracker.Progress;
-            }
-            set
-            {
-                progressTracker.Progress = value;
-            }
-        }
-
-        public bool ProgressIndeterminate => progressTracker.IsIndeterminate;
         public string SelectedArtist
         {
             get => selectedArtist;

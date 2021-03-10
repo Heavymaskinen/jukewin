@@ -33,6 +33,7 @@ namespace Juke.Core
             if (!songCore.ContainsKey(song.ID))
             {
                 songCore.Add(song.ID, song);
+
                 if (!Albums.Contains(song.Album))
                 {
                     Albums.Add(song.Album);

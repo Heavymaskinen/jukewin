@@ -22,6 +22,7 @@ namespace Juke.Log
         private Logger(string filename)
         {
             this.filename = filename;
+            Console.WriteLine("Using: " + Directory.GetCurrentDirectory()+filename);
             if (!File.Exists(filename))
             {
                 Log("J.U.K.E. log\n===============\n");

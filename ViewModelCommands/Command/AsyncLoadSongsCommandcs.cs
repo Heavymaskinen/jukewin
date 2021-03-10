@@ -22,11 +22,13 @@ namespace Juke.UI.Command
         {
             return Task.Run(() =>
             {
+                Messenger.Log("Load songs async, prompt path");
                 var path = view.PromptPath();
                 if (!string.IsNullOrEmpty(path))
                 {
+                    Messenger.Log("Loading songs async from " + path);
                     var loader = new LoaderFactory().CreateAsync(path);
-                    controller.LoadHandler.LoadSongs(loader);
+                    controller.LoadHandler.LoadSongs(loader, model.ProgressTracker);
                 }
             });
         }

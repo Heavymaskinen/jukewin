@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Juke.UI.Command
 {
-    public class DeleteAlbumCommand : JukeCommand
+    public class DeleteAlbumCommand : AsyncJukeCommand
     {
         public DeleteAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
         {
@@ -16,18 +16,20 @@ namespace Juke.UI.Command
 
         public override bool CanExecute(object parameter)
         {
-            return true;
+            return (model.SelectedAlbum != null && model.SelectedAlbum != Song.ALL_ALBUMS);
         }
 
-        protected override void ControlledExecute(object parameter)
+        protected override Task AsyncExecute(object parameter)
         {
-            if (model.SelectedAlbum == null || model.SelectedAlbum == Song.ALL_ALBUMS) return;
-            Messenger.Log("Delete album: "+model.SelectedAlbum);
-            var songs = controller.Browser.GetSongsByAlbum(model.SelectedAlbum);
-            foreach ( var song in songs)
+            return Task.Run(() =>
             {
-                controller.LoadHandler.DeleteSong(song);
-            }
+                if (model.SelectedAlbum == null || model.SelectedAlbum == Song.ALL_ALBUMS) return;
+
+                string selectedAlbum = model.SelectedAlbum;
+                Messenger.Post("Deleting album: " + selectedAlbum);
+                controller.LoadHandler.DeleteAlbum(selectedAlbum, model.ProgressTracker);
+                Messenger.Post(selectedAlbum + " was deleted from library");
+            });
         }
     }
 }

@@ -29,8 +29,6 @@ namespace Juke.UI.Wpf
             InitializeComponent();
             viewModel = new AdminViewModel(this);
             DataContext = viewModel;
-            var wmpTagReaderFactory = new TaglibTagReaderFactory() { BackupFactory = new WmpTagReaderFactory()};
-            //LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), wmpTagReaderFactory));
             (DataContext as AdminViewModel).PropertyChanged += MainWindow_PropertyChanged;
         }
 
