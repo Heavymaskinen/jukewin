@@ -1,0 +1,64 @@
+﻿<Window x:Class="Juke.UI.Wpf.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Juke.UI.Admin"
+        xmlns:wpf="clr-namespace:Juke.UI.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="725.763" Width="1000 " d:DataContext="{d:DesignInstance local:AdminViewModel }">
+
+    <Window.Resources>
+        <ContextMenu x:Key="artistContextMenu">
+            <ContextMenu.Items>
+                <MenuItem Header="Delete" Command="{Binding DeleteAlbum}" CommandParameter="{x:Static wpf:EditType.Artist}" />
+                <MenuItem Header="Rename" CommandParameter="{x:Static wpf:EditType.Artist}"/>
+            </ContextMenu.Items>
+        </ContextMenu>
+        
+        <ContextMenu x:Key="albumContextMenu">
+            <ContextMenu.Items>
+                <MenuItem Header="Delete" Command="{Binding DeleteAlbum}" CommandParameter="{x:Static wpf:EditType.Album}" />
+                <MenuItem Header="Rename" Command="{Binding EditAlbum}" CommandParameter="{x:Static wpf:EditType.Album}"/>
+            </ContextMenu.Items>
+        </ContextMenu>
+        
+        <ContextMenu x:Key="songContextMenu">
+            <ContextMenu.Items>
+                <MenuItem Header="Delete" Command="{Binding DeleteSong}" CommandParameter="{x:Static wpf:EditType.Song}" />
+                <MenuItem Header="Rename" Command="{Binding EditSong}" CommandParameter="{x:Static wpf:EditType.Song}"/>
+            </ContextMenu.Items>
+        </ContextMenu>
+        
+    </Window.Resources>
+    <Canvas>
+        <ListBox x:Name="artistBox" MouseRightButtonUp="ArtistBox_OnMouseRightButtonUp" SelectedValue="{Binding SelectedArtist}" HorizontalAlignment="Left" Height="377" VerticalAlignment="Top" Width="190" ItemsSource="{Binding Artists}" Canvas.Left="18" Canvas.Top="75" />
+        <ListBox x:Name="albumBox" MouseRightButtonUp="AlbumBox_OnMouseRightButtonUp" SelectedValue="{Binding SelectedAlbum}" Height="377" Canvas.Left="231" Canvas.Top="75" Width="245" ItemsSource="{Binding Albums}"/>
+        <ListBox x:Name="songBox" SelectedValue="{Binding SelectedSong}" SelectionMode="Extended" Height="377" Canvas.Left="509" Canvas.Top="75" Width="245" ItemsSource="{Binding Songs}"/>
+        <ListBox x:Name="queueBox" Height="377" Canvas.Left="788" Canvas.Top="75" Width="186" ItemsSource="{Binding Queue}" />
+        <Label x:Name="label" Content="Artists" Canvas.Left="19" Canvas.Top="45"/>
+        <Label x:Name="label1" Content="Albums" Canvas.Left="231" Canvas.Top="45"/>
+        <Label x:Name="label2" Content="Songs" Canvas.Left="509" Canvas.Top="45"/>
+        <Label x:Name="label3" Content="Queue" Canvas.Left="788" Canvas.Top="45"/>
+        <Label x:Name="systemLabel" Content="{Binding SystemMessage}" Canvas.Left="18" Canvas.Top="457" BorderBrush="Black" BorderThickness="2" Height="33"/>
+        <Button x:Name="loadButton" Content="Add..." Command="{Binding LoadSongs}" Canvas.Left="707" Canvas.Top="48" Width="47"/>
+        <Button x:Name="loadLibraryButton" Content="Load Library" Command="{Binding LoadLibrary}" Canvas.Left="791" Canvas.Top="590" Width="75"/>
+        <Button x:Name="saveLibraryButton" Content="SaveLibrary" Command="{Binding SaveLibrary}" Canvas.Left="791" Canvas.Top="615" Width="75"/>
+        <Button x:Name="playButton" Content="Play" Command="{Binding PlaySong}" Canvas.Left="884" Canvas.Top="48" Width="44"/>
+        <Button Content="Stop" Command="{Binding StopSong}" Canvas.Left="835" Canvas.Top="48" Width="44"/>
+        <Button x:Name="skipButton" Content="Skip" Command="{Binding SkipSong}" Canvas.Left="933" Canvas.Top="48" Width="41"/>
+        <Image x:Name="testImage" Height="84" Canvas.Left="379" Canvas.Top="564" Width="100"/>
+        <ProgressBar x:Name="progressBar" Background="DarkGray" Maximum="{Binding ProgressMax}" Value="{Binding Progress}" Height="17" Canvas.Left="21" Canvas.Top="631" Width="452"/>
+        <Button Content="Edit" Command="{Binding EditSong}" CommandParameter="{Binding SelectedSong}" Height="19" Canvas.Left="659" Canvas.Top="48" Width="43"/>
+        <Button Content="Edit" Command="{Binding EditAlbum}" Height="19" Canvas.Left="424" Canvas.Top="48" Width="52" RenderTransformOrigin="0.45,-0.137"/>
+        <Button Content="Rename" Command="{Binding RenameArtist}" Height="19" Canvas.Left="136" Canvas.Top="48" Width="72"/>
+        <Button Content="Delete" Command="{Binding DeleteAlbum}" Height="19" Canvas.Left="358" Canvas.Top="48" Width="52" RenderTransformOrigin="0.927,1.042"/>
+        <Button Content="Delete" Command="{Binding DeleteSong}" Height="19" Canvas.Left="590" Canvas.Top="48" Width="52" RenderTransformOrigin="0.927,1.042"/>
+        <Label x:Name="currentSongLabel" BorderBrush="Black" BorderThickness="1" Content="{Binding SelectedSong}" Canvas.Left="18" Canvas.Top="495" Height="35" Width="455"/>
+        <Label Content="{Binding SelectedAlbum}" Foreground="Black" BorderBrush="Black" BorderThickness="2" Canvas.Left="18" Canvas.Top="535" Width="455" Height="40"/>
+        <Label Content="{Binding SelectedArtist}" Foreground="Black" BorderBrush="Black" BorderThickness="2" Canvas.Left="18" Canvas.Top="580" Width="455" Height="43"/>
+        <Button Content="Cancel" Command="{Binding CancelLoad}" Height="19" Canvas.Left="484" Canvas.Top="631" Width="66"/>
+
+
+    </Canvas>
+</Window>
