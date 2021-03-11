@@ -54,7 +54,7 @@ namespace Juke.IO
         public Task LoadSongs(IAsyncSongLoader loader, LoadListener listener)
         {
             listener.Completed += Listener_Completed;
-           return LoadSongs(loader,listener, CancellationToken.None);
+            return LoadSongs(loader, listener, CancellationToken.None);
         }
 
         private void Listener_Completed(object sender, IList<Song> list)
@@ -81,7 +81,7 @@ namespace Juke.IO
         {
             library.RemoveById(songUpdate.SongSource.ID);
             library.AddSong(songUpdate.ToSong());
-           // library.InitialiseParts();
+            // library.InitialiseParts();
             NotifyUpdated();
         }
 
@@ -106,7 +106,23 @@ namespace Juke.IO
             library.InitialiseParts();
             listener.NotifyCompleted(new List<Song>());
             NotifyUpdated();
+        }
 
+        public void DeleteArtist(string artist, LoadListener progressTracker)
+        {
+            var songs = library.GetSongsByArtist(artist);
+            progressTracker.NotifyNewLoad();
+            progressTracker.NotifyLoadInitiated(songs.Count + 1);
+            foreach (var song in songs)
+            {
+                library.RemoveById(song.ID);
+                progressTracker.NotifyProgress(1);
+            }
+
+            library.InitialiseParts();
+            progressTracker.NotifyProgress(1);
+            progressTracker.NotifyCompleted(new List<Song>());
+            NotifyUpdated();
         }
 
         private void UpdateLibrary(IList<Song> list, bool reload)
@@ -115,6 +131,7 @@ namespace Juke.IO
             {
                 library.Clear();
             }
+
             foreach (var song in list)
             {
                 library.AddSong(song);
@@ -127,7 +144,6 @@ namespace Juke.IO
 
         private void NotifyUpdated()
         {
-            
             LibraryUpdated?.Invoke(this, EventArgs.Empty);
         }
 

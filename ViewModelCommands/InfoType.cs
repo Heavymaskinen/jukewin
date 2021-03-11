@@ -2,6 +2,8 @@
 {
     public enum InfoType
     {
-        Song, Album, Artist
+        Song,
+        Album,
+        Artist
     }
 }

@@ -59,7 +59,7 @@ namespace Juke.UI.Tests
             engine.SignalProgress();
             AreEqual(1, int.Parse(listener.ProgressNoted));
         }
-        
+
         [TestMethod()]
         public void LoadSongs_SongsAreAddedOnCompletion()
         {
@@ -78,7 +78,7 @@ namespace Juke.UI.Tests
         [TestMethod]
         public void LoadSongs_PromptReturnsNull_NothingLoaded()
         {
-            CreateFakeLoadEngine(CreateSongs(1,1,1));
+            CreateFakeLoadEngine(CreateSongs(1, 1, 1));
             var listener = new EventListener();
             var viewControl = new FakeViewControl(null);
             var viewModel = CreateViewModel(viewControl);

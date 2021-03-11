@@ -7,15 +7,19 @@
         mc:Ignorable="d"
         Title="InfoWindow" Height="240" Width="131.6">
     <Canvas>
-        <Label Content="Artist" Height="30" Margin="0,20,-0.2,320.4"/>
-        <Label Content="Album" Height="30" Margin="0,66,-0.2,274.4"/>
-        <Label Content="Title" Height="30" Margin="0,116,-0.2,224.4"/>
+        <Label Content="Artist" Height="30" Margin="0,20,-0.2,320.4" />
+        <Label Content="Album" Height="30" Margin="0,66,-0.2,274.4" />
+        <Label Content="Title" Height="30" Margin="0,116,-0.2,224.4" />
 
 
-        <Button Content="OK" x:Name="okButton" Click="okButton_Click" HorizontalAlignment="Left" Height="28" Margin="10,176,0,0" VerticalAlignment="Top" Width="38"/>
-        <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" HorizontalAlignment="Left" Height="28" Margin="63,176,0,0" VerticalAlignment="Top" Width="52"/>
-        <TextBox x:Name="artistBox" BorderThickness="2" Text="{Binding NewArtist}" HorizontalAlignment="Left" Height="18" Margin="0,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105"/>
-        <TextBox x:Name="albumBox" BorderThickness="2" Text="{Binding NewAlbum}" Height="18" Canvas.Top="93" Width="105"/>
-        <TextBox x:Name="songBox" BorderThickness="2" Text="{Binding NewName}" Height="18" Canvas.Top="140" Width="105"/>
+        <Button Content="OK" x:Name="okButton" Click="okButton_Click" HorizontalAlignment="Left" Height="28"
+                Margin="10,176,0,0" VerticalAlignment="Top" Width="38" />
+        <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" HorizontalAlignment="Left"
+                Height="28" Margin="63,176,0,0" VerticalAlignment="Top" Width="52" />
+        <TextBox x:Name="artistBox" BorderThickness="2" Text="{Binding NewArtist}" HorizontalAlignment="Left"
+                 Height="18" Margin="0,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" />
+        <TextBox x:Name="albumBox" BorderThickness="2" Text="{Binding NewAlbum}" Height="18" Canvas.Top="93"
+                 Width="105" />
+        <TextBox x:Name="songBox" BorderThickness="2" Text="{Binding NewName}" Height="18" Canvas.Top="140" Width="105" />
     </Canvas>
 </Window>

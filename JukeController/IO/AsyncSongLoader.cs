@@ -15,7 +15,7 @@ namespace Juke.IO
         private ISongCollector songCollector;
 
         public string Path { get; set; }
-        
+
         public AsyncSongLoader(LoadEngine engine)
         {
             this.engine = engine;
@@ -41,13 +41,12 @@ namespace Juke.IO
                 {
                     songCollector = new SongCollector(listener, tagReaderFactory);
                 }
-                
+
                 return Task.Run(async () =>
                 {
                     var list = await engine.LoadAsync(Path, listener);
                     await songCollector.Load(list, listener, cancelToken);
                 });
-                
             }
 
             Console.WriteLine("No engine?");

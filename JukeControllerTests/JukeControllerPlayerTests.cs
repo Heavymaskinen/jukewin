@@ -188,13 +188,13 @@ namespace Juke.Control.Tests
                 {
                     for (int song = 1; song <= songmax; song++)
                     {
-                        songList.Add(new Song("artist" + artist, "album" + album, "song" + song, (artist + song - 1) + "", artist + "/" + album + "/" + song));
+                        songList.Add(new Song("artist" + artist, "album" + album, "song" + song,
+                            (artist + song - 1) + "", artist + "/" + album + "/" + song));
                     }
                 }
             }
 
             return songList;
         }
-
     }
 }

@@ -5,22 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juke.UI.Wpf"
         mc:Ignorable="d"
-        Title="Welcome" Height="500" Width="500" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Background="Transparent">
+        Title="Welcome" Height="500" Width="500" WindowStyle="None" WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True" Background="Transparent">
     <Border Background="White" BorderBrush="Black" BorderThickness="6" CornerRadius="30 30 30 30">
         <Grid>
-            <Label Content="Welcome to J.U.K.E." FontSize="40" HorizontalAlignment="Left" Height="81" Margin="58,54,0,0" VerticalAlignment="Top" Width="375">
+            <Label Content="Welcome to J.U.K.E." FontSize="40" HorizontalAlignment="Left" Height="81"
+                   Margin="58,54,0,0" VerticalAlignment="Top" Width="375">
                 <Label.Effect>
-                    <DropShadowEffect BlurRadius="6" ShadowDepth="6"/>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="6" />
                 </Label.Effect>
             </Label>
-            <Border x:Name="innerContent" Background="WhiteSmoke" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="258" Margin="58,149,0,0" VerticalAlignment="Top" Width="375">
+            <Border x:Name="innerContent" Background="WhiteSmoke" BorderBrush="Black" BorderThickness="1"
+                    HorizontalAlignment="Left" Height="258" Margin="58,149,0,0" VerticalAlignment="Top" Width="375">
                 <Grid>
-                    <Label Name="openLabel"  Content="Please select a library folder to get started." HorizontalAlignment="Left" Height="31" Margin="9,22.2,0,0" VerticalAlignment="Top" Width="232"/>
-                    <Button Name="openButton" Content="Open" Height="20" Margin="301,25,32.6,211" Command="{Binding LoadSongs}" />
+                    <Label Name="openLabel" Content="Please select a library folder to get started."
+                           HorizontalAlignment="Left" Height="31" Margin="9,22.2,0,0" VerticalAlignment="Top"
+                           Width="232" />
+                    <Button Name="openButton" Content="Open" Height="20" Margin="301,25,32.6,211"
+                            Command="{Binding LoadSongs}" />
                     <Label Content="{Binding SystemMessage}" Height="30" />
                 </Grid>
             </Border>
-            <ProgressBar x:Name="progressBar" IsIndeterminate="{Binding ProgressIndeterminate}" Maximum="{Binding ProgressMax}" Value="{Binding Progress}" HorizontalAlignment="Left" Height="26" Margin="69,225,0,0" VerticalAlignment="Top" Width="355"/>
+            <ProgressBar x:Name="progressBar" IsIndeterminate="{Binding ProgressIndeterminate}"
+                         Maximum="{Binding ProgressMax}" Value="{Binding Progress}" HorizontalAlignment="Left"
+                         Height="26" Margin="69,225,0,0" VerticalAlignment="Top" Width="355" />
 
         </Grid>
     </Border>

@@ -21,7 +21,6 @@ namespace Juke.UI.Wpf
     /// </summary>
     public partial class JukeboxWindow : ViewControl
     {
-
         private JukeController jukeController;
         private AnimationTimeline fadeOutAnimation;
         private AnimationTimeline fadeInAnimation;
@@ -63,7 +62,7 @@ namespace Juke.UI.Wpf
                     }
                 },
                 Application.Current.Dispatcher
-                );
+            );
 
             dispatchTimer.Start();
         }
@@ -142,7 +141,6 @@ namespace Juke.UI.Wpf
             }
 
             InvalidateVisual();
-
         }
 
         private void FadeAnimation_Completed(object sender, EventArgs e)
@@ -158,7 +156,7 @@ namespace Juke.UI.Wpf
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             jukeController = JukeController.Instance;
-            
+
             Player.SongPlayed += Player_SongPlayed;
 
             if (!File.Exists("library.xml"))
@@ -297,7 +295,7 @@ namespace Juke.UI.Wpf
             if (!viewModel.PlaySong.CanExecute(null)) return;
             //viewModel.SelectedSong = song;
             viewModel.PlaySong.Execute(null);
-            
+
             searchBox.Visibility = Visibility.Hidden;
             songList.Visibility = Visibility.Hidden;
             searchBox.Text = "";
@@ -372,7 +370,6 @@ namespace Juke.UI.Wpf
 
         private void searchBox_KeyDown(object sender, KeyEventArgs e)
         {
-
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -398,7 +395,7 @@ namespace Juke.UI.Wpf
         {
             throw new NotImplementedException();
         }
-        
+
         public void CommandCompleted(JukeCommand command)
         {
             switch (command)

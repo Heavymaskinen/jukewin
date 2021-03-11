@@ -17,8 +17,9 @@ namespace Juke.UI.Wpf
         {
             base.OnStartup(e);
             JukeController.Instance.Player.RegisterPlayerEngine(new WmpPlayerEngine());
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
-            
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(),
+                new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
+
             Logger.Start("juke.log").EnableFrontendLog();
             Messenger.Log("Starting J.U.K.E.");
         }

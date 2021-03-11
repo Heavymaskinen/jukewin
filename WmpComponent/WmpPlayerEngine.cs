@@ -35,7 +35,8 @@ namespace Juke.External.Wmp
             if ((WMPPlayState) NewState == WMPPlayState.wmppsPlaying)
             {
                 isPlaying = true;
-            } else if ((WMPPlayState)NewState == WMPPlayState.wmppsStopped)
+            }
+            else if ((WMPPlayState) NewState == WMPPlayState.wmppsStopped)
             {
                 if (!isPlaying) //Catching a bug where Media Player stops without playing
                 {

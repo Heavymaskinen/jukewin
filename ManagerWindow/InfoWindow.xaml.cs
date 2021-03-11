@@ -20,8 +20,8 @@ namespace Juke.UI.Wpf
     /// </summary>
     public partial class InfoWindow : Window
     {
-
         public SongUpdate SongData { get; private set; }
+
         public InfoWindow()
         {
             InitializeComponent();

@@ -15,13 +15,15 @@ namespace DataModel
         public string TrackNo { get; private set; }
         public string FilePath { get; private set; }
 
-        public string ID => string.IsNullOrEmpty(FilePath) ? Name + Album + Artist + TrackNo: FilePath;
+        public string ID => string.IsNullOrEmpty(FilePath) ? Name + Album + Artist + TrackNo : FilePath;
 
         public void Merge(Song other)
         {
             if (other.ID == ID)
             {
-                Name = Name.Contains(".mp3") || (Name.StartsWith("0") &&  !string.IsNullOrEmpty(other.Name)) ? other.Name : Name;
+                Name = Name.Contains(".mp3") || (Name.StartsWith("0") && !string.IsNullOrEmpty(other.Name))
+                    ? other.Name
+                    : Name;
                 Artist = Artist == "<unknown>" ? other.Artist : Artist;
                 Album = Album == "<unknown>" ? other.Album : Album;
                 TrackNo = string.IsNullOrEmpty(TrackNo) ? other.TrackNo : TrackNo;
@@ -44,30 +46,29 @@ namespace DataModel
                 }
 
                 comparison = new Comparison<Song>((a, b) =>
-                 {
-                     var result = a.Artist.CompareTo(b.Artist);
-                     if (result != 0)
-                     {
-                         return result;
-                     }
+                {
+                    var result = a.Artist.CompareTo(b.Artist);
+                    if (result != 0)
+                    {
+                        return result;
+                    }
 
-                     result = a.Album.CompareTo(b.Album);
-                     if (result != 0)
-                     {
-                         return result;
-                     }
+                    result = a.Album.CompareTo(b.Album);
+                    if (result != 0)
+                    {
+                        return result;
+                    }
 
-                     if (a.TrackNo != b.TrackNo)
-                     {
-                         if (!string.IsNullOrEmpty(a.TrackNo) && !string.IsNullOrEmpty(b.TrackNo))
-                         {
-                             return int.Parse(a.TrackNo).CompareTo(int.Parse(b.TrackNo));
-                         }
-                     }
+                    if (a.TrackNo != b.TrackNo)
+                    {
+                        if (!string.IsNullOrEmpty(a.TrackNo) && !string.IsNullOrEmpty(b.TrackNo))
+                        {
+                            return int.Parse(a.TrackNo).CompareTo(int.Parse(b.TrackNo));
+                        }
+                    }
 
-                     return a.Name.CompareTo(b.Name);
-
-                 });
+                    return a.Name.CompareTo(b.Name);
+                });
 
                 return comparison;
             }
@@ -86,7 +87,8 @@ namespace DataModel
             TrackNo = "";
         }
 
-        public Song(string artist, string album, string name, string trackNo, string filePath) : this(artist, album, name)
+        public Song(string artist, string album, string name, string trackNo, string filePath) : this(artist, album,
+            name)
         {
             TrackNo = trackNo;
             FilePath = filePath;
@@ -107,7 +109,8 @@ namespace DataModel
             if (obj is Song)
             {
                 var other = obj as Song;
-                return Name.Equals(other.Name) && Artist.Equals(other.Artist) && Album.Equals(other.Album) && FilePath.Equals(other.FilePath);
+                return Name.Equals(other.Name) && Artist.Equals(other.Artist) && Album.Equals(other.Album) &&
+                       FilePath.Equals(other.FilePath);
             }
 
             return base.Equals(obj);
@@ -128,7 +131,5 @@ namespace DataModel
 
             return obj.ToString().CompareTo(ToString());
         }
-
-
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Juke.IO;
 using DataModel;
 
@@ -21,7 +20,8 @@ namespace Juke.Control.Tests
                 {
                     for (int song = 1; song <= songmax; song++)
                     {
-                        songList.Add(new Song("artist" + artist, "album" + album, "song" + song, (artist + song - 1) + "", artist + "/" + album + "/" + song));
+                        songList.Add(new Song("artist" + artist, "album" + album, "song" + song,
+                            (artist + song - 1) + "", artist + "/" + album + "/" + song));
                     }
                 }
             }
@@ -33,7 +33,7 @@ namespace Juke.Control.Tests
 
         private IList<Song> writtenSongs;
 
-        public FakeSongCatalogue():this(new List<Song>())
+        public FakeSongCatalogue() : this(new List<Song>())
         {
         }
 
@@ -45,11 +45,7 @@ namespace Juke.Control.Tests
 
         public IList<Song> WrittenSongs
         {
-            get
-            {
-                return writtenSongs;
-            }
-          
+            get { return writtenSongs; }
         }
 
         public IList<Song> LoadSongs()

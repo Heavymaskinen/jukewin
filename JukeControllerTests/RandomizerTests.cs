@@ -23,8 +23,8 @@ namespace JukeControllerTests
             for (var i = 0; i < 10; i++)
             {
                 var other = queue.Random;
-                Assert.AreNotEqual(first, other, "Failed at "+i);
-                Assert.IsNotNull(other, "Was null at "+i);
+                Assert.AreNotEqual(first, other, "Failed at " + i);
+                Assert.IsNotNull(other, "Was null at " + i);
             }
         }
 

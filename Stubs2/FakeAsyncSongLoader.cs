@@ -28,6 +28,7 @@ namespace Juke.Control.Tests
         public bool IsInitiated { get; private set; }
 
         private LoadListener listener;
+
         public List<string> Load(string path, LoadListener listener)
         {
             this.Path = path;
@@ -51,17 +52,18 @@ namespace Juke.Control.Tests
             IsInitiated = true;
             listener?.NotifyLoadInitiated(list.Count);
         }
+
         public Task<List<string>> LoadAsync(string path, LoadListener listener)
         {
             var task = Task.Run(() =>
-                           {
-                               this.Path = path;
-                               this.listener = listener;
-                               Initiate();
-                               listener.NotifyProgress(list.Count);
-                               var list1 = list.Select((e) => e.Name).ToList();
-                               return list1;
-                           });
+            {
+                this.Path = path;
+                this.listener = listener;
+                Initiate();
+                listener.NotifyProgress(list.Count);
+                var list1 = list.Select((e) => e.Name).ToList();
+                return list1;
+            });
             task.Wait();
             return task;
         }
@@ -86,7 +88,8 @@ namespace Juke.Control.Tests
             this.innerLoader = innerLoader;
         }
 
-        public FakeAsyncSongLoader(FakeSongLoadEngine engine, ISongCollector songCollector): this(new AsyncSongLoader(engine, songCollector))
+        public FakeAsyncSongLoader(FakeSongLoadEngine engine, ISongCollector songCollector) : this(
+            new AsyncSongLoader(engine, songCollector))
         {
         }
 
@@ -102,5 +105,4 @@ namespace Juke.Control.Tests
             return t;
         }
     }
-
 }

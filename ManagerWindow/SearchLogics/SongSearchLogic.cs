@@ -14,6 +14,7 @@ namespace Juke.UI.Wpf.SearchLogics
             this.browser = browser;
             list = new List<Song>();
         }
+
         public string Name => "Song titles";
 
         public List<Song> Search(string input)

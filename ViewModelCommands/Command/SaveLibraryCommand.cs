@@ -6,7 +6,8 @@ namespace Juke.UI.Command
 {
     public class SaveLibraryCommand : JukeCommand
     {
-        public SaveLibraryCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
+        public SaveLibraryCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+            view, model)
         {
         }
 
@@ -22,7 +23,6 @@ namespace Juke.UI.Command
                 controller.SaveLibrary(new XmlSongWriter("library.xml"));
                 view.CommandCompleted(this);
             });
-            
         }
     }
 }

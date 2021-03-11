@@ -12,7 +12,9 @@ namespace Juke.IO
         public string TrackNo { get; set; }
         public string FilePath { get; set; }
 
-        public PersistedSong() { }
+        public PersistedSong()
+        {
+        }
 
         public PersistedSong(Song song)
         {

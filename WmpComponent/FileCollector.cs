@@ -38,12 +38,12 @@ namespace Juke.External.Wmp
 
         private async Task LoadFromFolderBrowser(IFolderBrowser browser)
         {
-
             IList<string> folderFiles = browser.GetFiles();
 
             if (files.Count >= 20000 && !highFlag)
             {
-                Messenger.PostMessage("Over 20000 files!! Don't worry, we'll get there ...", Messenger.TargetType.Frontend);
+                Messenger.PostMessage("Over 20000 files!! Don't worry, we'll get there ...",
+                    Messenger.TargetType.Frontend);
                 highFlag = true;
             }
             else if (files.Count >= 10000 && !midFlag)
@@ -56,7 +56,7 @@ namespace Juke.External.Wmp
                 Messenger.PostMessage("Over 5000 files! This could take a while...", Messenger.TargetType.Frontend);
                 lowFlag = true;
             }
-            
+
             lock (files)
             {
                 foreach (var file in folderFiles)

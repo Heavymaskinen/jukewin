@@ -51,7 +51,7 @@ namespace Juke.External.Wmp
 
         public override string ToString()
         {
-            return TrackNo+Title + Album + Artist;
+            return TrackNo + Title + Album + Artist;
         }
     }
 }

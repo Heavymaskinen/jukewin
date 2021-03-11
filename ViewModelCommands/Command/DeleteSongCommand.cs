@@ -5,7 +5,8 @@ namespace Juke.UI.Command
 {
     public class DeleteSongCommand : JukeCommand
     {
-        public DeleteSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
+        public DeleteSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+            view, model)
         {
         }
 
@@ -21,7 +22,6 @@ namespace Juke.UI.Command
             var song = model.SelectedSong;
             Console.WriteLine("Delete: " + song);
             controller.LoadHandler.DeleteSong(song);
-
         }
     }
 }

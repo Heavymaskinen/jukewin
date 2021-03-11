@@ -32,26 +32,21 @@ namespace Juke.UI
         {
             return controller.Browser.GetSongsByArtist(art);
         }
+
         public ObservableCollection<string> Artists { get; private set; }
 
         public ProgressTracker ProgressTracker => progressTracker;
-        
+
         public double ProgressMax => progressTracker.ProgressMax;
 
         public double Progress
         {
-            get
-            {
-                return progressTracker.Progress;
-            }
-            set
-            {
-                progressTracker.Progress = value;
-            }
+            get { return progressTracker.Progress; }
+            set { progressTracker.Progress = value; }
         }
 
         public bool ProgressIndeterminate => progressTracker.IsIndeterminate;
-        
+
         public string SelectedArtist
         {
             get => selectedArtist;
@@ -93,6 +88,7 @@ namespace Juke.UI
                 {
                     return "<None>";
                 }
+
                 return song.Name + " (" + song.Artist + ")";
             }
         }
@@ -110,6 +106,7 @@ namespace Juke.UI
         public ICommand RenameArtist => new RenameArtistCommand(controller, View, this);
         public ICommand DeleteAlbum => new DeleteAlbumCommand(controller, View, this);
         public ICommand DeleteSong => new DeleteSongCommand(controller, View, this);
+
         public ICommand CancelLoad => new RelayCommand(
             (obj) => CancelTokenSource != null && !CancelTokenSource.IsCancellationRequested,
             (obj) =>
@@ -130,7 +127,7 @@ namespace Juke.UI
             progressTracker.Changed += ProgressTracker_Changed;
             View = view;
             InitializeCollections();
-            
+
             controller.LoadHandler.LibraryUpdated += LoadHandler_LibraryUpdated;
             controller.LoadHandler.LoadCompleted += (sender, args) => View.CommandCompleted(null);
             Player.SongPlayed += Player_SongPlayed;
@@ -147,6 +144,7 @@ namespace Juke.UI
             LoaderCancellationTokenProvider.Dispose();
             controller.Dispose();
         }
+
         private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)
         {
             SystemMessage = message;
@@ -172,6 +170,7 @@ namespace Juke.UI
             RefreshSongs(controller.Browser.Songs);
             RefreshQueue();
         }
+
         private void RefreshQueue()
         {
             Queue = new ObservableCollection<Song>(controller.Player.Queue.Songs);

@@ -17,6 +17,7 @@ namespace Juke.UI.Wpf
         Album,
         Song
     }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -79,13 +80,13 @@ namespace Juke.UI.Wpf
             var dlg = new FolderBrowserDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Messenger.Log("Path selected: "+ dlg.SelectedPath);
+                Messenger.Log("Path selected: " + dlg.SelectedPath);
                 return dlg.SelectedPath;
             }
 
             return null;
         }
-        
+
         public SongUpdate PromptSongData(InfoType infoType)
         {
             Song song;
@@ -96,9 +97,16 @@ namespace Juke.UI.Wpf
             }
             else if (artistBox.SelectedItem != null)
             {
+                if (artistBox.SelectedItem.ToString() == Song.ALL_ARTISTS ||
+                    albumBox.SelectedItem.ToString() == Song.ALL_ALBUMS) return null;
                 song = CreateSongDataFromAlbumAndArtist();
             }
             else
+            {
+                return null;
+            }
+
+            if (song == null)
             {
                 return null;
             }
@@ -110,7 +118,6 @@ namespace Juke.UI.Wpf
                     song = PopulateSongDataFromTags(song);
                 }
             }
-            
 
             var dialog = new InfoWindow(new SongUpdate(song), infoType);
 
@@ -133,7 +140,7 @@ namespace Juke.UI.Wpf
 
         private Song CreateSongDataFromAlbumAndArtist()
         {
-            Song song;
+            Song song = null;
             if (albumBox.SelectedItem != null)
             {
                 song = new Song(artistBox.SelectedItem.ToString(), albumBox.SelectedItem.ToString(), "");
@@ -156,7 +163,7 @@ namespace Juke.UI.Wpf
         private void ArtistBox_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (viewModel.SelectedArtist == null) return;
-            
+
             ContextMenu menu = FindResource("artistContextMenu") as ContextMenu;
             menu.PlacementTarget = artistBox;
             menu.IsOpen = true;
@@ -165,7 +172,7 @@ namespace Juke.UI.Wpf
         private void AlbumBox_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (viewModel.SelectedAlbum == null) return;
-            
+
             ContextMenu menu = FindResource("albumContextMenu") as ContextMenu;
             menu.PlacementTarget = albumBox;
             menu.IsOpen = true;

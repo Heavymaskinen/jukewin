@@ -41,7 +41,7 @@ namespace Juke.External.Wmp
                     listener.NotifyCompleted(songs);
                 }
             });
-            }
+        }
 
         private void SplitAndLoad(List<string> files)
         {
@@ -52,7 +52,7 @@ namespace Juke.External.Wmp
             Task.WaitAll(
                 Task.Run(async () => await LoadPartial(first)),
                 Task.Run(async () => await LoadPartial(files))
-             );
+            );
         }
 
         private async Task LoadPartial(List<string> list)
@@ -60,7 +60,7 @@ namespace Juke.External.Wmp
             if (list.Count > 2000)
             {
                 splits++;
-                Console.WriteLine("Do split! " + splits+" Count "+list.Count);
+                Console.WriteLine("Do split! " + splits + " Count " + list.Count);
                 SplitAndLoad(list);
                 splits--;
                 Console.WriteLine("Post split. " + splits);
@@ -82,20 +82,21 @@ namespace Juke.External.Wmp
             {
                 var reader = tagReaderFactory.Create(file);
                 var song = new Song(
-                        reader.Artist,
-                        reader.Album,
-                        reader.Title,
-                        reader.TrackNo,
-                        file
-                    );
+                    reader.Artist,
+                    reader.Album,
+                    reader.Title,
+                    reader.TrackNo,
+                    file
+                );
                 Messenger.PostMessage(reader.Title + " (" + reader.Artist + ")", Messenger.TargetType.Frontend);
                 lock (songs)
                 {
                     songs.Add(song);
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
-                Console.WriteLine("Load failed for "+file+": "+e.Message);
+                Console.WriteLine("Load failed for " + file + ": " + e.Message);
             }
         }
     }

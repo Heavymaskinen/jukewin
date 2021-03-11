@@ -8,6 +8,7 @@ namespace Juke.Control
     public class JukeController
     {
         private static JukeController instance;
+
         public static JukeController Instance
         {
             get
@@ -68,5 +69,5 @@ namespace Juke.Control
         {
             LoadHandler.LoadSongsSync(loader);
         }
-        }
+    }
 }

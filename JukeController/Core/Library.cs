@@ -43,6 +43,7 @@ namespace Juke.Core
                 {
                     Artists.Add(song.Artist);
                 }
+
                 //LoadAlbumAndArtists();
             }
             else if (!songCore[song.ID].Equals(song))
@@ -51,7 +52,7 @@ namespace Juke.Core
                 LoadAlbumAndArtists();
             }
         }
-        
+
         public void InitialiseParts()
         {
             Albums.Clear();
@@ -85,7 +86,7 @@ namespace Juke.Core
         {
             songCore.Remove(id);
         }
-        
+
         public void DeleteSong(Song song)
         {
             RemoveById(song.ID);

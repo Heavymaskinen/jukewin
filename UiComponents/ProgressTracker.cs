@@ -54,8 +54,8 @@ namespace UiComponents
 
         public void NotifyCompleted(IList<Song> loadedSongs)
         {
-            Messenger.Log("Progress completed "+Progress);
-            Completed?.Invoke(this, loadedSongs);    
+            Messenger.Log("Progress completed " + Progress);
+            Completed?.Invoke(this, loadedSongs);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Juke.UI.Wpf
     public partial class SearchSelectorWindow : Window
     {
         public SearchLogic SearchLogic { get; set; }
+
         public SearchSelectorWindow()
         {
             InitializeComponent();

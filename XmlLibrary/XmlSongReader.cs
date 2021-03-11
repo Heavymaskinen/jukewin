@@ -39,7 +39,7 @@ namespace Juke.External.Xml
 
             using (XmlReader reader = XmlReader.Create(filename))
             {
-                songs = new List<PersistedSong>((PersistedSong[])serializerInstance.Deserialize(reader));
+                songs = new List<PersistedSong>((PersistedSong[]) serializerInstance.Deserialize(reader));
             }
 
             return new SongConverter().ConvertPersistedSongs(songs);
@@ -58,14 +58,14 @@ namespace Juke.External.Xml
             }
 
             listener.NotifyNewLoad();
-           
+
             List<PersistedSong> songs = null;
 
             using (var reader = XmlReader.Create(filename))
             {
-                songs = new List<PersistedSong>((PersistedSong[])serializerInstance.Deserialize(reader));
+                songs = new List<PersistedSong>((PersistedSong[]) serializerInstance.Deserialize(reader));
             }
-            
+
             Messenger.Log("XML library read");
             var convertedSongs = new SongConverter().ConvertPersistedSongs(songs);
             Messenger.Log("Persisted songs converted");

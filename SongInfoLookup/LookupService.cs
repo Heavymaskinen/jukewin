@@ -1,24 +1,22 @@
-﻿using DataModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
+using DataModel;
 
 namespace Juke.External.Lookup
 {
     public class LookupService
     {
         private const string key = "002b10709790581ecb6897234c53c875";
+
         public CoverArtookupResult LookupCover(Song song)
         {
             var client = new HttpClient();
 
             client.BaseAddress = new Uri("http://ws.audioscrobbler.com/2.0/");
-            var result = client.GetAsync("?method=album.getinfo&api_key="+key+"&artist="+song.Artist+"&album="+song.Album).Result;
+            var result = client.GetAsync("?method=album.getinfo&api_key=" + key + "&artist=" + song.Artist + "&album=" +
+                                         song.Album).Result;
             var doc = new XmlDocument();
             doc.Load(result.Content.ReadAsStreamAsync().Result);
             //doc.WriteContentTo(new XmlTextWriter(Console.Out));

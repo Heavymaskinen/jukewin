@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using DataModel;
 using Juke.Control;
@@ -103,7 +102,7 @@ namespace JukeControllerTests
         public void LoadSecondTime_SongsAdded()
         {
             FakeLoad(CreateSongs(1, 1, 1));
-            FakeLoad(new List<Song> { new Song("artist", "album", "funky song") });
+            FakeLoad(new List<Song> {new Song("artist", "album", "funky song")});
             Assert.AreEqual(2, control.Browser.Songs.Count);
         }
 
@@ -119,7 +118,8 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadSongs_SameTitleDifferentArtist()
         {
-            FakeLoad(new List<Song> { new Song("artist", "album", "funky song"), new Song("artist1", "album", "funky song") });
+            FakeLoad(new List<Song>
+                {new Song("artist", "album", "funky song"), new Song("artist1", "album", "funky song")});
             Assert.AreEqual(2, control.Browser.Songs.Count);
         }
 
@@ -264,7 +264,7 @@ namespace JukeControllerTests
         [TestMethod]
         public void GetAlbumsByArtist_OneResult()
         {
-            FakeLoad(new List<Song> { new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1") });
+            FakeLoad(new List<Song> {new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1")});
             var albums = control.Browser.GetAlbumsByArtist("artist1");
             Assert.AreEqual("album1", albums[0]);
             Assert.AreEqual(1, albums.Count);
@@ -273,7 +273,7 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadAsync_GetAlbumsByArtist_OneResult()
         {
-            var songs = new List<Song> { new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1") };
+            var songs = new List<Song> {new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1")};
             var engine = new FakeSongLoadEngine(songs);
             var loader = FakeAsyncLoad(engine, songs);
             control.LoadHandler.LoadSongs(loader).Wait();
@@ -295,7 +295,6 @@ namespace JukeControllerTests
         [TestMethod]
         public void GetSongByTitle_NoResult()
         {
-
             var songs = control.Browser.GetSongsByTitle("none");
             Assert.AreEqual(0, songs.Count);
         }
@@ -354,8 +353,8 @@ namespace JukeControllerTests
         {
             var songs = new List<Song>
             {
-                new Song("art1","album2","track1"),
-                new Song("art1","album1","track1")
+                new Song("art1", "album2", "track1"),
+                new Song("art1", "album1", "track1")
             };
             songs.Sort(Song.Comparison);
             Assert.AreEqual("album1", songs[0].Album);
@@ -366,9 +365,9 @@ namespace JukeControllerTests
         {
             var songs = new List<Song>
             {
-                new Song("art1","album2","track1","1",""),
-                new Song("art1","album1","track2", "2",""),
-                new Song("art1","album1","track1","1","")
+                new Song("art1", "album2", "track1", "1", ""),
+                new Song("art1", "album1", "track2", "2", ""),
+                new Song("art1", "album1", "track1", "1", "")
             };
             songs.Sort(Song.Comparison);
             Assert.AreEqual("track1", songs[0].Name);
@@ -380,10 +379,10 @@ namespace JukeControllerTests
         {
             var songs = new List<Song>
             {
-                new Song("art1","album2","track1","1",""),
-                new Song("art1","album1","track2", "2",""),
-                new Song("art1","album1","track1","1",""),
-                new Song("art3","album3","track1","1","")
+                new Song("art1", "album2", "track1", "1", ""),
+                new Song("art1", "album1", "track2", "2", ""),
+                new Song("art1", "album1", "track1", "1", ""),
+                new Song("art3", "album3", "track1", "1", "")
             };
             songs.Sort(Song.Comparison);
             Assert.AreEqual("track1", songs[0].Name);
@@ -397,7 +396,6 @@ namespace JukeControllerTests
 
             Assert.AreEqual("track1", songs[3].Name);
             Assert.AreEqual("album3", songs[3].Album);
-
         }
 
         [TestMethod]
@@ -444,16 +442,26 @@ namespace JukeControllerTests
         public void DeleteAlbum()
         {
             FakeLoad(CreateSongs(1, 2, 4));
-            control.LoadHandler.DeleteAlbum("album2");
+            control.LoadHandler.DeleteAlbum("album2", new EventListener());
             Assert.AreEqual(4, control.Browser.Songs.Count);
             Assert.AreEqual(1, control.Browser.Albums.Count);
+        }
+
+        [TestMethod]
+        public void DeleteArtist()
+        {
+            FakeLoad(CreateSongs(2, 20, 40));
+            control.LoadHandler.DeleteArtist("artist1", new EventListener() as LoadListener);
+            Assert.AreEqual(20 * 40, control.Browser.Songs.Count);
+            Assert.AreEqual(1, control.Browser.Artists.Count);
+            Assert.AreEqual("artist2", control.Browser.Artists[0]);
         }
 
         [TestMethod]
         public void EmptyLibrary_AddSong_AlbumAndArtistVisible()
         {
             var library = new Library();
-            library.AddSong(new Song("artist","album","song"));
+            library.AddSong(new Song("artist", "album", "song"));
             Assert.AreEqual(1, library.Artists.Count);
             Assert.AreEqual(1, library.Albums.Count);
         }
@@ -462,8 +470,8 @@ namespace JukeControllerTests
         public void ExistingIncompleteSongGetsMergedWhenSimilarIsAdded()
         {
             var library = new Library();
-            library.AddSong(new Song("<unknown>", "<unknown>", "song.mp3","0", "ID"));
-            library.AddSong(new Song("artist", "album", "song","0", "ID"));
+            library.AddSong(new Song("<unknown>", "<unknown>", "song.mp3", "0", "ID"));
+            library.AddSong(new Song("artist", "album", "song", "0", "ID"));
             Assert.AreEqual(1, library.Songs.Count);
             Assert.AreEqual("song", library.Songs[0].Name);
         }
@@ -498,7 +506,7 @@ namespace JukeControllerTests
 
         private AsyncSongLoader FakeAsyncLoad(FakeSongLoadEngine engine, List<Song> songs)
         {
-            return new AsyncSongLoader(engine,new FakeSongCollector(songs));
+            return new AsyncSongLoader(engine, new FakeSongCollector(songs));
         }
 
         private void FakeLoad(List<Song> songs)
@@ -515,7 +523,8 @@ namespace JukeControllerTests
                 {
                     for (int song = 1; song <= songmax; song++)
                     {
-                        songList.Add(new Song("artist" + artist, "album" + album, "song" + song, (artist + song - 1) + "", artist + "/" + album + "/" + song));
+                        songList.Add(new Song("artist" + artist, "album" + album, "song" + song,
+                            (artist + song - 1) + "", artist + "/" + album + "/" + song));
                     }
                 }
             }

@@ -16,7 +16,7 @@ namespace Stubs2
                 listener1.NotifyCompleted(Songs);
             }, cancelToken);
         }
-        
+
 
         public FakeSongCollector(List<Song> songs)
         {

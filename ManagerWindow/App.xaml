@@ -10,20 +10,20 @@
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation From="0" To="1" Duration="0:0:2" Storyboard.TargetProperty="Opacity"/>
+                                <DoubleAnimation From="0" To="1" Duration="0:0:2" Storyboard.TargetProperty="Opacity" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
                     <Trigger.ExitActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation From="1" To="0" Duration="0:0:3" Storyboard.TargetProperty="Opacity"/>
+                                <DoubleAnimation From="1" To="0" Duration="0:0:3" Storyboard.TargetProperty="Opacity" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
                 </Trigger>
             </Style.Triggers>
-            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Opacity" Value="0" />
         </Style>
 
         <Style x:Key="selectedStyle" TargetType="{x:Type ListBoxItem}">
@@ -37,13 +37,13 @@
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
-        
+
         <Style x:Key="titleStyle" TargetType="{x:Type Label}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Effect">
                         <Setter.Value>
-                            <DropShadowEffect ShadowDepth="10" Color="Gray"/>
+                            <DropShadowEffect ShadowDepth="10" Color="Gray" />
                         </Setter.Value>
                     </Setter>
                 </Trigger>
@@ -51,15 +51,17 @@
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <ThicknessAnimation From="0" To="99" Duration="0:0:1" Storyboard.TargetProperty = "BorderThickness"/>
+                                <ThicknessAnimation From="0" To="99" Duration="0:0:1"
+                                                    Storyboard.TargetProperty="BorderThickness" />
                                 <StringAnimationUsingKeyFrames Storyboard.TargetProperty="Content">
                                     <StringAnimationUsingKeyFrames.KeyFrames>
                                         <StringKeyFrameCollection>
-                                            <DiscreteStringKeyFrame Value="J.U.K.E." KeyTime="0:0:1"/>
+                                            <DiscreteStringKeyFrame Value="J.U.K.E." KeyTime="0:0:1" />
                                         </StringKeyFrameCollection>
                                     </StringAnimationUsingKeyFrames.KeyFrames>
                                 </StringAnimationUsingKeyFrames>
-                                <ThicknessAnimation BeginTime="0:0:1" From="99" To="0" Duration="0:0:1" Storyboard.TargetProperty = "BorderThickness"/>
+                                <ThicknessAnimation BeginTime="0:0:1" From="99" To="0" Duration="0:0:1"
+                                                    Storyboard.TargetProperty="BorderThickness" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -67,17 +69,15 @@
             </Style.Triggers>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect ShadowDepth="5" Color="Black"/>
+                    <DropShadowEffect ShadowDepth="5" Color="Black" />
                 </Setter.Value>
             </Setter>
-            <Setter Property="FontSize" Value="40"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Opacity" Value="0.05"/>
-            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="FontSize" Value="40" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Opacity" Value="0.05" />
+            <Setter Property="BorderBrush" Value="Black" />
         </Style>
 
-        <Style x:Key="labelStyle" TargetType="{x:Type Label}">
-            
-        </Style>
+        <Style x:Key="labelStyle" TargetType="{x:Type Label}" />
     </Application.Resources>
 </Application>

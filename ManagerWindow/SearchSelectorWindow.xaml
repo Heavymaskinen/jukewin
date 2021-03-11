@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juke.UI.Wpf"
         mc:Ignorable="d"
-        Title="Select search logic" Height="300" Width="189.6" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Opacity="0.8">
+        Title="Select search logic" Height="300" Width="189.6" WindowStyle="None" AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen" Opacity="0.8">
     <Grid Margin="0,0,-0.4,-0.6">
-        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="237" Margin="10,8,0,0" VerticalAlignment="Top" Width="170"/>
-        <Button x:Name="okBUtton" Click="okBUtton_Click" Content="OK" HorizontalAlignment="Left" Height="34" Margin="10,257,0,0" VerticalAlignment="Top" Width="83"/>
-        <Button x:Name="cancelButton" Click="cancelButton_Click" Content="Cancel" HorizontalAlignment="Left" Height="34" Margin="98,257,0,0" VerticalAlignment="Top" Width="82"/>
+        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="237" Margin="10,8,0,0" VerticalAlignment="Top"
+                 Width="170" />
+        <Button x:Name="okBUtton" Click="okBUtton_Click" Content="OK" HorizontalAlignment="Left" Height="34"
+                Margin="10,257,0,0" VerticalAlignment="Top" Width="83" />
+        <Button x:Name="cancelButton" Click="cancelButton_Click" Content="Cancel" HorizontalAlignment="Left"
+                Height="34" Margin="98,257,0,0" VerticalAlignment="Top" Width="82" />
     </Grid>
 </Window>

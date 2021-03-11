@@ -29,7 +29,7 @@ namespace Juke.UI.Wpf.SearchLogics
             var artistList = browser.Artists.ToArray();
             foreach (var art in artistList)
             {
-                if ( art.ToLower().StartsWith(lowerName))
+                if (art.ToLower().StartsWith(lowerName))
                 {
                     var songs = browser.GetSongsByArtist(art);
                     list.AddRange(songs);

@@ -5,9 +5,10 @@ namespace Juke.UI
     public class LoaderCancellationTokenProvider
     {
         private static CancellationTokenSource tokenSource;
+
         public static CancellationToken Token
         {
-            get 
+            get
             {
                 if (tokenSource == null)
                 {

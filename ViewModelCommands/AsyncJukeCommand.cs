@@ -29,13 +29,13 @@ namespace Juke.UI
         {
             try
             {
-                _ = RunAsync(AsyncExecute(parameter));
+                _ = RunAsync(AsyncExecute(parameter)).ConfigureAwait(false);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.InnerException.Message);
-                Console.WriteLine(e.ToString());
+                Messenger.Log(e.Message);
+                Messenger.Log(e.InnerException.Message);
+                Messenger.Log(e.ToString());
             }
         }
 

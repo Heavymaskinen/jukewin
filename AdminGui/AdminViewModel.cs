@@ -37,8 +37,10 @@ namespace Juke.UI.Admin
         public ICommand EditSong => new EditSongCommand(controller, View, this);
         public ICommand EditAlbum => new EditAlbumCommand(controller, View, this);
         public ICommand RenameArtist => new RenameArtistCommand(controller, View, this);
+        public ICommand DeleteArtist => new DeleteArtistCommand(controller, View, this);
         public ICommand DeleteAlbum => new DeleteAlbumCommand(controller, View, this);
         public ICommand DeleteSong => new DeleteSongCommand(controller, View, this);
+
         public ICommand CancelLoad => new RelayCommand(
             (obj) => CancelTokenSource != null && !CancelTokenSource.IsCancellationRequested,
             (obj) =>
@@ -47,6 +49,7 @@ namespace Juke.UI.Admin
                 CancelTokenSource.Dispose();
                 CancelTokenSource = null;
             });
+
         public ProgressTracker ProgressTracker => progressTracker;
 
         public string SelectedArtist
@@ -90,6 +93,7 @@ namespace Juke.UI.Admin
                 {
                     return "<None>";
                 }
+
                 return song.Name + " (" + song.Artist + ")";
             }
         }
@@ -185,8 +189,9 @@ namespace Juke.UI.Admin
             Albums = new ObservableCollection<string>(albums.OrderBy(s => s));
             if (Albums.Count > 1)
             {
-                Albums.Insert(0,Song.ALL_ALBUMS);
+                Albums.Insert(0, Song.ALL_ALBUMS);
             }
+
             RaisePropertyChanged(nameof(Albums));
         }
 

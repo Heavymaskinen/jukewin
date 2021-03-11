@@ -9,7 +9,8 @@ namespace Juke.UI.Command
 {
     public class PlaySongCommand : JukeCommand
     {
-        public PlaySongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
+        public PlaySongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+            view, model)
         {
             model.PropertyChanged += Model_PropertyChanged;
         }
@@ -29,7 +30,8 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            Console.WriteLine("Play it: "+ model.SelectedSong+" "+model.SelectedSong.Album+" "+model.SelectedSong.Artist+" "+model.SelectedSong.FilePath);
+            Console.WriteLine("Play it: " + model.SelectedSong + " " + model.SelectedSong.Album + " " +
+                              model.SelectedSong.Artist + " " + model.SelectedSong.FilePath);
             controller.Player.PlaySong(model.SelectedSong);
         }
     }

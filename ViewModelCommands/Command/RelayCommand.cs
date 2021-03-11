@@ -28,7 +28,7 @@ namespace Juke.UI.Command
             if (val != canExecute)
             {
                 canExecute = val;
-                CanExecuteChanged?.Invoke(this,EventArgs.Empty);
+                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
             }
 
             return true;

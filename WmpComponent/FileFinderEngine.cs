@@ -22,7 +22,8 @@ namespace Juke.External.Wmp
             listener.NotifyNewLoad();
             Messenger.PostMessage("Counting files, please be patient", Messenger.TargetType.Frontend);
             var list = fileCollector.CollectFileNamesSync(path);
-            Messenger.PostMessage("Now adding " + list.Count + " files to library. Please be patient.", Messenger.TargetType.Frontend);
+            Messenger.PostMessage("Now adding " + list.Count + " files to library. Please be patient.",
+                Messenger.TargetType.Frontend);
             return list;
         }
 

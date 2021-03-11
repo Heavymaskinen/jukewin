@@ -19,7 +19,7 @@ namespace Juke.UI
 
         public IAsyncSongLoader CreateAsync(string path)
         {
-            if (loaderInstance !=  null)
+            if (loaderInstance != null)
             {
                 loaderInstance.Path = path;
                 return loaderInstance;

@@ -10,7 +10,8 @@ namespace Juke.UI.Command
 {
     public class EditAlbumCommand : JukeCommand
     {
-        public EditAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
+        public EditAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+            view, model)
         {
         }
 
@@ -27,7 +28,7 @@ namespace Juke.UI.Command
             var albumSongs = controller.Browser.GetSongsByAlbum(updateData.SongSource.Album);
             foreach (var song in albumSongs)
             {
-                var update = new SongUpdate(song) { NewAlbum = updateData.NewAlbum, NewArtist = updateData.NewArtist };
+                var update = new SongUpdate(song) {NewAlbum = updateData.NewAlbum, NewArtist = updateData.NewArtist};
                 controller.LoadHandler.UpdateSong(update);
             }
         }

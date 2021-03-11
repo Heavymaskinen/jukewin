@@ -20,7 +20,6 @@ namespace Juke.Control.Tests
 
         public EventListener()
         {
-
             JukeController.Instance.LoadHandler.LoadInitiated += SongLoader_LoadInitiated;
             JukeController.Instance.LoadHandler.LoadCompleted += LoadHandler_LoadCompleted;
             JukeController.Instance.LoadHandler.LoadProgress += LoadHandlerOnLoadProgress;
@@ -42,11 +41,13 @@ namespace Juke.Control.Tests
             SongPlayed = e;
         }
 
-        
+
         private void SongLoader_LoadInitiated(object sender, int e)
         {
             LoadInitiated = true;
         }
+
+        public event EventHandler<IList<Song>> Completed;
 
         public void NotifyNewLoad()
         {

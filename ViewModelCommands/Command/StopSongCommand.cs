@@ -9,7 +9,8 @@ namespace Juke.UI.Command
 {
     public class StopSongCommand : JukeCommand
     {
-        public StopSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
+        public StopSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+            view, model)
         {
         }
 

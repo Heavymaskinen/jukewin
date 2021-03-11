@@ -62,7 +62,7 @@ namespace Juke.IO
             Task.WaitAll(
                 Task.Run(async () => await LoadPartial(first), cancelToken),
                 Task.Run(async () => await LoadPartial(files), cancelToken)
-             );
+            );
         }
 
         private Task LoadPartial(List<string> list)

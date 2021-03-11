@@ -12,7 +12,7 @@ namespace WmpComponentTest
         [TestMethod]
         public void ParseOneLevel()
         {
-            var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(0, 10) };
+            var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(0, 10)};
             var list = PerformAsyncCollect(factory);
             Assert.AreEqual(10, list.Count);
         }
@@ -20,7 +20,7 @@ namespace WmpComponentTest
         [TestMethod]
         public void ParseTwoLevels()
         {
-            var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(1, 10) };
+            var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(1, 10)};
             IList<string> result = PerformAsyncCollect(factory);
 
             Assert.AreEqual(20, result.Count);
@@ -29,7 +29,7 @@ namespace WmpComponentTest
         [TestMethod]
         public void ParseThreeLevels()
         {
-            var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(2, 10) };
+            var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(2, 10)};
             IList<string> result = PerformAsyncCollect(factory);
             Assert.AreEqual(10 * 3 + 10 * 2, result.Count);
         }
@@ -38,7 +38,7 @@ namespace WmpComponentTest
         public void ParserStressTest_NineLevels()
         {
             //16 sec
-            var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(9, 10) };
+            var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(9, 10)};
             IList<string> result = PerformAsyncCollect(factory);
             Assert.AreEqual(9864100, result.Count);
         }
@@ -47,7 +47,7 @@ namespace WmpComponentTest
         public void ParserStressTest_ManyFiles()
         {
             //11 sec
-            var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(8, 100) };
+            var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(8, 100)};
             IList<string> result = PerformAsyncCollect(factory);
             Assert.AreEqual(10960100, result.Count);
         }
@@ -56,9 +56,9 @@ namespace WmpComponentTest
         public void ParserStressTest_RandomLevels()
         {
             //9.4 sec
-            var factory = new FakeFolderBrowserFactory { FakeFolderBrowser = new FakeFolderBrowser(700, 10, 10) };
+            var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(700, 10, 10)};
             IList<string> result = PerformAsyncCollect(factory);
-            Assert.IsTrue(result.Count >= 253400, result.Count+" was actual");
+            Assert.IsTrue(result.Count >= 253400, result.Count + " was actual");
         }
 
         private static IList<string> PerformAsyncCollect(FakeFolderBrowserFactory factory)
@@ -80,6 +80,7 @@ namespace WmpComponentTest
     class FakeFolderBrowserFactory : IFolderBrowserFactory
     {
         public FakeFolderBrowser FakeFolderBrowser { get; set; }
+
         public IFolderBrowser Create(string path)
         {
             return FakeFolderBrowser;

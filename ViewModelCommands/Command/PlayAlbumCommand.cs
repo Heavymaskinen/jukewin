@@ -9,7 +9,8 @@ namespace Juke.UI.Command
 {
     public class PlayAlbumCommand : JukeCommand
     {
-        public PlayAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
+        public PlayAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+            view, model)
         {
         }
 

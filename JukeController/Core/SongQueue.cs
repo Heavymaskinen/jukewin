@@ -12,6 +12,7 @@ namespace Juke.Core
         private Queue<Song> queue;
         private LibraryBrowser browser;
         private Randomizer randomizer;
+
         public Song Next
         {
             get
@@ -54,8 +55,8 @@ namespace Juke.Core
 
         public void EnqueueAlbum(string albumName)
         {
-            var songs =browser.GetSongsByAlbum(albumName);
-            foreach ( var s in songs)
+            var songs = browser.GetSongsByAlbum(albumName);
+            foreach (var s in songs)
             {
                 Enqueue(s);
             }

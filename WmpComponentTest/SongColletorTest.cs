@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace WmpComponentTest
 {
-
     [TestClass]
     public class SongColletorTest
     {
@@ -65,8 +64,12 @@ namespace WmpComponentTest
             }
 
             var listener = new FakeListener();
-            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new FakeTagReader { Album = "<unknown>", Artist = "<unknown>", Title = "song.mp3" },
-                BackupFactory = new FakeTagReaderFactory{FakeTagReader = new FakeTagReader{Album = "album", Artist = "artist", Title = "title"}}});
+            var collector = new SongCollector(listener, new FakeTagReaderFactory
+            {
+                FakeTagReader = new FakeTagReader {Album = "<unknown>", Artist = "<unknown>", Title = "song.mp3"},
+                BackupFactory = new FakeTagReaderFactory
+                    {FakeTagReader = new FakeTagReader {Album = "album", Artist = "artist", Title = "title"}}
+            });
             PerformSyncSongCollect(collector, list, listener);
             Assert.AreEqual("title", listener.CompletedSongs[0].Name);
             Assert.AreEqual("artist", listener.CompletedSongs[0].Artist);
@@ -85,12 +88,14 @@ namespace WmpComponentTest
                 list.Add("test" + i);
             }
 
-            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new SlowTagReader { Fails = 3 } });
+            var collector = new SongCollector(listener,
+                new FakeTagReaderFactory {FakeTagReader = new SlowTagReader {Fails = 3}});
             PerformSyncSongCollect(collector, list, listener);
             while (!listener.IsCompleted)
             {
                 Thread.Sleep(4);
             }
+
             Assert.AreEqual(loadCount - 3, listener.CompletedSongs.Count);
         }
 
@@ -99,12 +104,14 @@ namespace WmpComponentTest
             PerformSyncSongCollect(collector, list, listener, CancellationToken.None);
         }
 
-        private static void PerformSyncSongCollect(SongCollector collector, List<string> list, FakeListener listener, CancellationToken cancelToken)
+        private static void PerformSyncSongCollect(SongCollector collector, List<string> list, FakeListener listener,
+            CancellationToken cancelToken)
         {
             collector.Load(list, listener, cancelToken).Wait(cancelToken);
         }
 
-        private static Task PerformAsyncSongCollect(SongCollector collector, List<string> list, FakeListener listener, CancellationToken cancelToken)
+        private static Task PerformAsyncSongCollect(SongCollector collector, List<string> list, FakeListener listener,
+            CancellationToken cancelToken)
         {
             return collector.Load(list, listener, cancelToken);
         }
@@ -135,13 +142,15 @@ namespace WmpComponentTest
             var listener = new FakeListener();
             int loadCount = 3000;
             var provider = new CancellationTokenSource();
-            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new SlowTagReader() { Title = "MySong" } });
+            var collector = new SongCollector(listener,
+                new FakeTagReaderFactory {FakeTagReader = new SlowTagReader() {Title = "MySong"}});
 
             var list = new List<string>();
             for (var i = 0; i < loadCount; i++)
             {
                 list.Add("test" + i);
             }
+
             var task = PerformAsyncSongCollect(collector, list, listener, provider.Token);
             provider.CancelAfter(TimeSpan.FromMilliseconds(5));
 
@@ -153,23 +162,25 @@ namespace WmpComponentTest
             {
                 //Don't care...
             }
-            
+
             provider.Dispose();
-            
+
             Assert.IsNotNull(listener.CompletedSongs, "Should have completed songs!");
-            Assert.IsTrue(listener.CompletedSongs.Count > 0, "too few: "+listener.CompletedSongs.Count);
-            Assert.IsTrue(listener.CompletedSongs.Count < loadCount, "Too many: "+ listener.CompletedSongs.Count);
+            Assert.IsTrue(listener.CompletedSongs.Count > 0, "too few: " + listener.CompletedSongs.Count);
+            Assert.IsTrue(listener.CompletedSongs.Count < loadCount, "Too many: " + listener.CompletedSongs.Count);
         }
 
         private static void CollectWithListener(FakeListener listener)
         {
-            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new FakeTagReader { Title = "MySong" } });
-            PerformSyncSongCollect(collector, new List<string>() { "test" }, listener);
+            var collector = new SongCollector(listener,
+                new FakeTagReaderFactory {FakeTagReader = new FakeTagReader {Title = "MySong"}});
+            PerformSyncSongCollect(collector, new List<string>() {"test"}, listener);
         }
 
         private static void SlowCollectWithListener(FakeListener listener, int loadCount)
         {
-            var collector = new SongCollector(listener, new FakeTagReaderFactory { FakeTagReader = new SlowTagReader { Title = "MySlowSong" } });
+            var collector = new SongCollector(listener,
+                new FakeTagReaderFactory {FakeTagReader = new SlowTagReader {Title = "MySlowSong"}});
 
             var list = new List<string>();
             for (var i = 0; i < loadCount; i++)
@@ -193,7 +204,8 @@ namespace WmpComponentTest
 
         public virtual FakeTagReader New()
         {
-            return new FakeTagReader { Title = this.Title, Album = this.Album, Artist = this.Artist, TrackNo = this.TrackNo};
+            return new FakeTagReader
+                {Title = this.Title, Album = this.Album, Artist = this.Artist, TrackNo = this.TrackNo};
         }
     }
 
@@ -201,7 +213,7 @@ namespace WmpComponentTest
     {
         public override FakeTagReader New()
         {
-            return new FakeTagReader { Title = "song.mp3", Album = "<unknown>", Artist = "<unknown>" };
+            return new FakeTagReader {Title = "song.mp3", Album = "<unknown>", Artist = "<unknown>"};
         }
     }
 
@@ -209,6 +221,7 @@ namespace WmpComponentTest
     {
         private int count = 0;
         private string title;
+
         public override string Title
         {
             set { title = value; }
@@ -224,14 +237,14 @@ namespace WmpComponentTest
         public override FakeTagReader New()
         {
             count++;
-            if (Fails <= 0) return new SlowTagReader {Title = title+count};
+            if (Fails <= 0) return new SlowTagReader {Title = title + count};
 
             Fails--;
             throw new Exception("Test failure! " + Fails);
         }
     }
-    
-    class FakeTagReaderFactory :    TagReaderFactory
+
+    class FakeTagReaderFactory : TagReaderFactory
     {
         public FakeTagReader FakeTagReader { get; set; }
         public TagReaderFactory BackupFactory { get; set; }
@@ -260,6 +273,8 @@ namespace WmpComponentTest
         {
             IsInitiated = true;
         }
+
+        public event EventHandler<IList<Song>> Completed;
 
         public void NotifyNewLoad()
         {

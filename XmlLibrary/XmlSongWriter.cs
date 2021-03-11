@@ -23,7 +23,7 @@ namespace Juke.External.Xml
 
         public void Write(IList<Song> songs)
         {
-            Messenger.Log("Writing: " + songs.Count+" to "+filename);
+            Messenger.Log("Writing: " + songs.Count + " to " + filename);
             using (var writer = XmlWriter.Create(filename))
             {
                 var persistableSongs = new SongConverter().ConvertSongs(songs);

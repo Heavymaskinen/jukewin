@@ -22,7 +22,7 @@ namespace Juke.Log
         private Logger(string filename)
         {
             this.filename = filename;
-            Console.WriteLine("Using: " + Directory.GetCurrentDirectory()+filename);
+            Console.WriteLine("Using: " + Directory.GetCurrentDirectory() + filename);
             if (!File.Exists(filename))
             {
                 Log("J.U.K.E. log\n===============\n");
@@ -48,18 +48,19 @@ namespace Juke.Log
 
         private void Messenger_FrontendMessagePosted(string message, Messenger.TargetType target)
         {
-            LogWithTime("[Frontend] "+message);
+            LogWithTime("[Frontend] " + message);
         }
 
         private void LogWithTime(string message)
         {
             Log(DateTime.Now + "| " + message);
         }
+
         private void Log(string message)
         {
             lock (filename)
             {
-                File.AppendAllText(this.filename, message +"\n");
+                File.AppendAllText(this.filename, message + "\n");
             }
         }
     }

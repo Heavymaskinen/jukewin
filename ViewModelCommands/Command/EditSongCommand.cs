@@ -5,7 +5,8 @@ namespace Juke.UI.Command
 {
     public class EditSongCommand : JukeCommand
     {
-        public EditSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller, view, model)
+        public EditSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+            view, model)
         {
         }
 
@@ -16,7 +17,8 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            SongUpdate update = view.PromptSongData(InfoType.Song);
+            var infoType = (InfoType) parameter;
+            SongUpdate update = view.PromptSongData(infoType);
             if (update != null)
             {
                 controller.LoadHandler.UpdateSong(update);

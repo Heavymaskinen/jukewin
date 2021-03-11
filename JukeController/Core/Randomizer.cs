@@ -22,7 +22,7 @@ namespace Juke.Core
         {
             var rand = new Random(Environment.TickCount);
 
-            Song nextSong = usedSongs.Count > 0? usedSongs.Peek() : null;
+            Song nextSong = usedSongs.Count > 0 ? usedSongs.Peek() : null;
             while (nextSong == null || usedSongs.Contains(nextSong))
             {
                 var ind = rand.Next(0, library.Songs.Count);

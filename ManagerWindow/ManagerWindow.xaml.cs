@@ -82,13 +82,13 @@ namespace Juke.UI.Wpf
             var dlg = new FolderBrowserDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Messenger.Log("Path selected: "+ dlg.SelectedPath);
+                Messenger.Log("Path selected: " + dlg.SelectedPath);
                 return dlg.SelectedPath;
             }
 
             return null;
         }
-        
+
         public SongUpdate PromptSongData(InfoType infoType)
         {
             Song song;
@@ -113,7 +113,7 @@ namespace Juke.UI.Wpf
                     song = PopulateSongDataFromTags(song);
                 }
             }
-            
+
 
             var dialog = new InfoWindow(new SongUpdate(song), infoType);
 
@@ -151,8 +151,6 @@ namespace Juke.UI.Wpf
 
         public void CommandCompleted(JukeCommand command)
         {
-
         }
-
     }
 }

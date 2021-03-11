@@ -11,6 +11,7 @@ namespace Juke.Control.Tests
     public class FakePlayerEngine : PlayerEngine
     {
         public Song PlayedSong { get; set; }
+
         public override void Play(Song song)
         {
             PlayedSong = song;
@@ -28,7 +29,6 @@ namespace Juke.Control.Tests
 
         public override void Dispose()
         {
-            
         }
     }
 }

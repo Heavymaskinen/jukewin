@@ -20,8 +20,8 @@ namespace Juke.UI.Wpf
     /// </summary>
     public partial class InfoWindow : Window
     {
-
         public SongUpdate SongData { get; private set; }
+
         public InfoWindow()
         {
             InitializeComponent();
@@ -34,13 +34,14 @@ namespace Juke.UI.Wpf
 
             if (info == InfoType.Album)
             {
-                songBox.IsEnabled = false;
+                songBox.Visibility = Visibility.Hidden;
+                artistBox.Visibility = Visibility.Hidden;
             }
 
             if (info == InfoType.Artist)
             {
-                songBox.IsEnabled = false;
-                albumBox.IsEnabled = false;
+                songBox.Visibility = Visibility.Hidden;
+                albumBox.Visibility = Visibility.Hidden;
             }
         }
 

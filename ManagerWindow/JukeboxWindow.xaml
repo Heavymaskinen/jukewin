@@ -13,28 +13,47 @@
         <Border Background="White" Padding="6" CornerRadius="10 10 10 10">
             <Grid x:Name="mainGrid">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="139*"/>
-                    <RowDefinition Height="245*"/>
+                    <RowDefinition Height="139*" />
+                    <RowDefinition Height="245*" />
                 </Grid.RowDefinitions>
-                <Rectangle Fill="Transparent" Stroke="Gray" StrokeThickness="0.1" Margin="728,10,2,246.146"/>
+                <Rectangle Fill="Transparent" Stroke="Gray" StrokeThickness="0.1" Margin="728,10,2,246.146" />
 
 
-                <Button Style="{StaticResource closeButtonStyle}" Content="X" BorderThickness="1" BorderBrush="DarkGray" x:Name="closeButton" Margin="730,10,10,246.146" Click="closeButton_Click"/>
-                <Label x:Name="logoLabel" Style="{StaticResource titleStyle}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="203" Margin="294,63.854,271,347" MouseDown="logoLabel_MouseDown" Grid.Row="1">Loading...</Label>
-                <TextBox x:Name="searchBox" Visibility="Hidden" HorizontalAlignment="Left" Height="39" Margin="51,70,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="684" FontSize="20" Background="#FFF1F1F1" TextChanged="searchBox_TextChanged" KeyDown="searchBox_KeyDown"/>
-                <ListBox x:Name="songList" HorizontalAlignment="Left" Height="290" Margin="81,148.854,0,0" VerticalAlignment="Top" Width="654" Visibility="Hidden" Grid.Row="1">
+                <Button Style="{StaticResource closeButtonStyle}" Content="X" BorderThickness="1"
+                        BorderBrush="DarkGray" x:Name="closeButton" Margin="730,10,10,246.146"
+                        Click="closeButton_Click" />
+                <Label x:Name="logoLabel" Style="{StaticResource titleStyle}" HorizontalContentAlignment="Center"
+                       VerticalContentAlignment="Center" Width="203" Margin="294,63.854,271,347"
+                       MouseDown="logoLabel_MouseDown" Grid.Row="1">
+                    Loading...
+                </Label>
+                <TextBox x:Name="searchBox" Visibility="Hidden" HorizontalAlignment="Left" Height="39"
+                         Margin="51,70,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="684"
+                         FontSize="20" Background="#FFF1F1F1" TextChanged="searchBox_TextChanged"
+                         KeyDown="searchBox_KeyDown" />
+                <ListBox x:Name="songList" HorizontalAlignment="Left" Height="290" Margin="81,148.854,0,0"
+                         VerticalAlignment="Top" Width="654" Visibility="Hidden" Grid.Row="1">
                     <ListBox.Background>
-                        <SolidColorBrush Color="White"/>
+                        <SolidColorBrush Color="White" />
                     </ListBox.Background>
                 </ListBox>
-                <Label x:Name="songLabel" BorderBrush="Black" BorderThickness="2" Style="{StaticResource labelStyle}" Opacity="0" Content="" HorizontalAlignment="Left" Margin="19,167,0,0" VerticalAlignment="Top" Height="157" Width="450" FontSize="22" Grid.RowSpan="2">
+                <Label x:Name="songLabel" BorderBrush="Black" BorderThickness="2" Style="{StaticResource labelStyle}"
+                       Opacity="0" Content="" HorizontalAlignment="Left" Margin="19,167,0,0" VerticalAlignment="Top"
+                       Height="157" Width="450" FontSize="22" Grid.RowSpan="2">
                     <Label.Effect>
-                        <DropShadowEffect BlurRadius="2" ShadowDepth="10" Opacity="0.4"/>
+                        <DropShadowEffect BlurRadius="2" ShadowDepth="10" Opacity="0.4" />
                     </Label.Effect>
                 </Label>
-                <ListBox x:Name="queueBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.PanningMode="HorizontalFirst" HorizontalContentAlignment="Left" ItemContainerStyle="{StaticResource selectedStyle}" BorderThickness="2" Opacity="0" HorizontalAlignment="Left" Height="357" Margin="474,64,0,0" VerticalAlignment="Top" Width="292" Grid.RowSpan="2"/>
+                <ListBox x:Name="queueBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.PanningMode="HorizontalFirst" HorizontalContentAlignment="Left"
+                         ItemContainerStyle="{StaticResource selectedStyle}" BorderThickness="2" Opacity="0"
+                         HorizontalAlignment="Left" Height="357" Margin="474,64,0,0" VerticalAlignment="Top"
+                         Width="292" Grid.RowSpan="2" />
 
-                <ProgressBar x:Name="loadProgress" Height="20"  Background="Gray" Foreground="White"  Maximum="{Binding ProgressTracker.ProgressMax}" Minimum="0" Value="{Binding ProgressTracker.Progress}" Margin="0,459.854,0,10" BorderThickness="0" BorderBrush="White" Grid.Row="1" />
+                <ProgressBar x:Name="loadProgress" Height="20" Background="Gray" Foreground="White"
+                             Maximum="{Binding ProgressTracker.ProgressMax}" Minimum="0"
+                             Value="{Binding ProgressTracker.Progress}" Margin="0,459.854,0,10" BorderThickness="0"
+                             BorderBrush="White" Grid.Row="1" />
             </Grid>
         </Border>
     </Border>

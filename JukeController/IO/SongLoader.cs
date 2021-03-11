@@ -6,6 +6,6 @@ namespace Juke.IO
 {
     public interface SongLoader
     {
-       IList<Song> LoadSongs();
+        IList<Song> LoadSongs();
     }
 }

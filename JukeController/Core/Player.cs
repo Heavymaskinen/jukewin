@@ -11,7 +11,7 @@ namespace Juke.Core
         private PlayerEngine engine;
 
         public SongQueue Queue { get; }
-        
+
 
         public Player(LibraryBrowser browser)
         {
@@ -47,7 +47,7 @@ namespace Juke.Core
             {
                 NowPlaying = song;
                 engine.Play(song);
-                Messenger.Log("Playing "+song);
+                Messenger.Log("Playing " + song);
             }
             else if (!song.Equals(NowPlaying))
             {

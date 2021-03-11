@@ -22,5 +22,6 @@ namespace Juke.IO
         void UpdateSong(SongUpdate songUpdate);
         void DeleteSong(Song song);
         void DeleteAlbum(string albumName, LoadListener progressTracker);
+        void DeleteArtist(string artist, LoadListener progressTracker);
     }
 }

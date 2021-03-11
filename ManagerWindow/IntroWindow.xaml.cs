@@ -18,9 +18,10 @@ namespace Juke.UI.Wpf
             InitializeComponent();
             DataContext = viewModel;
             viewModel.View = this;
-            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(), new TaglibTagReaderFactory() { BackupFactory = new WmpTagReaderFactory() }));
+            LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(),
+                new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
         }
-        
+
         public IntroWindow()
         {
             InitializeComponent();
