@@ -39,7 +39,7 @@
         <ListBox x:Name="albumBox" MouseRightButtonUp="AlbumBox_OnMouseRightButtonUp"
                  SelectedValue="{Binding SelectedAlbum}" Height="377" Canvas.Left="231" Canvas.Top="75" Width="245"
                  ItemsSource="{Binding Albums}" />
-        <ListBox x:Name="songBox" SelectedValue="{Binding SelectedSong}" SelectionMode="Extended" Height="377"
+        <ListBox x:Name="songBox" MouseRightButtonUp="SongBox_OnMouseRightButtonUp" SelectedValue="{Binding SelectedSong}" SelectionMode="Extended" Height="377"
                  Canvas.Left="509" Canvas.Top="75" Width="245" ItemsSource="{Binding Songs}" />
         <ListBox x:Name="queueBox" Height="377" Canvas.Left="788" Canvas.Top="75" Width="186"
                  ItemsSource="{Binding Queue}" />

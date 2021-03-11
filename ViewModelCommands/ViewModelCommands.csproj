@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdministratorModel.cs" />
     <Compile Include="AsyncJukeCommand.cs" />
     <Compile Include="Command\AsyncLoadSongsCommandcs.cs" />
     <Compile Include="Command\DeleteAlbumCommand.cs" />

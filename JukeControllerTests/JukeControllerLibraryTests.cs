@@ -331,6 +331,14 @@ namespace JukeControllerTests
         }
 
         [TestMethod]
+        public void GetSongsByArtistAnAlbum()
+        {
+            FakeLoad(CreateSongs(2, 2, 10));
+            var songs = control.Browser.GetSongsByArtistAndAlbum("artist1", "album1");
+            Assert.AreEqual(10, songs.Count);
+        }
+
+        [TestMethod]
         public void ChangeSongInfo()
         {
             FakeLoad(CreateSongs(1, 1, 1));
@@ -477,7 +485,7 @@ namespace JukeControllerTests
         }
 
         [TestMethod]
-        public void UpdateSongData()
+        public void UpdateSongData_All()
         {
             var library = new Library();
             var sourceSong = new Song("<unknown>", "<unknown>", "song.mp3", "0", "ID");
@@ -487,6 +495,63 @@ namespace JukeControllerTests
             Assert.AreEqual("song", library.Songs[0].Name);
             Assert.AreEqual("artist", library.Songs[0].Artist);
             Assert.AreEqual("album", library.Songs[0].Album);
+        }
+        
+        [TestMethod]
+        public void UpdateSongData_AlbumOnly_KeepOtherData()
+        {
+            var library = new Library();
+            var sourceSong = new Song("artist", "<unknown>", "song", "0", "ID");
+            library.AddSong(sourceSong);
+            library.UpdateSong(new SongUpdate(sourceSong) {NewAlbum = "album"});
+            Assert.AreEqual(1, library.Songs.Count);
+            Assert.AreEqual("song", library.Songs[0].Name);
+            Assert.AreEqual("artist", library.Songs[0].Artist);
+            Assert.AreEqual("album", library.Songs[0].Album);
+        }
+        
+        [TestMethod]
+        public void UpdateSongData_ArtistOnly_KeepOtherData()
+        {
+            var library = new Library();
+            var sourceSong = new Song("wrong", "album", "song", "0", "ID");
+            library.AddSong(sourceSong);
+            library.UpdateSong(new SongUpdate(sourceSong) {NewArtist = "artist"});
+            Assert.AreEqual(1, library.Songs.Count);
+            Assert.AreEqual("song", library.Songs[0].Name);
+            Assert.AreEqual("artist", library.Songs[0].Artist);
+            Assert.AreEqual("album", library.Songs[0].Album);
+        }
+
+        [TestMethod]
+        public void RenameArtist()
+        {
+            FakeLoad(CreateSongs(100,10,20));
+            var sourceSong = new Song("artist1", "", "", "0", "ID");
+            control.LoadHandler.RenameArtist(new SongUpdate(sourceSong) {NewArtist = "new artist"});
+            var updatedSongs = control.Browser.GetSongsByArtist("new artist");
+            Assert.AreEqual(10, control.Browser.GetAlbumsByArtist("new artist").Count);
+            Assert.AreEqual(10*20, updatedSongs.Count);
+            foreach (var song in updatedSongs)
+            {
+                Assert.AreEqual("new artist", song.Artist);
+            }
+        }
+        
+        [TestMethod]
+        public void RenameAlbum()
+        {
+            FakeLoad(CreateSongs(2,2,20));
+            var sourceSong = new Song("artist1", "album1", null, "0", "ID");
+            control.LoadHandler.RenameAlbum(new SongUpdate(sourceSong) {NewAlbum = "new album"});
+            var updatedSongs = control.Browser.GetSongsByAlbum("new album");
+            Assert.AreEqual(2*20, updatedSongs.Count);
+            foreach (var song in updatedSongs)
+            {
+                Assert.AreEqual("new album", song.Album);
+                Assert.AreNotEqual("<unknown>", song.Name);
+                Assert.AreNotEqual("<unknown>", song.Artist);
+            }
         }
 
         private void WaitedLoad(IAsyncSongLoader loader)

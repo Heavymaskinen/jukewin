@@ -19,6 +19,16 @@ namespace Juke.Log
             return instance;
         }
 
+        public static Logger ConsoleLog()
+        {
+            if (instance == null)
+            {
+                instance = new Logger();
+            }
+
+            return instance;
+        }
+
         private Logger(string filename)
         {
             this.filename = filename;
@@ -29,6 +39,17 @@ namespace Juke.Log
             }
 
             Messenger.LogMessagePosted += Messenger_LogMessagePosted;
+        }
+
+        private Logger()
+        {
+            Console.WriteLine("Using: console logger");
+            if (!File.Exists(filename))
+            {
+                Console.WriteLine("J.U.K.E. log\n===============\n");
+            }
+
+            Messenger.LogMessagePosted += (message, target) => {Console.WriteLine(message);};
         }
 
         private void Messenger_LogMessagePosted(string message, Messenger.TargetType target)

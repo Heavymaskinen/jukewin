@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataModel
+﻿namespace DataModel
 {
     public class SongUpdate
     {
@@ -16,7 +10,7 @@ namespace DataModel
             NewName = source.Name;
         }
 
-        public Song SongSource { get; set; }
+        public Song SongSource { get; }
         public string NewAlbum { get; set; }
         public string NewArtist { get; set; }
         public string NewName { get; set; }
@@ -24,12 +18,23 @@ namespace DataModel
 
         public Song ToSong()
         {
-            return new Song(NewArtist, NewAlbum, NewName, NewTrackNo, SongSource.FilePath);
+            return new Song(NewArtist ?? SongSource.Artist, NewAlbum ?? SongSource.Album, NewName ?? SongSource.Name,
+                NewTrackNo ?? SongSource.TrackNo, SongSource.FilePath ?? SongSource.FilePath);
+        }
+
+        public SongUpdate CloneWith(Song song)
+        {
+            return new SongUpdate(song)
+            {
+                NewArtist = NewArtist != "<unknown>" ? NewArtist : song.Artist,
+                NewAlbum = NewAlbum != "<unknown>" ? NewAlbum : song.Album, NewName = NewName != "<unknown>" ? NewName : song.Name,
+                NewTrackNo = string.IsNullOrEmpty(NewTrackNo) ? NewTrackNo : song.TrackNo
+            };
         }
 
         public override string ToString()
         {
-            return ToSong().ToString();
+            return NewArtist + " " + NewAlbum + " " + NewTrackNo + " " + NewName;
         }
     }
 }

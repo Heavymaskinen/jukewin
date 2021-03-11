@@ -61,6 +61,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AdminGui\AdminGui.csproj">
+      <Project>{125FB0A0-7158-4270-AF1A-19D55F68317A}</Project>
+      <Name>AdminGui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataModel\DataModel.csproj">
       <Project>{f3727a39-b6cc-4a8f-8168-6ad2aeccad7e}</Project>
       <Name>DataModel</Name>

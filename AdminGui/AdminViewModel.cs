@@ -9,37 +9,38 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 using UiComponents;
+using ViewModelCommands;
 
 namespace Juke.UI.Admin
 {
-    public class AdminViewModel : SelectionModel
+    public class AdminViewModel : AdministratorModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private ViewControl View;
+        private ViewControl view;
         private JukeController controller;
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
-        private ProgressTracker progressTracker;
+        private readonly ProgressTracker progressTracker;
 
         public CancellationTokenSource CancelTokenSource { get; set; }
         public ObservableCollection<Song> Queue { get; private set; }
         public ObservableCollection<Song> Songs { get; private set; }
         public ObservableCollection<string> Albums { get; private set; }
         public ObservableCollection<string> Artists { get; private set; }
-        public ICommand LoadSongs => new LoadSongsCommand(controller, View, this);
-        public ICommand LoadLibrary => new LoadLibraryCommand(controller, View, this);
-        public ICommand SaveLibrary => new SaveLibraryCommand(controller, View, this);
-        public ICommand PlaySong => new PlaySongCommand(controller, View, this);
-        public ICommand StopSong => new StopSongCommand(controller, View, this);
-        public ICommand SkipSong => new StopSongCommand(controller, View, this);
-        public ICommand EditSong => new EditSongCommand(controller, View, this);
-        public ICommand EditAlbum => new EditAlbumCommand(controller, View, this);
-        public ICommand RenameArtist => new RenameArtistCommand(controller, View, this);
-        public ICommand DeleteArtist => new DeleteArtistCommand(controller, View, this);
-        public ICommand DeleteAlbum => new DeleteAlbumCommand(controller, View, this);
-        public ICommand DeleteSong => new DeleteSongCommand(controller, View, this);
+        public ICommand LoadSongs => new LoadSongsCommand(controller, view, this);
+        public ICommand LoadLibrary => new LoadLibraryCommand(controller, view, this);
+        public ICommand SaveLibrary => new SaveLibraryCommand(controller, view, this);
+        public ICommand PlaySong => new PlaySongCommand(controller, view, this);
+        public ICommand StopSong => new StopSongCommand(controller, view, this);
+        public ICommand SkipSong => new StopSongCommand(controller, view, this);
+        public ICommand EditSong => new EditSongCommand(controller, view, this);
+        public ICommand EditAlbum => new EditAlbumCommand(controller, view, this);
+        public ICommand RenameArtist => new RenameArtistCommand(controller, view, this);
+        public ICommand DeleteArtist => new DeleteArtistCommand(controller, view, this);
+        public ICommand DeleteAlbum => new DeleteAlbumCommand(controller, view, this);
+        public ICommand DeleteSong => new DeleteSongCommand(controller, view, this);
 
         public ICommand CancelLoad => new RelayCommand(
             (obj) => CancelTokenSource != null && !CancelTokenSource.IsCancellationRequested,
@@ -102,13 +103,16 @@ namespace Juke.UI.Admin
 
         public AdminViewModel(ViewControl viewControl)
         {
-            View = viewControl;
+            view = viewControl;
             controller = JukeController.Instance;
             progressTracker = new ProgressTracker(controller.LoadHandler);
             progressTracker.Changed += ProgressTracker_Changed;
             InitializeCollections();
             controller.LoadHandler.LibraryUpdated += LoadHandlerOnLibraryUpdated;
+            controller.LoadHandler.LoadCompleted += (sender, args) => view.CommandCompleted(null);
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
+            selectedAlbum = Song.ALL_ALBUMS;
+            selectedArtist = Song.ALL_ARTISTS;
         }
 
         private void LoadHandlerOnLibraryUpdated(object sender, EventArgs e)
@@ -148,31 +152,42 @@ namespace Juke.UI.Admin
 
         private void SelectArtist(string artist)
         {
-            IList<string> albums;
-            if (string.IsNullOrEmpty(selectedArtist) || artist == Song.ALL_ARTISTS)
+            if (artist == null) artist = Song.ALL_ARTISTS;
+            var songs = controller.Browser.Songs;
+            if (artist != Song.ALL_ARTISTS)
             {
-                albums = controller.Browser.Albums;
-                RefreshSongs(controller.Browser.Songs);
+                RefreshAlbums(controller.Browser.GetAlbumsByArtist(artist));
+                songs = selectedAlbum != Song.ALL_ALBUMS
+                    ? controller.Browser.GetSongsByArtistAndAlbum(artist, selectedAlbum)
+                    : controller.Browser.GetSongsByArtist(artist);
             }
             else
             {
-                albums = controller.Browser.GetAlbumsByArtist(selectedArtist);
-                RefreshSongs(controller.Browser.GetSongsByArtist(artist));
+                if (SelectedAlbum != Song.ALL_ALBUMS)
+                {
+                    songs = controller.Browser.GetSongsByAlbum(SelectedAlbum);
+                }
+
+                RefreshAlbums(controller.Browser.Albums);
             }
 
-            RefreshAlbums(albums);
+            RefreshSongs(songs);
         }
 
         private void SelectAlbum(string album)
         {
-            IList<Song> songs;
-            if (string.IsNullOrEmpty(album) || album == Song.ALL_ALBUMS)
-            {
-                songs = controller.Browser.Songs;
-            }
-            else
+            if (album == null) album = Song.ALL_ALBUMS;
+            var songs = controller.Browser.Songs;
+            if (album != Song.ALL_ALBUMS)
             {
                 songs = controller.Browser.GetSongsByAlbum(album);
+            }
+            else if (album == Song.ALL_ALBUMS)
+            {
+                if (SelectedArtist != Song.ALL_ARTISTS)
+                {
+                    songs = controller.Browser.GetSongsByArtist(SelectedArtist);
+                }
             }
 
             RefreshSongs(songs);

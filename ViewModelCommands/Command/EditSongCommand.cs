@@ -1,4 +1,5 @@
-﻿using Juke.Control;
+﻿using System;
+using Juke.Control;
 using DataModel;
 
 namespace Juke.UI.Command
@@ -21,8 +22,23 @@ namespace Juke.UI.Command
             SongUpdate update = view.PromptSongData(infoType);
             if (update != null)
             {
-                controller.LoadHandler.UpdateSong(update);
-                model.SelectedAlbum = update.NewAlbum;
+                switch (infoType)
+                {
+                    case InfoType.Album:
+                        controller.LoadHandler.RenameAlbum(update);
+                        model.SelectedAlbum = update.NewAlbum;
+                        break;
+                    case InfoType.Artist:
+                        controller.LoadHandler.RenameArtist(update);
+                        model.SelectedArtist = update.NewArtist;
+                        break;
+                    case InfoType.Song:
+                        controller.LoadHandler.UpdateSong(update);
+                        model.SelectedSong = update.ToSong();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
     }

@@ -28,12 +28,12 @@ namespace Juke.UI
         public ObservableCollection<Song> Songs { get; private set; }
         public ObservableCollection<string> Albums { get; private set; }
 
+        public ObservableCollection<string> Artists { get; private set; }
+
         public IList<Song> GetSongsByArtist(string art)
         {
             return controller.Browser.GetSongsByArtist(art);
         }
-
-        public ObservableCollection<string> Artists { get; private set; }
 
         public ProgressTracker ProgressTracker => progressTracker;
 
@@ -126,6 +126,8 @@ namespace Juke.UI
             progressTracker = new ProgressTracker(controller.LoadHandler);
             progressTracker.Changed += ProgressTracker_Changed;
             View = view;
+            selectedAlbum = Song.ALL_ALBUMS;
+            selectedArtist = Song.ALL_ARTISTS;
             InitializeCollections();
 
             controller.LoadHandler.LibraryUpdated += LoadHandler_LibraryUpdated;
@@ -202,31 +204,42 @@ namespace Juke.UI
 
         private void SelectArtist(string artist)
         {
-            IList<string> albums;
-            if (string.IsNullOrEmpty(selectedArtist) || artist == Song.ALL_ARTISTS)
+            if (artist == null) artist = Song.ALL_ARTISTS;
+            var songs = controller.Browser.Songs;
+            if (artist != Song.ALL_ARTISTS)
             {
-                albums = controller.Browser.Albums;
-                RefreshSongs(controller.Browser.Songs);
+                RefreshAlbums(controller.Browser.GetAlbumsByArtist(artist));
+                songs = selectedAlbum != Song.ALL_ALBUMS
+                    ? controller.Browser.GetSongsByArtistAndAlbum(artist, selectedAlbum)
+                    : controller.Browser.GetSongsByArtist(artist);
             }
             else
             {
-                albums = controller.Browser.GetAlbumsByArtist(selectedArtist);
-                RefreshSongs(controller.Browser.GetSongsByArtist(artist));
+                if (SelectedAlbum != Song.ALL_ALBUMS)
+                {
+                    songs = controller.Browser.GetSongsByAlbum(SelectedAlbum);
+                }
+
+                RefreshAlbums(controller.Browser.Albums);
             }
 
-            RefreshAlbums(albums);
+            RefreshSongs(songs);
         }
 
         private void SelectAlbum(string album)
         {
-            IList<Song> songs;
-            if (string.IsNullOrEmpty(album) || album == Song.ALL_ALBUMS)
-            {
-                songs = controller.Browser.Songs;
-            }
-            else
+            if (album == null) album = Song.ALL_ALBUMS;
+            var songs = controller.Browser.Songs;
+            if (album != Song.ALL_ALBUMS)
             {
                 songs = controller.Browser.GetSongsByAlbum(album);
+            }
+            else if (album == Song.ALL_ALBUMS)
+            {
+                if (SelectedArtist != Song.ALL_ARTISTS)
+                {
+                    songs = controller.Browser.GetSongsByArtist(SelectedArtist);
+                }
             }
 
             RefreshSongs(songs);

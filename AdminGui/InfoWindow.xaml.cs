@@ -31,11 +31,11 @@ namespace Juke.UI.Wpf
         {
             InitializeComponent();
             DataContext = song;
+            SongData = song;
 
             if (info == InfoType.Album)
             {
                 songBox.Visibility = Visibility.Hidden;
-                artistBox.Visibility = Visibility.Hidden;
             }
 
             if (info == InfoType.Artist)

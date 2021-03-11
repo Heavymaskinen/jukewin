@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DataModel;
+using Juke.Control;
 using Juke.Core;
 
 namespace Juke.IO
@@ -70,18 +71,10 @@ namespace Juke.IO
             return loader.StartNewLoad(listener, cancelToken);
         }
 
-        public void AddSong(Song song)
-        {
-            library.AddSong(song);
-            //library.InitialiseParts();
-            NotifyUpdated();
-        }
-
         public void UpdateSong(SongUpdate songUpdate)
         {
             library.RemoveById(songUpdate.SongSource.ID);
             library.AddSong(songUpdate.ToSong());
-            // library.InitialiseParts();
             NotifyUpdated();
         }
 
@@ -122,6 +115,33 @@ namespace Juke.IO
             library.InitialiseParts();
             progressTracker.NotifyProgress(1);
             progressTracker.NotifyCompleted(new List<Song>());
+            NotifyUpdated();
+        }
+
+        public void RenameArtist(SongUpdate songUpdate)
+        {
+            Messenger.Log("Updating artist with "+songUpdate);
+            var songs = library.GetSongsByArtist(songUpdate.SongSource.Artist);
+            PerformUpdate(songUpdate, songs);
+        }
+
+        public void RenameAlbum(SongUpdate songUpdate)
+        {
+            Messenger.Log("Updating album with "+songUpdate);
+            var songs = library.GetSongsByAlbum(songUpdate.SongSource.Album);
+            PerformUpdate(songUpdate, songs);
+        }
+
+        private void PerformUpdate(SongUpdate songUpdate, IList<Song> songs)
+        {
+            foreach (var song in songs)
+            {
+                var update = songUpdate.CloneWith(song);
+                library.UpdateSongShallow(update);
+            }
+
+            if (songs.Count <= 0) return;
+            library.InitialiseParts();
             NotifyUpdated();
         }
 

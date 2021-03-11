@@ -20,7 +20,8 @@ namespace Juke.UI.Wpf
             LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(),
                 new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
 
-            Logger.Start("juke.log").EnableFrontendLog();
+            //Logger.Start("juke.log").EnableFrontendLog();
+            Logger.ConsoleLog();
             Messenger.Log("Starting J.U.K.E.");
         }
     }

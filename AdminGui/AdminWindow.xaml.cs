@@ -91,14 +91,31 @@ namespace Juke.UI.Wpf
         {
             Song song;
 
+            if (infoType == InfoType.Album && viewModel.SelectedAlbum != Song.ALL_ALBUMS && viewModel.SelectedArtist != Song.ALL_ARTISTS)
+            {
+                song = new Song(viewModel.SelectedArtist, viewModel.SelectedAlbum, null);
+                var infoWindow = new InfoWindow(new SongUpdate(song), infoType);
+                var useData = infoWindow.ShowDialog();
+                return useData == true ? infoWindow.SongData : null;
+            }
+            
+            if (infoType == InfoType.Artist && viewModel.SelectedArtist != Song.ALL_ARTISTS)
+            {
+                song = new Song(viewModel.SelectedArtist, null, null);
+                var infoWindow = new InfoWindow(new SongUpdate(song), infoType);
+                var useData = infoWindow.ShowDialog();
+                return useData == true ? infoWindow.SongData : null;
+            }
+
             if (songBox.SelectedItem != null)
             {
                 song = songBox.SelectedItem as Song;
             }
             else if (artistBox.SelectedItem != null)
             {
-                if (artistBox.SelectedItem.ToString() == Song.ALL_ARTISTS ||
-                    albumBox.SelectedItem.ToString() == Song.ALL_ALBUMS) return null;
+                if (artistBox.SelectedItem?.ToString() == Song.ALL_ARTISTS ||
+                    albumBox.SelectedItem?.ToString() == Song.ALL_ALBUMS) return null;
+                
                 song = CreateSongDataFromAlbumAndArtist();
             }
             else
@@ -122,12 +139,7 @@ namespace Juke.UI.Wpf
             var dialog = new InfoWindow(new SongUpdate(song), infoType);
 
             var result = dialog.ShowDialog();
-            if (result == true)
-            {
-                return dialog.SongData;
-            }
-
-            return null;
+            return result == true ? dialog.SongData : null;
         }
 
         private static Song PopulateSongDataFromTags(Song song)
@@ -175,6 +187,15 @@ namespace Juke.UI.Wpf
 
             ContextMenu menu = FindResource("albumContextMenu") as ContextMenu;
             menu.PlacementTarget = albumBox;
+            menu.IsOpen = true;
+        }
+
+        private void SongBox_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (viewModel.SelectedSong == null) return;
+
+            ContextMenu menu = FindResource("songContextMenu") as ContextMenu;
+            menu.PlacementTarget = songBox;
             menu.IsOpen = true;
         }
     }

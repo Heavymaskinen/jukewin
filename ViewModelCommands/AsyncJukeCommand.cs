@@ -45,5 +45,10 @@ namespace Juke.UI
         }
 
         protected abstract Task AsyncExecute(object parameter);
+
+        protected void SignalCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

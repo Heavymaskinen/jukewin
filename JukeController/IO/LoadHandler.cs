@@ -18,10 +18,12 @@ namespace Juke.IO
         Task LoadSongs(IAsyncSongLoader loader, LoadListener listener);
         void LoadSongsSync(SongLoader loader);
         Task LoadSongs(IAsyncSongLoader loader, CancellationToken cancelToken);
-        void AddSong(Song song);
+    
         void UpdateSong(SongUpdate songUpdate);
         void DeleteSong(Song song);
         void DeleteAlbum(string albumName, LoadListener progressTracker);
         void DeleteArtist(string artist, LoadListener progressTracker);
+        void RenameArtist(SongUpdate songUpdate);
+        void RenameAlbum(SongUpdate songUpdate);
     }
 }

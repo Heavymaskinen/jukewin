@@ -81,6 +81,12 @@ namespace Juke.Core
             DeleteSong(edit.SongSource);
             AddSong(CreateSongFromUpdate(edit));
         }
+        
+        internal void UpdateSongShallow(SongUpdate edit)
+        {
+            RemoveById(edit.SongSource.ID);
+            AddSong(CreateSongFromUpdate(edit));
+        }
 
         internal void RemoveById(string id)
         {
@@ -142,6 +148,12 @@ namespace Juke.Core
             }
 
             return songList;
+        }
+
+        public IList<Song> GetSongsByArtistAndAlbum(string artist, string selectedAlbum)
+        {
+            var songs = GetSongsByAlbum(selectedAlbum);
+            return songs.Where(s => s.Artist == artist).ToList();
         }
 
         public void Clear()

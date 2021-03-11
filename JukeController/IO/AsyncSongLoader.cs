@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Juke.Control;
 using Juke.Core;
 
 namespace Juke.IO
@@ -35,6 +36,7 @@ namespace Juke.IO
 
         public Task StartNewLoad(LoadListener listener, CancellationToken cancelToken)
         {
+            Messenger.Log("Starting new Async load");
             if (engine != null)
             {
                 if (songCollector == null)
@@ -46,10 +48,11 @@ namespace Juke.IO
                 {
                     var list = await engine.LoadAsync(Path, listener);
                     await songCollector.Load(list, listener, cancelToken);
+                    Messenger.Log("Done loading, "+list.Count);
                 });
             }
 
-            Console.WriteLine("No engine?");
+            Messenger.Log("No engine?");
             return null;
         }
     }

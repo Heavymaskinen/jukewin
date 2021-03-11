@@ -9,12 +9,20 @@ namespace Juke.UI.Command
         public DeleteAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
+            model.PropertyChanged += Model_PropertyChanged;
+        }
+
+        private void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SelectedAlbum")
+            {
+                SignalCanExecuteChanged();
+            }
         }
 
         public override bool CanExecute(object parameter)
         {
-            return model.SelectedAlbum != null && model.SelectedAlbum != Song.ALL_ALBUMS &&
-                   !LoaderCancellationTokenProvider.Token.CanBeCanceled;
+            return model.SelectedAlbum != Song.ALL_ALBUMS;
         }
 
         protected override Task AsyncExecute(object parameter)

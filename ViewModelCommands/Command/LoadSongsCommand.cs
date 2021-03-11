@@ -32,7 +32,7 @@ namespace Juke.UI.Command
 
         private void LoadAsync(string path)
         {
-            Messenger.Log("Load command with " + path);
+            Messenger.Log("Load command with " + path+"|");
             var loader = new LoaderFactory().CreateAsync(path);
             controller.LoadHandler.LoadSongs(loader, LoaderCancellationTokenProvider.Token);
         }
