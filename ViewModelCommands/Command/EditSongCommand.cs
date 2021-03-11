@@ -19,7 +19,9 @@ namespace Juke.UI.Command
         protected override void ControlledExecute(object parameter)
         {
             var infoType = (InfoType) parameter;
+            Messenger.Log("Editing " + infoType+". Opening data prompt");
             SongUpdate update = view.PromptSongData(infoType);
+            Messenger.Log("Prompt closed. "+update);
             if (update != null)
             {
                 switch (infoType)
@@ -27,14 +29,17 @@ namespace Juke.UI.Command
                     case InfoType.Album:
                         controller.LoadHandler.RenameAlbum(update);
                         model.SelectedAlbum = update.NewAlbum;
+                        Messenger.Log("Album updated");
                         break;
                     case InfoType.Artist:
                         controller.LoadHandler.RenameArtist(update);
                         model.SelectedArtist = update.NewArtist;
+                        Messenger.Log("Artist updated");
                         break;
                     case InfoType.Song:
                         controller.LoadHandler.UpdateSong(update);
                         model.SelectedSong = update.ToSong();
+                        Messenger.Log("Song updated");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

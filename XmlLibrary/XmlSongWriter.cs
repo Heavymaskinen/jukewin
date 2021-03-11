@@ -31,6 +31,7 @@ namespace Juke.External.Xml
                 writer.Flush();
                 writer.Close();
             }
+            Messenger.Post("Library saved to " + filename);
         }
     }
 }

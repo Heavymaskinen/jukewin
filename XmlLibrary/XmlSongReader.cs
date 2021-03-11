@@ -66,7 +66,7 @@ namespace Juke.External.Xml
                 songs = new List<PersistedSong>((PersistedSong[]) serializerInstance.Deserialize(reader));
             }
 
-            Messenger.Log("XML library read");
+            Messenger.Post("Library reloaded from "+filename);
             var convertedSongs = new SongConverter().ConvertPersistedSongs(songs);
             Messenger.Log("Persisted songs converted");
             listener.NotifyLoadInitiated(convertedSongs.Count);

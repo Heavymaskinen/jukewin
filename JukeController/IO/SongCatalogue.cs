@@ -85,6 +85,23 @@ namespace Juke.IO
             NotifyUpdated();
         }
 
+        public void DeleteSongs(IList<Song> songs, LoadListener progressTracker)
+        {
+            progressTracker.NotifyNewLoad();
+            progressTracker.NotifyLoadInitiated(songs.Count);
+
+            foreach (var s in songs)
+            {
+                library.RemoveById(s.ID);
+                Messenger.Post("Deleted song: " + s.Name);
+                progressTracker.NotifyProgress(1);
+            }
+
+            progressTracker.NotifyCompleted(songs);
+            library.InitialiseParts();
+            NotifyUpdated();
+        }
+
         public void DeleteAlbum(string album, LoadListener listener)
         {
             var songsToDelete = library.GetSongsByAlbum(album);

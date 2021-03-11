@@ -117,6 +117,7 @@ namespace Juke.UI
             });
 
         public ViewControl View { get; set; }
+        public IList<Song> SelectedSongs { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private ProgressTracker progressTracker;
 

@@ -8,6 +8,7 @@ using Juke.External.Wmp;
 using Juke.UI.Command;
 using Juke.UI.Admin;
 using ContextMenu = System.Windows.Controls.ContextMenu;
+using System.Collections.Generic;
 
 namespace Juke.UI.Wpf
 {
@@ -27,17 +28,33 @@ namespace Juke.UI.Wpf
 
         public AdminWindow()
         {
+            Construct(new AdminViewModel(this));
+        }
+
+        private void Construct(AdminViewModel viewModel)
+        {
             InitializeComponent();
-            viewModel = new AdminViewModel(this);
+            this.viewModel = viewModel;
             DataContext = viewModel;
             (DataContext as AdminViewModel).PropertyChanged += MainWindow_PropertyChanged;
+            songBox.SelectionChanged += SongBox_SelectionChanged;
+        }
+
+        private void SongBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var songs = new List<Song>();
+            foreach (var i in songBox.SelectedItems)
+            {
+                songs.Add((Song)i);
+            }
+
+            viewModel.SelectedSongs = songs;
         }
 
         public AdminWindow(AdminViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = viewModel;
-            (DataContext as AdminViewModel).PropertyChanged += MainWindow_PropertyChanged;
+            Construct(viewModel);
         }
 
         private void MainWindow_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -91,9 +108,15 @@ namespace Juke.UI.Wpf
         {
             Song song;
 
-            if (infoType == InfoType.Album && viewModel.SelectedAlbum != Song.ALL_ALBUMS && viewModel.SelectedArtist != Song.ALL_ARTISTS)
+            if (infoType == InfoType.Album && viewModel.SelectedAlbum != Song.ALL_ALBUMS)
             {
-                song = new Song(viewModel.SelectedArtist, viewModel.SelectedAlbum, null);
+                var artist = viewModel.SelectedArtist != Song.ALL_ARTISTS ? viewModel.SelectedArtist : null;
+                if (artist == null && viewModel.Songs.Count>0)
+                {
+                    artist = viewModel.Songs[0].Artist;
+                }
+                Messenger.Log("Editing album");
+                song = new Song(artist, viewModel.SelectedAlbum, null);
                 var infoWindow = new InfoWindow(new SongUpdate(song), infoType);
                 var useData = infoWindow.ShowDialog();
                 return useData == true ? infoWindow.SongData : null;
@@ -101,6 +124,7 @@ namespace Juke.UI.Wpf
             
             if (infoType == InfoType.Artist && viewModel.SelectedArtist != Song.ALL_ARTISTS)
             {
+                Messenger.Log("Editing artist");
                 song = new Song(viewModel.SelectedArtist, null, null);
                 var infoWindow = new InfoWindow(new SongUpdate(song), infoType);
                 var useData = infoWindow.ShowDialog();
@@ -120,11 +144,12 @@ namespace Juke.UI.Wpf
             }
             else
             {
-                return null;
+                song = null;
             }
 
             if (song == null)
             {
+                Messenger.Log("Song not found?");
                 return null;
             }
 
@@ -153,6 +178,7 @@ namespace Juke.UI.Wpf
         private Song CreateSongDataFromAlbumAndArtist()
         {
             Song song = null;
+
             if (albumBox.SelectedItem != null)
             {
                 song = new Song(artistBox.SelectedItem.ToString(), albumBox.SelectedItem.ToString(), "");

@@ -1,5 +1,6 @@
 ﻿using DataModel;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,5 +26,6 @@ namespace Juke.IO
         void DeleteArtist(string artist, LoadListener progressTracker);
         void RenameArtist(SongUpdate songUpdate);
         void RenameAlbum(SongUpdate songUpdate);
+        void DeleteSongs(IList<Song> selectedSongs, LoadListener loadListener);
     }
 }

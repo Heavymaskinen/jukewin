@@ -3,6 +3,7 @@ using DataModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using UiComponents;
+using System.Collections.Generic;
 
 namespace Juke.UI
 {
@@ -20,5 +21,6 @@ namespace Juke.UI
         ObservableCollection<string> Albums { get; }
         ObservableCollection<string> Artists { get; }
         ICommand PlaySong {get; }
+        IList<Song> SelectedSongs { get; set; }
     }
 }

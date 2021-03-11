@@ -22,6 +22,7 @@ namespace Juke.UI.Admin
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
+        private IList<Song> selectedSongs;
         private readonly ProgressTracker progressTracker;
 
         public CancellationTokenSource CancelTokenSource { get; set; }
@@ -71,6 +72,7 @@ namespace Juke.UI.Admin
             {
                 selectedAlbum = value;
                 SelectAlbum(selectedAlbum);
+                selectedSong = Songs[0];
                 RaisePropertyChanged(nameof(SelectedAlbum));
             }
         }
@@ -81,8 +83,18 @@ namespace Juke.UI.Admin
             set
             {
                 selectedSong = value;
+                selectedAlbum = selectedSong.Album;
+                selectedArtist = selectedSong.Artist;
                 RaisePropertyChanged(nameof(SelectedSong));
+                RaisePropertyChanged(nameof(SelectedAlbum));
+                RaisePropertyChanged(nameof(SelectedArtist));
             }
+        }
+
+        public IList<Song> SelectedSongs
+        {
+            get => selectedSongs;
+            set => selectedSongs = value;
         }
 
         public string CurrentSong
@@ -169,6 +181,7 @@ namespace Juke.UI.Admin
                 }
 
                 RefreshAlbums(controller.Browser.Albums);
+                selectedAlbum = SelectedAlbum;
             }
 
             RefreshSongs(songs);
@@ -182,12 +195,9 @@ namespace Juke.UI.Admin
             {
                 songs = controller.Browser.GetSongsByAlbum(album);
             }
-            else if (album == Song.ALL_ALBUMS)
+            else if (album == Song.ALL_ALBUMS && SelectedArtist != Song.ALL_ARTISTS)
             {
-                if (SelectedArtist != Song.ALL_ARTISTS)
-                {
-                    songs = controller.Browser.GetSongsByArtist(SelectedArtist);
-                }
+                songs = controller.Browser.GetSongsByArtist(SelectedArtist);
             }
 
             RefreshSongs(songs);

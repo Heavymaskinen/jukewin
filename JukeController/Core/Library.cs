@@ -120,7 +120,8 @@ namespace Juke.Core
                 return albumList;
             }
 
-            foreach (var song in Songs)
+            var artistSongs = GetSongsByArtist(artistName);
+            foreach (var song in artistSongs)
             {
                 if (song.Artist.Equals(artistName) && !albumList.Contains(song.Album))
                 {
@@ -138,16 +139,7 @@ namespace Juke.Core
 
         public IList<Song> GetSongsByArtistAndTitle(string artistName, string songTitle)
         {
-            var songList = new List<Song>();
-            foreach (var song in Songs)
-            {
-                if (song.Artist == artistName && song.Name == songTitle)
-                {
-                    songList.Add(song);
-                }
-            }
-
-            return songList;
+            return Songs.Where(s => s.Artist == artistName && s.Name == songTitle).ToList();
         }
 
         public IList<Song> GetSongsByArtistAndAlbum(string artist, string selectedAlbum)

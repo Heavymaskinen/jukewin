@@ -526,7 +526,7 @@ namespace JukeControllerTests
         [TestMethod]
         public void RenameArtist()
         {
-            FakeLoad(CreateSongs(100,10,20));
+            FakeLoad(CreateSongs(10,10,20));
             var sourceSong = new Song("artist1", "", "", "0", "ID");
             control.LoadHandler.RenameArtist(new SongUpdate(sourceSong) {NewArtist = "new artist"});
             var updatedSongs = control.Browser.GetSongsByArtist("new artist");
