@@ -14,10 +14,9 @@ namespace ViewModelCommands
         ICommand LoadSongs { get; }
         ICommand LoadLibrary { get; }
         ICommand SaveLibrary { get; }
-        ICommand PlaySong { get; }
         ICommand StopSong { get; }
         ICommand SkipSong { get; }
-        ICommand EditSong { get; }
+        ICommand EditSong { get; } 
         ICommand EditAlbum { get; }
         ICommand RenameArtist { get; }
         ICommand DeleteAlbum { get; }
