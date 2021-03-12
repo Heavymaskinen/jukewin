@@ -29,6 +29,7 @@ namespace Juke.UI.Command
                     case InfoType.Album:
                         controller.LoadHandler.RenameAlbum(update);
                         model.SelectedAlbum = update.NewAlbum;
+                        model.SelectedArtist = update.ToSong().Artist;
                         Messenger.Log("Album updated");
                         break;
                     case InfoType.Artist:

@@ -182,14 +182,14 @@ namespace Juke.Control.Tests
         private List<Song> createSongs(int artistMax, int albumMax, int songmax)
         {
             var songList = new List<Song>();
-            for (int artist = 1; artist <= artistMax; artist++)
+            for (var artist = 1; artist <= artistMax; artist++)
             {
-                for (int album = 1; album <= albumMax; album++)
+                for (var album = 1; album <= albumMax; album++)
                 {
-                    for (int song = 1; song <= songmax; song++)
+                    for (var song = 1; song <= songmax; song++)
                     {
                         songList.Add(new Song("artist" + artist, "album" + album, "song" + song,
-                            (artist + song - 1) + "", artist + "/" + album + "/" + song));
+                            artist + song - 1 + "", artist + "/" + album + "/" + song));
                     }
                 }
             }

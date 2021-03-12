@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
-using UiComponents;
 using ViewModelCommands;
 
 namespace Juke.UI.Admin
@@ -62,6 +61,8 @@ namespace Juke.UI.Admin
                 selectedArtist = value;
                 SelectArtist(selectedArtist);
                 RaisePropertyChanged(nameof(SelectedArtist));
+                RaisePropertyChanged(nameof(SelectedAlbum));
+                RaisePropertyChanged(nameof(SelectedSong));
             }
         }
 
@@ -151,12 +152,6 @@ namespace Juke.UI.Admin
             RefreshQueue();
         }
 
-        private void RefreshArtists()
-        {
-            Artists = new ObservableCollection<string>(controller.Browser.Artists.OrderBy(s => s));
-            RaisePropertyChanged(nameof(Artists));
-        }
-
         private void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -165,13 +160,20 @@ namespace Juke.UI.Admin
         private void SelectArtist(string artist)
         {
             if (artist == null) artist = Song.ALL_ARTISTS;
+            
             var songs = controller.Browser.Songs;
             if (artist != Song.ALL_ARTISTS)
             {
                 RefreshAlbums(controller.Browser.GetAlbumsByArtist(artist));
+                if (!Albums.Contains(selectedAlbum))
+                {
+                    selectedAlbum = Albums[0];
+                }
+
                 songs = selectedAlbum != Song.ALL_ALBUMS
                     ? controller.Browser.GetSongsByArtistAndAlbum(artist, selectedAlbum)
                     : controller.Browser.GetSongsByArtist(artist);
+                selectedSong = songs[0];
             }
             else
             {
@@ -207,6 +209,17 @@ namespace Juke.UI.Admin
         {
             Songs = new ObservableCollection<Song>(songs);
             RaisePropertyChanged(nameof(Songs));
+        }
+
+        private void RefreshArtists()
+        {
+            Artists = new ObservableCollection<string>(controller.Browser.Artists.OrderBy(s => s));
+            if (Artists.Count > 1)
+            {
+                Artists.Insert(0, Song.ALL_ARTISTS);
+            }
+
+            RaisePropertyChanged(nameof(Artists));
         }
 
         private void RefreshAlbums(IList<string> albums)

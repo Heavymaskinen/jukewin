@@ -67,7 +67,7 @@ namespace DataModel
                         }
                     }
 
-                    return a.Name.CompareTo(b.Name);
+                    return String.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase);
                 });
 
                 return comparison;

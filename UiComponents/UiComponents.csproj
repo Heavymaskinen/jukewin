@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ProgressTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectionTracker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JukeController\JukeController.csproj">

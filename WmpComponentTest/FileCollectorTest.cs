@@ -21,7 +21,7 @@ namespace WmpComponentTest
         public void ParseTwoLevels()
         {
             var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(1, 10)};
-            IList<string> result = PerformAsyncCollect(factory);
+            var result = PerformAsyncCollect(factory);
 
             Assert.AreEqual(20, result.Count);
         }
@@ -30,7 +30,7 @@ namespace WmpComponentTest
         public void ParseThreeLevels()
         {
             var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(2, 10)};
-            IList<string> result = PerformAsyncCollect(factory);
+            var result = PerformAsyncCollect(factory);
             Assert.AreEqual(10 * 3 + 10 * 2, result.Count);
         }
 
@@ -39,7 +39,7 @@ namespace WmpComponentTest
         {
             //16 sec
             var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(9, 10)};
-            IList<string> result = PerformAsyncCollect(factory);
+            var result = PerformAsyncCollect(factory);
             Assert.AreEqual(9864100, result.Count);
         }
 
@@ -48,7 +48,7 @@ namespace WmpComponentTest
         {
             //11 sec
             var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(8, 100)};
-            IList<string> result = PerformAsyncCollect(factory);
+            var result = PerformAsyncCollect(factory);
             Assert.AreEqual(10960100, result.Count);
         }
 
@@ -57,7 +57,7 @@ namespace WmpComponentTest
         {
             //9.4 sec
             var factory = new FakeFolderBrowserFactory {FakeFolderBrowser = new FakeFolderBrowser(700, 10, 10)};
-            IList<string> result = PerformAsyncCollect(factory);
+            var result = PerformAsyncCollect(factory);
             Assert.IsTrue(result.Count >= 253400, result.Count + " was actual");
         }
 
@@ -77,7 +77,7 @@ namespace WmpComponentTest
         }
     }
 
-    class FakeFolderBrowserFactory : IFolderBrowserFactory
+    internal class FakeFolderBrowserFactory : IFolderBrowserFactory
     {
         public FakeFolderBrowser FakeFolderBrowser { get; set; }
 
@@ -87,7 +87,7 @@ namespace WmpComponentTest
         }
     }
 
-    class FakeFolderBrowser : IFolderBrowser
+    internal class FakeFolderBrowser : IFolderBrowser
     {
         private List<string> files;
         private List<IFolderBrowser> subFolders;

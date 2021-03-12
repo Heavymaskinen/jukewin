@@ -60,6 +60,9 @@
   <ItemGroup>
     <Compile Include="JukeViewModelPlayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchLogicTest.cs" />
+    <Compile Include="ViewModelFaker.cs" />
+    <Compile Include="ViewModelStressTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdminGui\AdminGui.csproj">
@@ -73,6 +76,10 @@
     <ProjectReference Include="..\JukeController\JukeController.csproj">
       <Project>{D4BCD500-55A6-4E74-9943-3BDFE830DC68}</Project>
       <Name>JukeController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ManagerWindow\WpfGui.csproj">
+      <Project>{44659f38-545d-43eb-9c4e-e47f06bf603d}</Project>
+      <Name>WpfGui</Name>
     </ProjectReference>
     <ProjectReference Include="..\Stubs2\Stubs2.csproj">
       <Project>{33cf6bf0-cbe8-468a-bf88-1f69924c76b4}</Project>

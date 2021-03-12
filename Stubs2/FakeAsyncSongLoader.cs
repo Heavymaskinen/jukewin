@@ -31,7 +31,7 @@ namespace Juke.Control.Tests
 
         public List<string> Load(string path, LoadListener listener)
         {
-            this.Path = path;
+            Path = path;
             this.listener = listener;
             Initiate();
             return new List<string>();
@@ -57,7 +57,7 @@ namespace Juke.Control.Tests
         {
             var task = Task.Run(() =>
             {
-                this.Path = path;
+                Path = path;
                 this.listener = listener;
                 Initiate();
                 listener.NotifyProgress(list.Count);

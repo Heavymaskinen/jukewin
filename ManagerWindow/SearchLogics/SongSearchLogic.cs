@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Juke.UI.Wpf.SearchLogics
 {
-    class SongSearchLogic : SearchLogic
+    public class SongSearchLogic : SearchLogic
     {
-        private JukeViewModel browser;
+        private SelectionModel browser;
         private List<Song> list;
 
-        public SongSearchLogic(JukeViewModel browser)
+        public SongSearchLogic(SelectionModel browser)
         {
             this.browser = browser;
             list = new List<Song>();
@@ -20,16 +20,32 @@ namespace Juke.UI.Wpf.SearchLogics
         public List<Song> Search(string input)
         {
             list.Clear();
+            var perfects = new List<Song>();
             var lowerInput = input.ToLower();
             foreach (var song in browser.Songs)
             {
-                if (song.Name.ToLower().Contains(lowerInput))
+                var lowerName = song.Name.ToLower();
+                if (lowerName.Equals(lowerInput))
                 {
-                    list.Add(song);
+                    perfects.Add(song);
+                }
+                else
+                {
+                    if (lowerName.StartsWith(lowerInput))
+                    {
+                        perfects.Add(song);
+                    }
+                    else if (lowerName.Contains(lowerInput))
+                    {
+                        list.Add(song);
+                    }
                 }
             }
 
-            return list;
+            list.Sort(Song.Comparison);
+            perfects.AddRange(list);
+
+            return perfects;
         }
 
         public override string ToString()

@@ -102,7 +102,7 @@ namespace JukeControllerTests
         public void LoadSecondTime_SongsAdded()
         {
             FakeLoad(CreateSongs(1, 1, 1));
-            FakeLoad(new List<Song> {new Song("artist", "album", "funky song")});
+            FakeLoad(new List<Song> {new("artist", "album", "funky song")});
             Assert.AreEqual(2, control.Browser.Songs.Count);
         }
 
@@ -119,7 +119,7 @@ namespace JukeControllerTests
         public void LoadSongs_SameTitleDifferentArtist()
         {
             FakeLoad(new List<Song>
-                {new Song("artist", "album", "funky song"), new Song("artist1", "album", "funky song")});
+                {new("artist", "album", "funky song"), new("artist1", "album", "funky song")});
             Assert.AreEqual(2, control.Browser.Songs.Count);
         }
 
@@ -264,7 +264,7 @@ namespace JukeControllerTests
         [TestMethod]
         public void GetAlbumsByArtist_OneResult()
         {
-            FakeLoad(new List<Song> {new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1")});
+            FakeLoad(new List<Song> {new("artist1", "album1", "song1"), new("artist2", "album2", "song1")});
             var albums = control.Browser.GetAlbumsByArtist("artist1");
             Assert.AreEqual("album1", albums[0]);
             Assert.AreEqual(1, albums.Count);
@@ -273,7 +273,7 @@ namespace JukeControllerTests
         [TestMethod]
         public void LoadAsync_GetAlbumsByArtist_OneResult()
         {
-            var songs = new List<Song> {new Song("artist1", "album1", "song1"), new Song("artist2", "album2", "song1")};
+            var songs = new List<Song> {new("artist1", "album1", "song1"), new("artist2", "album2", "song1")};
             var engine = new FakeSongLoadEngine(songs);
             var loader = FakeAsyncLoad(engine, songs);
             control.LoadHandler.LoadSongs(loader).Wait();
@@ -361,8 +361,8 @@ namespace JukeControllerTests
         {
             var songs = new List<Song>
             {
-                new Song("art1", "album2", "track1"),
-                new Song("art1", "album1", "track1")
+                new("art1", "album2", "track1"),
+                new("art1", "album1", "track1")
             };
             songs.Sort(Song.Comparison);
             Assert.AreEqual("album1", songs[0].Album);
@@ -373,9 +373,9 @@ namespace JukeControllerTests
         {
             var songs = new List<Song>
             {
-                new Song("art1", "album2", "track1", "1", ""),
-                new Song("art1", "album1", "track2", "2", ""),
-                new Song("art1", "album1", "track1", "1", "")
+                new("art1", "album2", "track1", "1", ""),
+                new("art1", "album1", "track2", "2", ""),
+                new("art1", "album1", "track1", "1", "")
             };
             songs.Sort(Song.Comparison);
             Assert.AreEqual("track1", songs[0].Name);
@@ -387,10 +387,10 @@ namespace JukeControllerTests
         {
             var songs = new List<Song>
             {
-                new Song("art1", "album2", "track1", "1", ""),
-                new Song("art1", "album1", "track2", "2", ""),
-                new Song("art1", "album1", "track1", "1", ""),
-                new Song("art3", "album3", "track1", "1", "")
+                new("art1", "album2", "track1", "1", ""),
+                new("art1", "album1", "track2", "2", ""),
+                new("art1", "album1", "track1", "1", ""),
+                new("art3", "album3", "track1", "1", "")
             };
             songs.Sort(Song.Comparison);
             Assert.AreEqual("track1", songs[0].Name);
@@ -496,7 +496,7 @@ namespace JukeControllerTests
             Assert.AreEqual("artist", library.Songs[0].Artist);
             Assert.AreEqual("album", library.Songs[0].Album);
         }
-        
+
         [TestMethod]
         public void UpdateSongData_AlbumOnly_KeepOtherData()
         {
@@ -509,7 +509,7 @@ namespace JukeControllerTests
             Assert.AreEqual("artist", library.Songs[0].Artist);
             Assert.AreEqual("album", library.Songs[0].Album);
         }
-        
+
         [TestMethod]
         public void UpdateSongData_ArtistOnly_KeepOtherData()
         {
@@ -526,26 +526,26 @@ namespace JukeControllerTests
         [TestMethod]
         public void RenameArtist()
         {
-            FakeLoad(CreateSongs(10,10,20));
+            FakeLoad(CreateSongs(10, 10, 20));
             var sourceSong = new Song("artist1", "", "", "0", "ID");
             control.LoadHandler.RenameArtist(new SongUpdate(sourceSong) {NewArtist = "new artist"});
             var updatedSongs = control.Browser.GetSongsByArtist("new artist");
             Assert.AreEqual(10, control.Browser.GetAlbumsByArtist("new artist").Count);
-            Assert.AreEqual(10*20, updatedSongs.Count);
+            Assert.AreEqual(10 * 20, updatedSongs.Count);
             foreach (var song in updatedSongs)
             {
                 Assert.AreEqual("new artist", song.Artist);
             }
         }
-        
+
         [TestMethod]
         public void RenameAlbum()
         {
-            FakeLoad(CreateSongs(2,2,20));
+            FakeLoad(CreateSongs(2, 2, 20));
             var sourceSong = new Song("artist1", "album1", null, "0", "ID");
             control.LoadHandler.RenameAlbum(new SongUpdate(sourceSong) {NewAlbum = "new album"});
             var updatedSongs = control.Browser.GetSongsByAlbum("new album");
-            Assert.AreEqual(2*20, updatedSongs.Count);
+            Assert.AreEqual(2 * 20, updatedSongs.Count);
             foreach (var song in updatedSongs)
             {
                 Assert.AreEqual("new album", song.Album);
@@ -566,12 +566,12 @@ namespace JukeControllerTests
 
         private FakeAsyncSongLoader FakeAsyncLoad(List<Song> list)
         {
-            return new FakeAsyncSongLoader(new FakeSongLoadEngine(list), new FakeSongCollector(list));
+            return new(new FakeSongLoadEngine(list), new FakeSongCollector(list));
         }
 
         private AsyncSongLoader FakeAsyncLoad(FakeSongLoadEngine engine, List<Song> songs)
         {
-            return new AsyncSongLoader(engine, new FakeSongCollector(songs));
+            return new(engine, new FakeSongCollector(songs));
         }
 
         private void FakeLoad(List<Song> songs)
@@ -582,14 +582,14 @@ namespace JukeControllerTests
         private static List<Song> CreateSongs(int artistMax, int albumMax, int songmax)
         {
             var songList = new List<Song>();
-            for (int artist = 1; artist <= artistMax; artist++)
+            for (var artist = 1; artist <= artistMax; artist++)
             {
-                for (int album = 1; album <= albumMax; album++)
+                for (var album = 1; album <= albumMax; album++)
                 {
-                    for (int song = 1; song <= songmax; song++)
+                    for (var song = 1; song <= songmax; song++)
                     {
                         songList.Add(new Song("artist" + artist, "album" + album, "song" + song,
-                            (artist + song - 1) + "", artist + "/" + album + "/" + song));
+                            artist + song - 1 + "", artist + "/" + album + "/" + song));
                     }
                 }
             }

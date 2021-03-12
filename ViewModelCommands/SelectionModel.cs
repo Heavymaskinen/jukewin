@@ -2,7 +2,6 @@
 using DataModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using UiComponents;
 using System.Collections.Generic;
 
 namespace Juke.UI

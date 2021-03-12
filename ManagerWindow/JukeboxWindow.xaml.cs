@@ -352,7 +352,7 @@ namespace Juke.UI.Wpf
         private void AddSongsFromSearch()
         {
             var output = searchLogic.Search(searchBox.Text);
-            output.Sort(Song.Comparison);
+            //output.Sort(Song.Comparison);
 
             foreach (var song in output)
             {

@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Juke.UI.Admin"
+        xmlns:local="clr-namespace:Juke.UI.Wpf"
         xmlns:wpf="clr-namespace:Juke.UI.Wpf"
         xmlns:ui="clr-namespace:Juke.UI;assembly=ViewModelCommands"
+        xmlns:admin="clr-namespace:Juke.UI.Admin;assembly=ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="725.763" Width="1000 " d:DataContext="{d:DesignInstance local:AdminViewModel }">
+        Title="MainWindow" Height="725.763" Width="1000 " d:DataContext="{d:DesignInstance admin:AdminViewModel }">
 
     <Window.Resources>
         <ContextMenu x:Key="artistContextMenu">
@@ -77,9 +78,9 @@
                 Width="52" RenderTransformOrigin="0.927,1.042" />
         <Label x:Name="currentSongLabel" BorderBrush="Black" BorderThickness="1" Content="{Binding SelectedSong}"
                Canvas.Left="18" Canvas.Top="495" Height="35" Width="455" />
-        <Label Content="{Binding SelectedAlbum}" Foreground="Black" BorderBrush="Black" BorderThickness="2"
+        <Label Content="{Binding SelectedSong.Album}" Foreground="Black" BorderBrush="Black" BorderThickness="2"
                Canvas.Left="18" Canvas.Top="535" Width="455" Height="40" />
-        <Label Content="{Binding SelectedArtist}" Foreground="Black" BorderBrush="Black" BorderThickness="2"
+        <Label Content="{Binding SelectedSong.Artist}" Foreground="Black" BorderBrush="Black" BorderThickness="2"
                Canvas.Left="18" Canvas.Top="580" Width="455" Height="43" />
         <Button Content="Cancel" Command="{Binding CancelLoad}" Height="19" Canvas.Left="484" Canvas.Top="631"
                 Width="66" />

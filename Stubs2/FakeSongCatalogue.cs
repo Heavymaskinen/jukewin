@@ -14,14 +14,14 @@ namespace Juke.Control.Tests
         public static List<Song> CreateSongs(int artistMax, int albumMax, int songmax)
         {
             var songList = new List<Song>();
-            for (int artist = 1; artist <= artistMax; artist++)
+            for (var artist = 1; artist <= artistMax; artist++)
             {
-                for (int album = 1; album <= albumMax; album++)
+                for (var album = 1; album <= albumMax; album++)
                 {
-                    for (int song = 1; song <= songmax; song++)
+                    for (var song = 1; song <= songmax; song++)
                     {
                         songList.Add(new Song("artist" + artist, "album" + album, "song" + song,
-                            (artist + song - 1) + "", artist + "/" + album + "/" + song));
+                            artist + song - 1 + "", artist + "/" + album + "/" + song));
                     }
                 }
             }
@@ -31,8 +31,6 @@ namespace Juke.Control.Tests
 
         private IList<Song> songsToLoad;
 
-        private IList<Song> writtenSongs;
-
         public FakeSongCatalogue() : this(new List<Song>())
         {
         }
@@ -40,13 +38,10 @@ namespace Juke.Control.Tests
         public FakeSongCatalogue(IList<Song> songsToLoad)
         {
             this.songsToLoad = songsToLoad;
-            writtenSongs = new List<Song>();
+            WrittenSongs = new List<Song>();
         }
 
-        public IList<Song> WrittenSongs
-        {
-            get { return writtenSongs; }
-        }
+        public IList<Song> WrittenSongs { get; private set; }
 
         public IList<Song> LoadSongs()
         {
@@ -55,7 +50,7 @@ namespace Juke.Control.Tests
 
         public void Write(IList<Song> songs)
         {
-            writtenSongs = songs;
+            WrittenSongs = songs;
         }
     }
 }

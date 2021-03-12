@@ -1,10 +1,10 @@
-﻿using DataModel;
+﻿using System;
+using System.Collections.Generic;
+using DataModel;
 using Juke.Control;
 using Juke.IO;
-using System;
-using System.Collections.Generic;
 
-namespace UiComponents
+namespace Juke.UI
 {
     public class ProgressTracker : LoadListener
     {
