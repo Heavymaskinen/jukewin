@@ -114,6 +114,8 @@ namespace Juke.UI.Admin
 
         public string SystemMessage { set; get; }
 
+        public SelectionTracker SelectionTracker { get; }
+
         public AdminViewModel(ViewControl viewControl)
         {
             view = viewControl;
@@ -126,11 +128,19 @@ namespace Juke.UI.Admin
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
             selectedAlbum = Song.ALL_ALBUMS;
             selectedArtist = Song.ALL_ARTISTS;
+            SelectionTracker = new SelectionTracker(controller.Browser);
+            SelectionTracker.Changed += SelectionTracker_Changed;
+        }
+
+        private void SelectionTracker_Changed(object sender, string e)
+        {
+            RaisePropertyChanged(nameof(SelectionTracker));
         }
 
         private void LoadHandlerOnLibraryUpdated(object sender, EventArgs e)
         {
-            InitializeCollections();
+            //InitializeCollections();
+            SelectionTracker.Refresh(controller.Browser);
         }
 
         private void ProgressTracker_Changed(object sender, System.EventArgs e)

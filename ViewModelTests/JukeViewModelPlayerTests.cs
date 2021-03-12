@@ -122,11 +122,13 @@ namespace Juke.UI.Tests
                     new("artist1", "album1", "song1"),
                     new("artist2", "album2", "song1")
                 });
-            viewModel.SelectedArtist = "artist1";
-            viewModel.SelectedArtist = null;
-            AreEqual(2, viewModel.Albums.Count);
-            AreEqual("album1", viewModel.Albums[0]);
-            AreEqual("album2", viewModel.Albums[1]);
+
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedArtist = "artist1";
+            selector.SelectedArtist = null;
+            AreEqual(3, selector.Albums.Count); //Including ALL_ALBUMS
+            AreEqual("album1", selector.Albums[1]);
+            AreEqual("album2", selector.Albums[2]);
         }
 
         [TestMethod]
@@ -134,18 +136,20 @@ namespace Juke.UI.Tests
         {
             var songs = ViewModelFaker.CreateSongs(1, 2, 4);
             var viewModel = ViewModelFaker.InitializeLoadedViewModel(songs);
-            viewModel.SelectedAlbum = "album1";
-            AreEqual(4, viewModel.Songs.Count);
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedAlbum = "album1";
+            AreEqual(4, selector.Songs.Count);
         }
 
         [TestMethod]
         public void SelectNullAsAlbum_SelectAllSongs()
-        {
+        {            
             var songs = ViewModelFaker.CreateSongs(1, 2, 4);
             var viewModel = ViewModelFaker.InitializeLoadedViewModel(songs);
-            viewModel.SelectedAlbum = "album1";
-            viewModel.SelectedAlbum = null;
-            AreEqual(8, viewModel.Songs.Count);
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedAlbum = "album1";
+            selector.SelectedAlbum = null;
+            AreEqual(8, selector.Songs.Count);
         }
 
         [TestMethod]
@@ -169,6 +173,7 @@ namespace Juke.UI.Tests
         [TestMethod]
         public void SelectConstantAsArtist_SelectAllSongsForSelectedAlbum()
         {
+            
             var viewModel =
                 ViewModelFaker.InitializeLoadedAdminViewModel(new List<Song>
                 {
@@ -176,9 +181,10 @@ namespace Juke.UI.Tests
                     new("artist2", "album2", "song1"),
                     new("artist3", "album2", "song2")
                 }, new FakeViewControl("path"));
-            viewModel.SelectedAlbum = "album2";
-            viewModel.SelectedArtist = Song.ALL_ARTISTS;
-            AreEqual(3, viewModel.Albums.Count); //Including ALL_ALBUMS
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedAlbum = "album2";
+            selector.SelectedArtist = Song.ALL_ARTISTS;
+            AreEqual(3, selector.Albums.Count); //Including ALL_ALBUMS
         }
 
         [TestMethod]
@@ -193,14 +199,16 @@ namespace Juke.UI.Tests
                     new("artist2", "albumA", "song1"),
                     new("artist2", "albumB", "song1")
                 }, new FakeViewControl("path"));
-            viewModel.SelectedArtist = "artist1";
-            viewModel.SelectedAlbum = Song.ALL_ALBUMS;
-            AreEqual(3, viewModel.Songs.Count);
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedArtist = "artist1";
+            selector.SelectedAlbum = Song.ALL_ALBUMS;
+            AreEqual(3, selector.Songs.Count);
         }
 
         [TestMethod]
         public void SelectAllArtistWithAllAlbums_SelectAllSongs()
         {
+            
             var viewModel =
                 ViewModelFaker.InitializeLoadedAdminViewModel(new List<Song>
                 {
@@ -210,14 +218,16 @@ namespace Juke.UI.Tests
                     new("artist2", "albumA", "song1"),
                     new("artist2", "albumB", "song1")
                 }, new FakeViewControl("path"));
-            viewModel.SelectedArtist = Song.ALL_ARTISTS;
-            viewModel.SelectedAlbum = Song.ALL_ALBUMS;
-            AreEqual(5, viewModel.Songs.Count);
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedArtist = Song.ALL_ARTISTS;
+            selector.SelectedAlbum = Song.ALL_ALBUMS;
+            AreEqual(5, selector.Songs.Count);
         }
 
         [TestMethod]
         public void SelectSpecificArtist_AfterAllArtistWithAllAlbums_SelectArtistSongs()
         {
+            
             var viewModel =
                 ViewModelFaker.InitializeLoadedAdminViewModel(new List<Song>
                 (new List<Song>
@@ -228,10 +238,11 @@ namespace Juke.UI.Tests
                     new("artist2", "albumA", "song1"),
                     new("artist2", "albumB", "song1")
                 }), new FakeViewControl("path"));
-            viewModel.SelectedArtist = Song.ALL_ARTISTS;
-            viewModel.SelectedAlbum = Song.ALL_ALBUMS;
-            viewModel.SelectedArtist = "artist1";
-            AreEqual(3, viewModel.Songs.Count);
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedArtist = Song.ALL_ARTISTS;
+            selector.SelectedAlbum = Song.ALL_ALBUMS;
+            selector.SelectedArtist = "artist1";
+            AreEqual(3, selector.Songs.Count);
         }
 
         [TestMethod]
@@ -247,37 +258,42 @@ namespace Juke.UI.Tests
                     new("artist2", "albumA", "song1"),
                     new("artist2", "albumB", "song1")
                 }), new FakeViewControl("path"));
-            viewModel.SelectedAlbum = Song.ALL_ALBUMS;
-            viewModel.SelectedArtist = Song.ALL_ARTISTS;
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedAlbum = Song.ALL_ALBUMS;
+            selector.SelectedArtist = Song.ALL_ARTISTS;
 
-            viewModel.SelectedAlbum = "album2";
-            AreEqual(1, viewModel.Songs.Count);
+            selector.SelectedAlbum = "album2";
+            AreEqual(1, selector.Songs.Count);
         }
 
         [TestMethod]
         public void ChangeToArtistWithOneAlbum_PreselectAlbum()
         {
             var viewModel = ViewModelFaker.InitializeLoadedAdminViewModel(ViewModelFaker.CreateSongsDistinct(4, 1, 10), new FakeViewControl("path"));
-            viewModel.SelectedArtist = "artist2";
-            AreEqual("album21",viewModel.SelectedAlbum);
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedArtist = "artist2";
+            AreEqual("album21", selector.SelectedAlbum);
         }
         
         [TestMethod]
         public void ChangeToArtistWithOneAlbum_PreselectSong()
         {
+            
             var viewModel = ViewModelFaker.InitializeLoadedAdminViewModel(ViewModelFaker.CreateSongsDistinct(4, 1, 10), new FakeViewControl("path"));
-            viewModel.SelectedArtist = "artist2";
-            AreEqual("song211",viewModel.SelectedSong.Name);
+            var selector = new SelectionTracker(JukeController.Instance.Browser); 
+            selector.SelectedArtist = "artist2";
+            AreEqual("song211", selector.SelectedSong.Name);
         }
 
         [TestMethod]
         public void NewSelectedArtistHasSameAlbum_AlbumStillSelected()
         {
             var viewModel = ViewModelFaker.InitializeLoadedAdminViewModel(ViewModelFaker.CreateSongsDistinct(4, 2, 10), new FakeViewControl("path"));
-            viewModel.SelectedArtist = Song.ALL_ARTISTS;
-            viewModel.SelectedAlbum = "album22";
-            viewModel.SelectedArtist = "artist2";
-            AreEqual("album22",viewModel.SelectedAlbum);
+            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            selector.SelectedArtist = Song.ALL_ARTISTS;
+            selector.SelectedAlbum = "album22";
+            selector.SelectedArtist = "artist2";
+            AreEqual("album22", selector.SelectedAlbum);
         }
         
         [TestMethod]
@@ -295,9 +311,7 @@ namespace Juke.UI.Tests
             AreEqual("new",viewModel.SelectedArtist);
             AreEqual("new", viewModel.SelectedAlbum);
         }
-        
-        
-
+                
         private static FakeSongLoadEngine CreateFakeLoadEngine(List<Song> songs)
         {
             var engine = new FakeSongLoadEngine(songs);

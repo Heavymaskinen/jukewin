@@ -6,18 +6,21 @@ using Juke.Core;
 
 namespace Juke.UI
 {
+
     public class SelectionTracker
     {
         public event EventHandler<string> Changed;
-        
+
+        private Dictionary<string, Dictionary<string, IList<Song>>> collection;
+
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
         private IList<Song> selectedSongs;
         private LibraryBrowser browser;
         
-        public IList<Song> Songs { get; private set; }
-        public IList<string> Albums { get; private set; }
+        public IList<Song> Songs { get; set; }
+        public IList<string> Albums { get; set; }
         public IList<string> Artists { get; set; }
 
         public string SelectedArtist
@@ -25,7 +28,7 @@ namespace Juke.UI
             get => selectedArtist;
             set
             {
-                selectedArtist = value;
+                selectedArtist = value ?? Song.ALL_ARTISTS;
                 SelectArtist(selectedArtist);
                 RaisePropertyChanged(nameof(SelectedArtist));
                 RaisePropertyChanged(nameof(SelectedAlbum));
@@ -38,9 +41,9 @@ namespace Juke.UI
             get => selectedAlbum;
             set
             {
-                selectedAlbum = value;
+                selectedAlbum = value ?? Song.ALL_ALBUMS;
                 SelectAlbum(selectedAlbum);
-                selectedSong = Songs[0];
+                selectedSong = Songs.Count > 0 ? Songs[0] : null;
                 RaisePropertyChanged(nameof(SelectedAlbum));
             }
         }
@@ -68,35 +71,61 @@ namespace Juke.UI
         public SelectionTracker(LibraryBrowser browser)
         {
             this.browser = browser;
+            selectedAlbum = Song.ALL_ALBUMS;
+            SelectedArtist = Song.ALL_ARTISTS;
             selectedSongs = new List<Song>();
+            Refresh(browser);
+        }
+
+        public void Refresh(LibraryBrowser browser)
+        {
             Songs = browser.Songs;
             Albums = browser.Albums;
             Artists = browser.Artists;
+            collection = new Dictionary<string, Dictionary<string, IList<Song>>>();
+            foreach (var song in Songs)
+            {
+                if (!collection.ContainsKey(song.Artist))
+                {
+                    collection.Add(song.Artist, new ());
+                }
+                if (!collection[song.Artist].ContainsKey(song.Album))
+                {
+                    collection[song.Artist].Add(song.Album, new List<Song>());
+                }
+                
+                collection[song.Artist][song.Album].Add(song);
+            }
         }
 
         private void SelectArtist(string artist)
         {
-            if (artist == null) artist = Song.ALL_ARTISTS;
-            
             var songs = browser.Songs;
             if (artist != Song.ALL_ARTISTS)
             {
-                RefreshAlbums(browser.GetAlbumsByArtist(artist));
+                RefreshAlbums(GetAlbumsByArtist(artist));
                 if (!Albums.Contains(selectedAlbum))
                 {
                     selectedAlbum = Albums[0];
                 }
 
-                songs = selectedAlbum != Song.ALL_ALBUMS
-                    ? browser.GetSongsByArtistAndAlbum(artist, selectedAlbum)
-                    : browser.GetSongsByArtist(artist);
-                selectedSong = songs[0];
+                if (SelectedAlbum != Song.ALL_ALBUMS)
+                {
+                    songs = selectedAlbum != Song.ALL_ALBUMS
+                    ? collection[artist][selectedAlbum]
+                    : GetAllSongsByArtist(artist);
+                    selectedSong = songs[0];
+                } else
+                {
+                    songs = GetAllSongsByArtist(artist);
+                }
+
             }
             else
             {
                 if (SelectedAlbum != Song.ALL_ALBUMS)
                 {
-                    songs = browser.GetSongsByAlbum(SelectedAlbum);
+                    songs = GetSongsByAlbum(SelectedAlbum);
                 }
 
                 RefreshAlbums(browser.Albums);
@@ -106,17 +135,53 @@ namespace Juke.UI
             RefreshSongs(songs);
         }
 
+        private IList<Song> GetSongsByAlbum(string album)
+        {
+            var songs = new List<Song>();
+            foreach (var artist in collection)
+            {
+                if (artist.Value.ContainsKey(album))
+                {
+                    songs.AddRange(artist.Value[album]);
+                }
+            }
+
+            return songs;
+        }
+
+        private IList<string> GetAlbumsByArtist(string artist)
+        {
+            return collection[artist].Keys.ToList();
+        }
+
+        private List<Song> GetAllSongsByArtist(string artist)
+        {
+            var selSongs = new List<Song>();
+            foreach (var album in collection[artist].Keys)
+            {
+                selSongs.AddRange(collection[artist][album]);
+            }
+
+            return selSongs;
+        }
+
         private void SelectAlbum(string album)
         {
-            if (album == null) album = Song.ALL_ALBUMS;
             var songs = browser.Songs;
             if (album != Song.ALL_ALBUMS)
             {
-                songs = browser.GetSongsByAlbum(album);
+                if (SelectedArtist != Song.ALL_ARTISTS)
+                {
+                    songs = collection[SelectedArtist][album];
+                } else
+                {
+                    songs = GetSongsByAlbum(album);
+                }
+                
             }
             else if (album == Song.ALL_ALBUMS && SelectedArtist != Song.ALL_ARTISTS)
             {
-                songs = browser.GetSongsByArtist(SelectedArtist);
+                songs = GetAllSongsByArtist(SelectedArtist);
             }
 
             RefreshSongs(songs);
@@ -124,7 +189,7 @@ namespace Juke.UI
 
         private void RefreshSongs(IList<Song> songs)
         {
-            Songs = new List<Song>(songs);
+            Songs = songs;
             RaisePropertyChanged(nameof(Songs));
         }
 
