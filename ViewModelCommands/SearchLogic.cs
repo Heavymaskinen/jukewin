@@ -1,7 +1,7 @@
 ﻿using DataModel;
 using System.Collections.Generic;
 
-namespace Juke.UI.Wpf
+namespace Juke.UI
 {
     public interface SearchLogic
     {

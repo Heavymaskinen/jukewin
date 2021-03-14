@@ -1,8 +1,7 @@
 ﻿using DataModel;
-using System;
 using System.Collections.Generic;
 
-namespace Juke.UI.Wpf.SearchLogics
+namespace Juke.UI.SearchLogics
 {
     public class SongSearchLogic : SearchLogic
     {
@@ -22,7 +21,7 @@ namespace Juke.UI.Wpf.SearchLogics
             list.Clear();
             var perfects = new List<Song>();
             var lowerInput = input.ToLower();
-            foreach (var song in browser.Songs)
+            foreach (var song in browser.SelectionTracker.Songs)
             {
                 var lowerName = song.Name.ToLower();
                 if (lowerName.Equals(lowerInput))

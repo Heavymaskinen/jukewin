@@ -25,14 +25,14 @@ namespace Juke.UI.Command
 
         public override bool CanExecute(object parameter)
         {
-            return model.SelectedSong != null;
+            return model.SelectionTracker.SelectedSong != null;
         }
 
         protected override void ControlledExecute(object parameter)
         {
-            Console.WriteLine("Play it: " + model.SelectedSong + " " + model.SelectedSong.Album + " " +
-                              model.SelectedSong.Artist + " " + model.SelectedSong.FilePath);
-            controller.Player.PlaySong(model.SelectedSong);
+            Console.WriteLine("Play it: " + model.SelectionTracker.SelectedSong + " " + model.SelectionTracker.SelectedSong.Album + " " +
+                              model.SelectionTracker.SelectedSong.Artist + " " + model.SelectionTracker.SelectedSong.FilePath);
+            controller.Player.PlaySong(model.SelectionTracker.SelectedSong);
         }
     }
 }

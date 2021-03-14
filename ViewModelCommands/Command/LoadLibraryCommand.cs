@@ -5,7 +5,7 @@ using Juke.External.Xml;
 
 namespace Juke.UI.Command
 {
-    public class LoadLibraryCommand : JukeCommand
+    public class LoadLibraryCommand : AsyncJukeCommand
     {
         public LoadLibraryCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
@@ -17,16 +17,14 @@ namespace Juke.UI.Command
             return true;
         }
 
-        protected override void ControlledExecute(object parameter)
+        protected override Task AsyncExecute(object parameter)
         {
-            AsyncExecute();
-        }
-
-        private async void AsyncExecute()
-        {
-            await controller.LoadHandler.LoadSongs(new XmlSongReader("library.xml"), model.ProgressTracker);
-            Messenger.Log("Done loading library");
-            view.CommandCompleted(this);
+            return Task.Run(async () =>
+            {
+                await controller.LoadHandler.LoadSongs(new XmlSongReader("library.xml"), model.ProgressTracker);
+                Messenger.Log("Done loading library");
+                view.CommandCompleted(this);
+            });
         }
     }
 }

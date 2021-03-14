@@ -8,17 +8,8 @@ namespace Juke.UI
 {
     public interface SelectionModel : INotifyPropertyChanged
     {
-        string SelectedArtist { get; set; }
-
-        string SelectedAlbum { get; set; }
-
-        Song SelectedSong { get; set; }
-
+        SelectionTracker SelectionTracker { get; }
         ProgressTracker ProgressTracker { get; }
-        ObservableCollection<Song> Queue { get; }
-        ObservableCollection<Song> Songs { get;}
-        ObservableCollection<string> Albums { get; }
-        ObservableCollection<string> Artists { get; }
         ICommand PlaySong {get; }
         IList<Song> SelectedSongs { get; set; }
     }

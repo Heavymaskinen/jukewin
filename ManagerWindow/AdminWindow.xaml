@@ -84,6 +84,7 @@
                Canvas.Left="18" Canvas.Top="580" Width="455" Height="43" />
         <Button Content="Cancel" Command="{Binding CancelLoad}" Height="19" Canvas.Left="484" Canvas.Top="631"
                 Width="66" />
+        <Label Content="{Binding SelectionTracker.SelectedSong.ID}" Canvas.Left="509" Canvas.Top="495" Width="465" Height="35"/>
 
 
     </Canvas>

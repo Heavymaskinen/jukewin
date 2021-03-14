@@ -16,9 +16,7 @@ namespace Juke.UI
     public class JukeViewModel : SelectionModel
     {
         private JukeController controller;
-        private string selectedArtist;
-        private string selectedAlbum;
-        private Song selectedSong;
+
         public CancellationTokenSource CancelTokenSource { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -46,52 +44,7 @@ namespace Juke.UI
 
         public bool ProgressIndeterminate => progressTracker.IsIndeterminate;
 
-        public string SelectedArtist
-        {
-            get => selectedArtist;
-            set
-            {
-                selectedArtist = value;
-                SelectArtist(selectedArtist);
-                RaisePropertyChanged(nameof(SelectedArtist));
-            }
-        }
-
-        public string SelectedAlbum
-        {
-            get => selectedAlbum;
-            set
-            {
-                selectedAlbum = value;
-                SelectAlbum(selectedAlbum);
-                RaisePropertyChanged(nameof(SelectedAlbum));
-            }
-        }
-
-        public Song SelectedSong
-        {
-            get => selectedSong;
-            set
-            {
-                selectedSong = value;
-                RaisePropertyChanged(nameof(SelectedSong));
-            }
-        }
-
-        public string CurrentSong
-        {
-            get
-            {
-                var song = controller.Player.NowPlaying;
-                if (song == null)
-                {
-                    return "<None>";
-                }
-
-                return song.Name + " (" + song.Artist + ")";
-            }
-        }
-
+       
         public string SystemMessage { set; get; }
 
         public ICommand LoadSongs => new LoadSongsCommand(controller, View, this);
@@ -118,6 +71,8 @@ namespace Juke.UI
         public ViewControl View { get; set; }
         public IList<Song> SelectedSongs { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public SelectionTracker SelectionTracker { get; }
+
         private ProgressTracker progressTracker;
 
         public JukeViewModel(ViewControl view)
@@ -126,14 +81,19 @@ namespace Juke.UI
             progressTracker = new ProgressTracker(controller.LoadHandler);
             progressTracker.Changed += ProgressTracker_Changed;
             View = view;
-            selectedAlbum = Song.ALL_ALBUMS;
-            selectedArtist = Song.ALL_ARTISTS;
             InitializeCollections();
 
+            SelectionTracker = new SelectionTracker(controller.Browser);
+            SelectionTracker.Changed += SelectionTracker_Changed;
             controller.LoadHandler.LibraryUpdated += LoadHandler_LibraryUpdated;
             controller.LoadHandler.LoadCompleted += (sender, args) => View.CommandCompleted(null);
             Player.SongPlayed += Player_SongPlayed;
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
+        }
+
+        private void SelectionTracker_Changed(object sender, string e)
+        {
+            RaisePropertyChanged(nameof(SelectionTracker));
         }
 
         private void ProgressTracker_Changed(object sender, EventArgs e)
@@ -161,6 +121,7 @@ namespace Juke.UI
 
         private void LoadHandler_LibraryUpdated(object sender, EventArgs e)
         {
+            SelectionTracker.Refresh(controller.Browser);
             InitializeCollections();
         }
 
@@ -202,47 +163,5 @@ namespace Juke.UI
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void SelectArtist(string artist)
-        {
-            if (artist == null) artist = Song.ALL_ARTISTS;
-            var songs = controller.Browser.Songs;
-            if (artist != Song.ALL_ARTISTS)
-            {
-                RefreshAlbums(controller.Browser.GetAlbumsByArtist(artist));
-                songs = selectedAlbum != Song.ALL_ALBUMS
-                    ? controller.Browser.GetSongsByArtistAndAlbum(artist, selectedAlbum)
-                    : controller.Browser.GetSongsByArtist(artist);
-            }
-            else
-            {
-                if (SelectedAlbum != Song.ALL_ALBUMS)
-                {
-                    songs = controller.Browser.GetSongsByAlbum(SelectedAlbum);
-                }
-
-                RefreshAlbums(controller.Browser.Albums);
-            }
-
-            RefreshSongs(songs);
-        }
-
-        private void SelectAlbum(string album)
-        {
-            if (album == null) album = Song.ALL_ALBUMS;
-            var songs = controller.Browser.Songs;
-            if (album != Song.ALL_ALBUMS)
-            {
-                songs = controller.Browser.GetSongsByAlbum(album);
-            }
-            else if (album == Song.ALL_ALBUMS)
-            {
-                if (SelectedArtist != Song.ALL_ARTISTS)
-                {
-                    songs = controller.Browser.GetSongsByArtist(SelectedArtist);
-                }
-            }
-
-            RefreshSongs(songs);
-        }
     }
 }

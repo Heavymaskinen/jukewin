@@ -22,16 +22,14 @@ namespace Juke.UI.Command
 
         public override bool CanExecute(object parameter)
         {
-            return model.SelectedAlbum != Song.ALL_ALBUMS;
+            return model.SelectionTracker.SelectedAlbum != null && model.SelectionTracker.SelectedAlbum != Song.ALL_ALBUMS;
         }
 
         protected override Task AsyncExecute(object parameter)
         {
             return Task.Run(() =>
             {
-                if (model.SelectedAlbum == null || model.SelectedAlbum == Song.ALL_ALBUMS) return;
-
-                var selectedAlbum = model.SelectedAlbum;
+                var selectedAlbum = model.SelectionTracker.SelectedAlbum;
                 Messenger.Post("Deleting album: " + selectedAlbum);
                 controller.LoadHandler.DeleteAlbum(selectedAlbum, model.ProgressTracker);
                 Messenger.Post(selectedAlbum + " was deleted from library");

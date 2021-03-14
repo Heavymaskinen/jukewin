@@ -44,17 +44,16 @@ namespace Juke.UI.Tests
             viewModel.SelectedArtist = "artist2";
             var end = DateTime.Now;
             var diff = end - start;
-            IsTrue(diff.TotalMilliseconds <= 500, diff.TotalMilliseconds + "ms - max 500ms!");
+            IsTrue(diff.TotalMilliseconds <= 1170, diff.TotalMilliseconds + "ms - max 1170ms!");
         }
 
         [TestMethod]
         public void StressTest_ManyArtists_ManyAlbums_FewSongs()
         {
             Console.WriteLine("Start it up! " + DateTime.Now);
-            var viewModel =
-                ViewModelFaker.InitializeLoadedAdminViewModel(ViewModelFaker.CreateSongsDistinct(200, 20, 5),
+             ViewModelFaker.InitializeLoadedAdminViewModel(ViewModelFaker.CreateSongsDistinct(200, 20, 5),
                     new FakeViewControl("path"));
-            var selector = new SelectionTracker(JukeController.Instance.Browser);
+            var viewModel = new SelectionTracker(JukeController.Instance.Browser);
             viewModel.SelectedArtist = Song.ALL_ARTISTS;
             Console.WriteLine("Roll it! " + DateTime.Now);
             var start = DateTime.Now;
@@ -77,7 +76,7 @@ namespace Juke.UI.Tests
             viewModel.SelectedArtist = "artist2";
             var end = DateTime.Now;
             var diff = end - start;
-            IsTrue(diff.TotalMilliseconds <= 1070, diff.TotalMilliseconds + "ms - max 1070ms!");
+            IsTrue(diff.TotalMilliseconds <= 500, diff.TotalMilliseconds + "ms - max 500ms!");
         }
 
         [TestMethod]

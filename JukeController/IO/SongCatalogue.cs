@@ -68,13 +68,14 @@ namespace Juke.IO
         {
             attachedListener = listener != this ? listener : null;
 
-            return loader.StartNewLoad(listener, cancelToken);
+            return loader.StartNewLoad(this, cancelToken);
         }
 
         public void UpdateSong(SongUpdate songUpdate)
         {
-            library.RemoveById(songUpdate.SongSource.ID);
-            library.AddSong(songUpdate.ToSong());
+            library.UpdateSongShallow(songUpdate);
+            
+            library.InitialiseParts();
             NotifyUpdated();
         }
 

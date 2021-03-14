@@ -37,7 +37,7 @@ namespace Juke.UI.Tests
                     for (var song = 1; song <= songmax; song++)
                     {
                         songList.Add(new Song("artist" + artist, "album" + artist + album, "song"+artist+album + song,
-                            artist + song - 1 + "", artist + "/" + album + "/" + song));
+                            song - 1 + "", artist + "/" + album + "/" + song));
                     }
                 }
             }

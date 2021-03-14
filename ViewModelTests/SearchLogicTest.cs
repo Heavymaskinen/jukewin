@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DataModel;
-using Juke.UI.Wpf.SearchLogics;
+using Juke.UI.SearchLogics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Juke.UI.Tests

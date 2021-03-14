@@ -60,9 +60,7 @@ namespace Juke.UI.Admin
             {
                 selectedArtist = value;
                 SelectArtist(selectedArtist);
-                RaisePropertyChanged(nameof(SelectedArtist));
-                RaisePropertyChanged(nameof(SelectedAlbum));
-                RaisePropertyChanged(nameof(SelectedSong));
+                RaisePropertyChanged(nameof(SelectionTracker));
             }
         }
 
@@ -86,9 +84,13 @@ namespace Juke.UI.Admin
                 selectedSong = value;
                 selectedAlbum = selectedSong.Album;
                 selectedArtist = selectedSong.Artist;
-                RaisePropertyChanged(nameof(SelectedSong));
-                RaisePropertyChanged(nameof(SelectedAlbum));
-                RaisePropertyChanged(nameof(SelectedArtist));
+                SelectAlbum(selectedSong.Album);
+                SelectArtist(selectedSong.Artist);
+
+                Messenger.Log("New song incoming: " + value.Artist + " " + value.Album + " " + value.Name);
+                Messenger.Log("New song selected: " + selectedArtist + " " + selectedAlbum + " " + selectedSong.Name);
+                
+                RaisePropertyChanged(nameof(SelectionTracker));
             }
         }
 
@@ -139,8 +141,9 @@ namespace Juke.UI.Admin
 
         private void LoadHandlerOnLibraryUpdated(object sender, EventArgs e)
         {
-            //InitializeCollections();
             SelectionTracker.Refresh(controller.Browser);
+            RaisePropertyChanged(nameof(ProgressTracker));
+            RaisePropertyChanged(nameof(SelectionTracker));
         }
 
         private void ProgressTracker_Changed(object sender, System.EventArgs e)

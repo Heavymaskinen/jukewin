@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juke.UI.Wpf"
+        xmlns:ui="clr-namespace:Juke.UI;assembly=ViewModel"
         mc:Ignorable="d"
         Title="Welcome" Height="500" Width="500" WindowStyle="None" WindowStartupLocation="CenterScreen"
-        AllowsTransparency="True" Background="Transparent">
+        AllowsTransparency="True" Background="Transparent" d:DataContext="{d:DesignInstance ui:JukeViewModel}">
     <Border Background="White" BorderBrush="Black" BorderThickness="6" CornerRadius="30 30 30 30">
         <Grid>
             <Label Content="Welcome to J.U.K.E." FontSize="40" HorizontalAlignment="Left" Height="81"
@@ -26,8 +27,8 @@
                     <Label Content="{Binding SystemMessage}" Height="30" />
                 </Grid>
             </Border>
-            <ProgressBar x:Name="progressBar" IsIndeterminate="{Binding ProgressIndeterminate}"
-                         Maximum="{Binding ProgressMax}" Value="{Binding Progress}" HorizontalAlignment="Left"
+            <ProgressBar x:Name="progressBar" IsIndeterminate="{Binding ProgressTracker.IsIndeterminate}"
+                         Maximum="{Binding ProgressTracker.ProgressMax}" Value="{Binding ProgressTracker.Progress}" HorizontalAlignment="Left"
                          Height="26" Margin="69,225,0,0" VerticalAlignment="Top" Width="355" />
 
         </Grid>

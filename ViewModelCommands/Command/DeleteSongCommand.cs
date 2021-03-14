@@ -21,20 +21,14 @@ namespace Juke.UI.Command
 
         public override bool CanExecute(object parameter)
         {
-            return model.SelectedSongs?.Count > 0;
-        }
-
-        protected void ControlledExecute(object parameter)
-        {
-            
+            return model.SelectionTracker.SelectedSongs?.Count > 0;
         }
 
         protected override Task AsyncExecute(object parameter)
         {
             return Task.Run(() =>
             {
-                if (model.SelectedSong == null) return;
-                controller.LoadHandler.DeleteSongs(model.SelectedSongs, model.ProgressTracker);
+                controller.LoadHandler.DeleteSongs(model.SelectionTracker.SelectedSongs, model.ProgressTracker);
             });
         }
     }

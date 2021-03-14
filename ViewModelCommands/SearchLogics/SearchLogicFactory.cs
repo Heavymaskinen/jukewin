@@ -1,11 +1,10 @@
-﻿using Juke.UI.Wpf.SearchLogics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Juke.UI.Wpf
+namespace Juke.UI.SearchLogics
 {
-    internal class SearchLogicFactory
+    public class SearchLogicFactory
     {
-        internal IList<SearchLogic> CreateAll(JukeViewModel viewModel)
+        public IList<SearchLogic> CreateAll(SelectionModel viewModel)
         {
             return new List<SearchLogic>
             {

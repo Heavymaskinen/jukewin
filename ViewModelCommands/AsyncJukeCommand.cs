@@ -1,4 +1,5 @@
 ﻿using Juke.Control;
+using Juke.UI.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Windows.Input;
 
 namespace Juke.UI
 {
-    public abstract class AsyncJukeCommand : ICommand
+    public abstract class AsyncJukeCommand : JukeCommand
     {
         public event EventHandler CanExecuteChanged;
 
@@ -16,27 +17,16 @@ namespace Juke.UI
         protected ViewControl view;
         protected SelectionModel model;
 
-        protected AsyncJukeCommand(JukeController controller, ViewControl view, SelectionModel model)
+        protected AsyncJukeCommand(JukeController controller, ViewControl view, SelectionModel model):base(controller, view, model)
         {
             this.controller = controller;
             this.view = view;
             this.model = model;
         }
 
-        public abstract bool CanExecute(object parameter);
-
-        public void Execute(object parameter)
+        protected override void ControlledExecute(object parameter)
         {
-            try
-            {
-                _ = RunAsync(AsyncExecute(parameter)).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                Messenger.Log(e.Message);
-                Messenger.Log(e.InnerException.Message);
-                Messenger.Log(e.ToString());
-            }
+            _ = RunAsync(AsyncExecute(parameter)).ConfigureAwait(false);
         }
 
         private async Task RunAsync(Task task)

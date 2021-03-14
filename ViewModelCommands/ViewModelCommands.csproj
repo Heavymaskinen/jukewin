@@ -64,6 +64,11 @@
     <Compile Include="LoaderCancellationTokenProvider.cs" />
     <Compile Include="LoaderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchLogic.cs" />
+    <Compile Include="SearchLogics\AlbumSearchLogic.cs" />
+    <Compile Include="SearchLogics\ArtistSearchLogic.cs" />
+    <Compile Include="SearchLogics\SearchLogicFactory.cs" />
+    <Compile Include="SearchLogics\SongSearchLogic.cs" />
     <Compile Include="SelectionModel.cs" />
     <Compile Include="ViewControl.cs" />
   </ItemGroup>

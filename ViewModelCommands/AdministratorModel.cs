@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Juke.UI;
-using Juke.UI.Command;
 
 namespace ViewModelCommands
 {
@@ -21,6 +15,5 @@ namespace ViewModelCommands
         ICommand RenameArtist { get; }
         ICommand DeleteAlbum { get; }
         ICommand DeleteSong { get; }
-        SelectionTracker SelectionTracker { get; }
     }
 }

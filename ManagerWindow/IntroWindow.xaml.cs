@@ -18,8 +18,14 @@ namespace Juke.UI.Wpf
             InitializeComponent();
             DataContext = viewModel;
             viewModel.View = this;
+
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
             LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(),
                 new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
         }
 
         public IntroWindow()

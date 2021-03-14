@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataModel;
+using Juke.Control;
 using Juke.Core;
 
 namespace Juke.UI
@@ -31,8 +32,6 @@ namespace Juke.UI
                 selectedArtist = value ?? Song.ALL_ARTISTS;
                 SelectArtist(selectedArtist);
                 RaisePropertyChanged(nameof(SelectedArtist));
-                RaisePropertyChanged(nameof(SelectedAlbum));
-                RaisePropertyChanged(nameof(SelectedSong));
             }
         }
 
@@ -54,11 +53,11 @@ namespace Juke.UI
             set
             {
                 selectedSong = value;
+                if (selectedSong == null) return;
                 selectedAlbum = selectedSong.Album;
                 selectedArtist = selectedSong.Artist;
+                RaisePropertyChanged(nameof(SelectionTracker));
                 RaisePropertyChanged(nameof(SelectedSong));
-                RaisePropertyChanged(nameof(SelectedAlbum));
-                RaisePropertyChanged(nameof(SelectedArtist));
             }
         }
 
@@ -87,15 +86,17 @@ namespace Juke.UI
             {
                 if (!collection.ContainsKey(song.Artist))
                 {
-                    collection.Add(song.Artist, new ());
+                    collection.Add(song.Artist, new());
                 }
                 if (!collection[song.Artist].ContainsKey(song.Album))
                 {
                     collection[song.Artist].Add(song.Album, new List<Song>());
                 }
-                
+
                 collection[song.Artist][song.Album].Add(song);
             }
+
+            RefreshArtists(browser.Artists);
         }
 
         private void SelectArtist(string artist)
@@ -104,7 +105,7 @@ namespace Juke.UI
             if (artist != Song.ALL_ARTISTS)
             {
                 RefreshAlbums(GetAlbumsByArtist(artist));
-                if (!Albums.Contains(selectedAlbum))
+                if (!collection[artist].ContainsKey(selectedAlbum))
                 {
                     selectedAlbum = Albums[0];
                 }
@@ -115,7 +116,8 @@ namespace Juke.UI
                     ? collection[artist][selectedAlbum]
                     : GetAllSongsByArtist(artist);
                     selectedSong = songs[0];
-                } else
+                } 
+                else
                 {
                     songs = GetAllSongsByArtist(artist);
                 }
@@ -170,7 +172,7 @@ namespace Juke.UI
             var songs = browser.Songs;
             if (album != Song.ALL_ALBUMS)
             {
-                if (SelectedArtist != Song.ALL_ARTISTS)
+                if (SelectedArtist != Song.ALL_ARTISTS  && collection[SelectedArtist].ContainsKey(album))
                 {
                     songs = collection[SelectedArtist][album];
                 } else
@@ -184,6 +186,11 @@ namespace Juke.UI
                 songs = GetAllSongsByArtist(SelectedArtist);
             }
 
+            if (!songs.Contains(SelectedSong))
+            {
+                selectedSong = songs[0];
+            }
+
             RefreshSongs(songs);
         }
 
@@ -193,9 +200,9 @@ namespace Juke.UI
             RaisePropertyChanged(nameof(Songs));
         }
 
-        private void RefreshArtists()
+        private void RefreshArtists(IList<string> artists)
         {
-            Artists = new List<string>(browser.Artists.OrderBy(s => s));
+            Artists = new List<string>(artists.OrderBy(s => s));
             if (Artists.Count > 1)
             {
                 Artists.Insert(0, Song.ALL_ARTISTS);

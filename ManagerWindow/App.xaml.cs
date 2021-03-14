@@ -20,9 +20,15 @@ namespace Juke.UI.Wpf
             LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(),
                 new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
 
-            //Logger.Start("juke.log").EnableFrontendLog();
-            Logger.ConsoleLog();
+            Logger.Start("juke.log");
+            //Logger.ConsoleLog();
             Messenger.Log("Starting J.U.K.E.");
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+        }
+
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            Messenger.Log("Fatal exception: " + e.Exception.Message + " " + e.Exception.StackTrace);
         }
     }
 }

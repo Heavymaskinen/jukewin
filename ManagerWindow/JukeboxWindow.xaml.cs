@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Juke.UI.Admin;
+using Juke.UI.SearchLogics;
 
 namespace Juke.UI.Wpf
 {
@@ -43,9 +44,11 @@ namespace Juke.UI.Wpf
             Messenger.Log("Starting UI");
             CreateFadeAnimation();
             borderOutAnimation = new ThicknessAnimation(new Thickness(99.0), new Thickness(0.0),
-                new Duration(TimeSpan.FromSeconds(5))) {DecelerationRatio = 0.7};
+                new Duration(TimeSpan.FromSeconds(5)))
+            { DecelerationRatio = 0.7 };
             borderInAnimation = new ThicknessAnimation(new Thickness(0.0), new Thickness(99.0),
-                new Duration(TimeSpan.FromSeconds(5))) {DecelerationRatio = 0.7};
+                new Duration(TimeSpan.FromSeconds(5)))
+            { DecelerationRatio = 0.7 };
             viewModel = new JukeViewModel(this);
             DataContext = viewModel;
             loaded = false;
@@ -293,8 +296,7 @@ namespace Juke.UI.Wpf
         {
             var song = songList.SelectedItem as Song;
             if (!viewModel.PlaySong.CanExecute(null)) return;
-            //viewModel.SelectedSong = song;
-            viewModel.PlaySong.Execute(null);
+            viewModel.PlaySong.Execute(this);
 
             searchBox.Visibility = Visibility.Hidden;
             songList.Visibility = Visibility.Hidden;
@@ -306,7 +308,7 @@ namespace Juke.UI.Wpf
             if (songList.SelectedIndex >= songList.Items.Count - 1) return;
             songList.SelectedIndex++;
             songList.ScrollIntoView(songList.SelectedItem);
-            viewModel.SelectedSong = songList.SelectedItem as Song;
+            viewModel.SelectionTracker.SelectedSong = songList.SelectedItem as Song;
         }
 
         private void MoveListCursorUp()
@@ -314,7 +316,7 @@ namespace Juke.UI.Wpf
             if (songList.SelectedIndex <= 0) return;
             songList.SelectedIndex--;
             songList.ScrollIntoView(songList.SelectedItem);
-            viewModel.SelectedSong = songList.SelectedItem as Song;
+            viewModel.SelectionTracker.SelectedSong = songList.SelectedItem as Song;
         }
 
         private void searchBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -352,8 +354,7 @@ namespace Juke.UI.Wpf
         private void AddSongsFromSearch()
         {
             var output = searchLogic.Search(searchBox.Text);
-            //output.Sort(Song.Comparison);
-
+            viewModel.SelectionTracker.SelectedSong = output.Count > 0 ? output[0] : null;
             foreach (var song in output)
             {
                 songList.Items.Add(song);
@@ -362,7 +363,7 @@ namespace Juke.UI.Wpf
 
         private void ClearSearch()
         {
-            viewModel.SelectedSong = null;
+            viewModel.SelectionTracker.SelectedSong = null;
             searchBox.Text = "";
             searchBox.Visibility = Visibility.Hidden;
             songList.Visibility = Visibility.Hidden;

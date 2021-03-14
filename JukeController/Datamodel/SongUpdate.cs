@@ -24,6 +24,9 @@
 
         public SongUpdate CloneWith(Song song)
         {
+            NewArtist = NewArtist ?? "<unknown>";
+            NewAlbum = NewAlbum ?? "<unknown>";
+            NewName = NewName ?? "<unknown>";
             return new SongUpdate(song)
             {
                 NewArtist = NewArtist != "<unknown>" ? NewArtist : song.Artist,

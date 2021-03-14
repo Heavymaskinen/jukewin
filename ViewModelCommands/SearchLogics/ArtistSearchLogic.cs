@@ -1,20 +1,17 @@
 ﻿using DataModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Juke.UI.Wpf.SearchLogics
+namespace Juke.UI.SearchLogics
 {
     public class ArtistSearchLogic : SearchLogic
     {
         public string Name => "Artist names";
 
-        private JukeViewModel browser;
+        private SelectionModel browser;
         private List<Song> list;
 
-        public ArtistSearchLogic(JukeViewModel browser)
+        public ArtistSearchLogic(SelectionModel browser)
         {
             this.browser = browser;
             list = new List<Song>();
@@ -26,12 +23,13 @@ namespace Juke.UI.Wpf.SearchLogics
 
             list.Clear();
             var lowerName = input.ToLower();
-            var artistList = browser.Artists.ToArray();
+            var artistList = browser.SelectionTracker.Artists.ToArray();
             foreach (var art in artistList)
             {
                 if (art.ToLower().StartsWith(lowerName))
                 {
-                    var songs = browser.GetSongsByArtist(art);
+                    browser.SelectionTracker.SelectedArtist = art;
+                    var songs = browser.SelectionTracker.Songs;
                     list.AddRange(songs);
                 }
             }

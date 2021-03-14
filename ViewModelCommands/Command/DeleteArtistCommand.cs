@@ -22,14 +22,14 @@ namespace Juke.UI.Command
 
         public override bool CanExecute(object parameter)
         {
-            return model.SelectedArtist != Song.ALL_ARTISTS;
+            return model.SelectionTracker.SelectedArtist != Song.ALL_ARTISTS;
         }
 
         protected override Task AsyncExecute(object parameter)
         {
             return Task.Run(() =>
             {
-                var selectedArtist = model.SelectedArtist;
+                var selectedArtist = model.SelectionTracker.SelectedArtist;
                 Messenger.Post("Deleting artist: " + selectedArtist);
                 controller.LoadHandler.DeleteArtist(selectedArtist, model.ProgressTracker);
                 Messenger.Post(selectedArtist + " was deleted.");

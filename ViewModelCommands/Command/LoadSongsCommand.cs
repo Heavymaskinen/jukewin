@@ -34,7 +34,7 @@ namespace Juke.UI.Command
         {
             Messenger.Log("Load command with " + path+"|");
             var loader = new LoaderFactory().CreateAsync(path);
-            controller.LoadHandler.LoadSongs(loader, LoaderCancellationTokenProvider.Token);
+            controller.LoadHandler.LoadSongs(loader, model.ProgressTracker);
         }
     }
 }

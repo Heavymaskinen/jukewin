@@ -27,20 +27,24 @@ namespace Juke.UI.Command
                 switch (infoType)
                 {
                     case InfoType.Album:
+                        update.NewName = null;
                         controller.LoadHandler.RenameAlbum(update);
-                        model.SelectedAlbum = update.NewAlbum;
-                        model.SelectedArtist = update.ToSong().Artist;
+                        model.SelectionTracker.SelectedAlbum = update.NewAlbum;
+                        model.SelectionTracker.SelectedArtist = update.ToSong().Artist;
                         Messenger.Log("Album updated");
                         break;
                     case InfoType.Artist:
+                        update.NewName = null;
+                        update.NewAlbum = null;
                         controller.LoadHandler.RenameArtist(update);
-                        model.SelectedArtist = update.NewArtist;
+                        model.SelectionTracker.SelectedArtist = update.NewArtist;
                         Messenger.Log("Artist updated");
                         break;
                     case InfoType.Song:
                         controller.LoadHandler.UpdateSong(update);
-                        model.SelectedSong = update.ToSong();
-                        Messenger.Log("Song updated");
+                        var updatedSong = update.ToSong();
+                        model.SelectionTracker.SelectedSong = updatedSong;
+                        Messenger.Log("Song updated to: "+updatedSong.Artist+" "+updatedSong.Album+" "+updatedSong.Name);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

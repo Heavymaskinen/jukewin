@@ -5,16 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Juke.UI.Wpf.SearchLogics
+namespace Juke.UI.SearchLogics
 {
     public class AlbumSearchLogic : SearchLogic
     {
         public string Name => "Album titles";
 
-        private JukeViewModel browser;
+        private SelectionModel browser;
         private List<Song> list;
 
-        public AlbumSearchLogic(JukeViewModel browser)
+        public AlbumSearchLogic(SelectionModel browser)
         {
             this.browser = browser;
             list = new List<Song>();
@@ -24,17 +24,17 @@ namespace Juke.UI.Wpf.SearchLogics
         {
             list.Clear();
             var lowerName = input.ToLower();
-            var albumList = browser.Albums.ToArray();
+            var albumList = browser.SelectionTracker.Albums.ToArray();
             foreach (var al in albumList)
             {
                 if (al.ToLower().Contains(lowerName))
                 {
-                    browser.SelectedAlbum = al;
-                    list.AddRange(browser.Songs);
+                    browser.SelectionTracker.SelectedAlbum = al;
+                    list.AddRange(browser.SelectionTracker.Songs);
                 }
             }
 
-            browser.SelectedAlbum = Song.ALL_ALBUMS;
+            browser.SelectionTracker.SelectedAlbum = Song.ALL_ALBUMS;
             return list;
         }
 

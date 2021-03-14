@@ -16,12 +16,12 @@ namespace Juke.UI.Command
 
         public override bool CanExecute(object parameter)
         {
-            return parameter is string && model.SelectedAlbum.Equals(parameter);
+            return parameter is string && model.SelectionTracker.SelectedAlbum.Equals(parameter);
         }
 
         protected override void ControlledExecute(object parameter)
         {
-            controller.Player.PlayAlbum(model.SelectedAlbum);
+            controller.Player.PlayAlbum(model.SelectionTracker.SelectedAlbum);
         }
     }
 }

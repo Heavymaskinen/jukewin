@@ -9,6 +9,7 @@ using Juke.UI.Command;
 using Juke.UI.Admin;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Juke.UI.Wpf
 {
@@ -42,13 +43,8 @@ namespace Juke.UI.Wpf
 
         private void SongBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            var songs = new List<Song>();
-            foreach (var i in songBox.SelectedItems)
-            {
-                songs.Add((Song)i);
-            }
-
-            viewModel.SelectedSongs = songs;
+            var songs = songBox.SelectedItems.Cast<Song>().ToList();
+            viewModel.SelectionTracker.SelectedSongs = songs;
         }
 
         public AdminWindow(AdminViewModel viewModel)
@@ -94,6 +90,7 @@ namespace Juke.UI.Wpf
         public string PromptPath()
         {
             Messenger.Log("Prompt for path");
+            
             var dlg = new FolderBrowserDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -218,7 +215,7 @@ namespace Juke.UI.Wpf
 
         private void SongBox_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (viewModel.SelectedSong == null) return;
+            if (viewModel.SelectionTracker.SelectedSong == null) return;
 
             ContextMenu menu = FindResource("songContextMenu") as ContextMenu;
             menu.PlacementTarget = songBox;
