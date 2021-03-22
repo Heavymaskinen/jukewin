@@ -1,5 +1,4 @@
-﻿using Juke.External.Xml;
-using Juke.Control;
+﻿using Juke.Control;
 using System.Threading.Tasks;
 
 namespace Juke.UI.Command
@@ -20,7 +19,7 @@ namespace Juke.UI.Command
         {
             Task.Run(() =>
             {
-                controller.SaveLibrary(new XmlSongWriter("library.xml"));
+                controller.SaveLibrary(new WriterFactory().CreateWriter("library.xml"));
                 view.CommandCompleted(this);
             });
         }

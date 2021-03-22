@@ -71,6 +71,7 @@
     <Compile Include="SearchLogics\SongSearchLogic.cs" />
     <Compile Include="SelectionModel.cs" />
     <Compile Include="ViewControl.cs" />
+    <Compile Include="WriterFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -83,10 +84,6 @@
     <ProjectReference Include="..\UiComponents\UiComponents.csproj">
       <Project>{02E2C976-8441-420D-9304-F784EE91F0BD}</Project>
       <Name>UiComponents</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XmlLibrary\XmlLibrary.csproj">
-      <Project>{DF5A5D42-389C-4FFD-94F3-BFCB46553B82}</Project>
-      <Name>XmlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

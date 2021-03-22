@@ -12,7 +12,7 @@ namespace Stubs2
         {
             return Task.Run(() =>
             {
-                listener1.NotifyProgress(Songs.Count);
+                listener1.NotifyProgress(1);
                 listener1.NotifyCompleted(Songs);
             }, cancelToken);
         }

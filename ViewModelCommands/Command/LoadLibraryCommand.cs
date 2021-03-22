@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Juke.Control;
-using Juke.External.Xml;
 
 namespace Juke.UI.Command
 {
@@ -21,7 +20,8 @@ namespace Juke.UI.Command
         {
             return Task.Run(async () =>
             {
-                await controller.LoadHandler.LoadSongs(new XmlSongReader("library.xml"), model.ProgressTracker);
+                var loader = new LoaderFactory().CreateLibraryLoader("library.xml");
+                await controller.LoadHandler.LoadSongs(loader, model.ProgressTracker);
                 Messenger.Log("Done loading library");
                 view.CommandCompleted(this);
             });

@@ -91,6 +91,7 @@ namespace WmpComponentTest
             var collector = new SongCollector(listener,
                 new FakeTagReaderFactory {FakeTagReader = new SlowTagReader {Fails = 3}});
             PerformSyncSongCollect(collector, list, listener);
+            Console.WriteLine("Back here!");
             while (!listener.IsCompleted)
             {
                 Thread.Sleep(4);
@@ -108,6 +109,7 @@ namespace WmpComponentTest
             CancellationToken cancelToken)
         {
             collector.Load(list, listener, cancelToken).Wait(cancelToken);
+            Console.WriteLine("Done sync collect");
         }
 
         private static Task PerformAsyncSongCollect(SongCollector collector, List<string> list, FakeListener listener,

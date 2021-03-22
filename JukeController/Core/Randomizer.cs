@@ -30,7 +30,7 @@ namespace Juke.Core
             }
 
             usedSongs.Enqueue(nextSong);
-            if (usedSongs.Count >= 10 || usedSongs.Count >= library.Songs.Count)
+            if (usedSongs.Count > 10 || usedSongs.Count >= library.Songs.Count)
             {
                 usedSongs.Dequeue();
             }

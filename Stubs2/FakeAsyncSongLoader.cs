@@ -60,7 +60,7 @@ namespace Juke.Control.Tests
                 Path = path;
                 this.listener = listener;
                 Initiate();
-                listener.NotifyProgress(list.Count);
+                listener.NotifyProgress(1);
                 var list1 = list.Select((e) => e.Name).ToList();
                 return list1;
             });

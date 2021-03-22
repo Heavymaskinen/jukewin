@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using Juke.Control;
 using Juke.External.Wmp;
+using Juke.External.Xml;
 using Juke.IO;
 using Juke.Log;
 
@@ -19,6 +20,9 @@ namespace Juke.UI.Wpf
             JukeController.Instance.Player.RegisterPlayerEngine(new WmpPlayerEngine());
             LoaderFactory.SetLoaderInstance(new AsyncSongLoader(new FileFinderEngine(),
                 new TaglibTagReaderFactory() {BackupFactory = new WmpTagReaderFactory()}));
+            LoaderFactory.SetLibraryLoaderInstance(new XmlSongReader("library.xml"));
+            WriterFactory.SetWriterInstance(new XmlSongWriter("library.xml"));
+            
 
             Logger.Start("juke.log");
             //Logger.ConsoleLog();

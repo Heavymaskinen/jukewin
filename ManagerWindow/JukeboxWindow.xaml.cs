@@ -26,8 +26,6 @@ namespace Juke.UI.Wpf
         private AnimationTimeline fadeOutAnimation;
         private AnimationTimeline fadeInAnimation;
         private AnimationTimeline endlessFadeAnimation;
-        private AnimationTimeline borderOutAnimation;
-        private AnimationTimeline borderInAnimation;
         private AnimationTimeline searchHideAnimation;
         private JukeViewModel viewModel;
         private bool loaded;
@@ -43,12 +41,7 @@ namespace Juke.UI.Wpf
             InitializeComponent();
             Messenger.Log("Starting UI");
             CreateFadeAnimation();
-            borderOutAnimation = new ThicknessAnimation(new Thickness(99.0), new Thickness(0.0),
-                new Duration(TimeSpan.FromSeconds(5)))
-            { DecelerationRatio = 0.7 };
-            borderInAnimation = new ThicknessAnimation(new Thickness(0.0), new Thickness(99.0),
-                new Duration(TimeSpan.FromSeconds(5)))
-            { DecelerationRatio = 0.7 };
+
             viewModel = new JukeViewModel(this);
             DataContext = viewModel;
             loaded = false;
