@@ -5,8 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\UiComponents\UiComponents.csproj">
-      <Project>{02E2C976-8441-420D-9304-F784EE91F0BD}</Project>
-      <Name>UiComponents</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

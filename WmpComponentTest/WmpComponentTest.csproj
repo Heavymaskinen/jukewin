@@ -13,12 +13,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JukeController\JukeController.csproj">
-      <Project>{D4BCD500-55A6-4E74-9943-3BDFE830DC68}</Project>
-      <Name>JukeController</Name>
     </ProjectReference>
     <ProjectReference Include="..\WmpComponent\WmpComponent.csproj">
-      <Project>{3DCAD1F3-800D-4217-8C28-DBE3F7FF755D}</Project>
-      <Name>WmpComponent</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

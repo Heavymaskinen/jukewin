@@ -7,32 +7,18 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModel\DataModel.csproj">
-      <Project>{f3727a39-b6cc-4a8f-8168-6ad2aeccad7e}</Project>
-      <Name>DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\JukeController\JukeController.csproj">
-      <Project>{D4BCD500-55A6-4E74-9943-3BDFE830DC68}</Project>
-      <Name>JukeController</Name>
     </ProjectReference>
     <ProjectReference Include="..\SongInfoLookup\SongInfoLookup.csproj">
-      <Project>{e3cb1508-feae-4870-980c-ca1b96850e92}</Project>
-      <Name>SongInfoLookup</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModelCommands\ViewModelCommands.csproj">
-      <Project>{FF709AB5-21F6-4B0C-B872-B6AABFF715E8}</Project>
-      <Name>ViewModelCommands</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
-      <Project>{9383db45-264b-4d71-9ca1-8a72f10af6b0}</Project>
-      <Name>ViewModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\WmpComponent\WmpComponent.csproj">
-      <Project>{3DCAD1F3-800D-4217-8C28-DBE3F7FF755D}</Project>
-      <Name>WmpComponent</Name>
     </ProjectReference>
     <ProjectReference Include="..\XmlLibrary\XmlLibrary.csproj">
-      <Project>{DF5A5D42-389C-4FFD-94F3-BFCB46553B82}</Project>
-      <Name>XmlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
