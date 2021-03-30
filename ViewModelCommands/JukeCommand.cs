@@ -6,11 +6,11 @@ namespace Juke.UI.Command
 {
     public abstract class JukeCommand : ICommand
     {
-        protected JukeController controller;
+        protected IJukeController controller;
         protected ViewControl view;
         protected SelectionModel model;
 
-        protected JukeCommand(JukeController controller, ViewControl view, SelectionModel model)
+        protected JukeCommand(IJukeController controller, ViewControl view, SelectionModel model)
         {
             this.controller = controller;
             this.view = view;

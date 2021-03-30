@@ -18,7 +18,7 @@ namespace Juke.Control.Tests
         [TestInitialize()]
         public void Setup()
         {
-            control = JukeController.Create();
+            control = (JukeController) JukeController.Create();
             control.Player.RegisterPlayerEngine(new FakePlayerEngine());
         }
 
@@ -109,13 +109,13 @@ namespace Juke.Control.Tests
         public void InitialState_QueueEmpty()
         {
             control.Player.PlaySong(new Song("artist", "song", "song2"));
-            Assert.AreEqual(0, control.Player.Queue.Count);
+            Assert.AreEqual(0, control.Player.EnqueuedSongs.Count);
         }
 
         [TestMethod]
         public void InitialState_QueueNextIsNull()
         {
-            Assert.IsNull(control.Player.Queue.Next);
+            Assert.IsNull((control.Player as Player).Queue.Next);
         }
 
         [TestMethod]
@@ -123,7 +123,7 @@ namespace Juke.Control.Tests
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
             control.Player.PlaySong(new Song("artist", "song", "song2"));
-            Assert.AreEqual("song2", control.Player.Queue.Next.Name);
+            Assert.AreEqual("song2", (control.Player as Player).Queue.Next.Name);
         }
 
         [TestMethod]
@@ -132,7 +132,7 @@ namespace Juke.Control.Tests
             control.Player.PlaySong(new Song("artist", "song", "song1"));
             control.Player.PlaySong(new Song("artist", "song", "song3"));
             control.Player.PlaySong(new Song("artist", "song", "song4"));
-            Assert.AreEqual(2, control.Player.Queue.Count);
+            Assert.AreEqual(2, control.Player.EnqueuedSongs.Count);
         }
 
         [TestMethod]
@@ -141,7 +141,7 @@ namespace Juke.Control.Tests
             control.Player.PlaySong(new Song("artist", "song", "song1"));
             control.Player.PlaySong(new Song("artist", "song", "song2"));
             control.Player.PlaySong(new Song("artist", "song", "song2"));
-            Assert.AreEqual(1, control.Player.Queue.Count);
+            Assert.AreEqual(1, control.Player.EnqueuedSongs.Count);
         }
 
         [TestMethod]
@@ -150,7 +150,7 @@ namespace Juke.Control.Tests
             control.Player.PlaySong(new Song("artist", "song", "song1"));
             control.Player.PlaySong(new Song("artist", "song", "song2"));
             control.Player.PlaySong(new Song("artist", "song", "song1"));
-            Assert.AreEqual(1, control.Player.Queue.Count);
+            Assert.AreEqual(1, control.Player.EnqueuedSongs.Count);
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace Juke.Control.Tests
         {
             control.Player.PlaySong(new Song("artist", "song", "song1"));
             control.Player.PlaySong(new Song("artist", "song", "song2"));
-            Assert.AreEqual(control.Player.Queue.Songs[0].Name, "song2");
+            Assert.AreEqual(control.Player.EnqueuedSongs[0].Name, "song2");
         }
 
         [TestMethod]
@@ -169,9 +169,9 @@ namespace Juke.Control.Tests
             control.Player.PlayAlbum("album1");
             Assert.AreEqual("song1", control.Player.NowPlaying.Name);
             Assert.AreEqual("album1", control.Player.NowPlaying.Album);
-            Assert.AreEqual("song2", control.Player.Queue.Songs[0].Name);
-            Assert.AreEqual("album1", control.Player.Queue.Songs[0].Album);
-            Assert.AreEqual(9, control.Player.Queue.Songs.Count);
+            Assert.AreEqual("song2", control.Player.EnqueuedSongs[0].Name);
+            Assert.AreEqual("album1", control.Player.EnqueuedSongs[0].Album);
+            Assert.AreEqual(9, control.Player.EnqueuedSongs.Count);
         }
 
         private void FakeLoad(List<Song> songs)

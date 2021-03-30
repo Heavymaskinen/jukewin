@@ -6,7 +6,7 @@ namespace Juke.UI.Command
 {
     public class EditSongCommand : JukeCommand
     {
-        public EditSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+        public EditSongCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
         }

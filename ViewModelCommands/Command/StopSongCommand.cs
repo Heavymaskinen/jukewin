@@ -9,9 +9,11 @@ namespace Juke.UI.Command
 {
     public class StopSongCommand : JukeCommand
     {
-        public StopSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+
+        public StopSongCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
+            this.controller = controller;
         }
 
         public override bool CanExecute(object parameter)
@@ -21,7 +23,6 @@ namespace Juke.UI.Command
 
         protected override void ControlledExecute(object parameter)
         {
-            Console.WriteLine("stop it!");
             controller.Player.Stop();
         }
     }

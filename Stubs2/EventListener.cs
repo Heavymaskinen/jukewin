@@ -23,7 +23,7 @@ namespace Juke.Control.Tests
             JukeController.Instance.LoadHandler.LoadInitiated += SongLoader_LoadInitiated;
             JukeController.Instance.LoadHandler.LoadCompleted += LoadHandler_LoadCompleted;
             JukeController.Instance.LoadHandler.LoadProgress += LoadHandlerOnLoadProgress;
-            Player.SongPlayed += Instance_SongPlayed;
+            JukeController.Instance.Player.SongPlayed += Instance_SongPlayed;
         }
 
         private void LoadHandlerOnLoadProgress(object sender, int e)

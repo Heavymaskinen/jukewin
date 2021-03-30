@@ -6,7 +6,7 @@ namespace Juke.UI.Command
 {
     public class LoadLibraryCommand : AsyncJukeCommand
     {
-        public LoadLibraryCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+        public LoadLibraryCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
         }

@@ -22,7 +22,7 @@ namespace Juke.UI.Wpf
     /// </summary>
     public partial class JukeboxWindow : ViewControl
     {
-        private JukeController jukeController;
+        private IJukeController jukeController;
         private AnimationTimeline fadeOutAnimation;
         private AnimationTimeline fadeInAnimation;
         private AnimationTimeline endlessFadeAnimation;
@@ -153,7 +153,7 @@ namespace Juke.UI.Wpf
         {
             jukeController = JukeController.Instance;
 
-            Player.SongPlayed += Player_SongPlayed;
+            jukeController.Player.SongPlayed += Player_SongPlayed;
 
             if (!File.Exists("library.xml"))
             {

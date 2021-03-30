@@ -19,7 +19,7 @@ namespace JukeControllerTests
         [TestInitialize()]
         public void Setup()
         {
-            control = JukeController.Create();
+            control = (JukeController) JukeController.Create();
             listener = new EventListener();
         }
 

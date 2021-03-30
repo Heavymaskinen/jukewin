@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Juke.Control
 {
-    public class JukeController
+    public class JukeController : IJukeController
     {
-        private static JukeController instance;
+        private static IJukeController instance;
 
-        public static JukeController Instance
+        public static IJukeController Instance
         {
             get
             {
@@ -27,7 +27,7 @@ namespace Juke.Control
             instance = new JukeController();
         }
 
-        public static JukeController Create()
+        public static IJukeController Create()
         {
             return new JukeController();
         }
@@ -58,7 +58,7 @@ namespace Juke.Control
             get { return catalogue; }
         }
 
-        public Player Player { get; set; }
+        public IPlayer Player { get; set; }
 
         public void SaveLibrary(SongWriter writer)
         {

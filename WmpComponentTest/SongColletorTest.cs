@@ -81,7 +81,7 @@ namespace WmpComponentTest
         {
             //9.4 sec
             var listener = new FakeListener();
-            int loadCount = 400;
+            var loadCount = 400;
             var list = new List<string>();
             for (var i = 0; i < loadCount; i++)
             {
@@ -91,7 +91,7 @@ namespace WmpComponentTest
             var collector = new SongCollector(listener,
                 new FakeTagReaderFactory {FakeTagReader = new SlowTagReader {Fails = 3}});
             PerformSyncSongCollect(collector, list, listener);
-            Console.WriteLine("Back here!");
+
             while (!listener.IsCompleted)
             {
                 Thread.Sleep(4);

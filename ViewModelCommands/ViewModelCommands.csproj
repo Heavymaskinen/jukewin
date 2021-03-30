@@ -1,90 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FF709AB5-21F6-4B0C-B872-B6AABFF715E8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ViewModelCommands</RootNamespace>
-    <AssemblyName>ViewModelCommands</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <LangVersion>9</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AdministratorModel.cs" />
-    <Compile Include="AsyncJukeCommand.cs" />
-    <Compile Include="Command\AsyncLoadSongsCommandcs.cs" />
-    <Compile Include="Command\DeleteAlbumCommand.cs" />
-    <Compile Include="Command\DeleteArtistCommand.cs" />
-    <Compile Include="Command\DeleteSongCommand.cs" />
-    <Compile Include="Command\EditAlbumCommand.cs" />
-    <Compile Include="Command\EditSongCommand.cs" />
-    <Compile Include="Command\SkipSongCommand.cs" />
-    <Compile Include="InfoType.cs" />
-    <Compile Include="JukeCommand.cs" />
-    <Compile Include="Command\LoadLibraryCommand.cs" />
-    <Compile Include="Command\LoadSongsCommand.cs" />
-    <Compile Include="Command\PlayAlbumCommand.cs" />
-    <Compile Include="Command\PlaySongCommand.cs" />
-    <Compile Include="Command\RelayCommand.cs" />
-    <Compile Include="Command\RenameArtistCommand.cs" />
-    <Compile Include="Command\SaveLibraryCommand.cs" />
-    <Compile Include="Command\StopSongCommand.cs" />
-    <Compile Include="LoaderCancellationTokenProvider.cs" />
-    <Compile Include="LoaderFactory.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchLogic.cs" />
-    <Compile Include="SearchLogics\AlbumSearchLogic.cs" />
-    <Compile Include="SearchLogics\ArtistSearchLogic.cs" />
-    <Compile Include="SearchLogics\SearchLogicFactory.cs" />
-    <Compile Include="SearchLogics\SongSearchLogic.cs" />
-    <Compile Include="SelectionModel.cs" />
-    <Compile Include="ViewControl.cs" />
-    <Compile Include="WriterFactory.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\JukeController\JukeController.csproj">
-      <Project>{d4bcd500-55a6-4e74-9943-3bdfe830dc68}</Project>
-      <Name>JukeController</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UiComponents\UiComponents.csproj">
       <Project>{02E2C976-8441-420D-9304-F784EE91F0BD}</Project>
       <Name>UiComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

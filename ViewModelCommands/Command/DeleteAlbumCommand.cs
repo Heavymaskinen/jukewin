@@ -6,7 +6,7 @@ namespace Juke.UI.Command
 {
     public class DeleteAlbumCommand : AsyncJukeCommand
     {
-        public DeleteAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+        public DeleteAlbumCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
             model.PropertyChanged += Model_PropertyChanged;

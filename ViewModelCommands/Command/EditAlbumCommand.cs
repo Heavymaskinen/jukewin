@@ -10,7 +10,7 @@ namespace Juke.UI.Command
 {
     public class EditAlbumCommand : JukeCommand
     {
-        public EditAlbumCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+        public EditAlbumCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
         }

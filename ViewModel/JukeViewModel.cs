@@ -15,7 +15,7 @@ namespace Juke.UI
 {
     public class JukeViewModel : SelectionModel
     {
-        private JukeController controller;
+        private IJukeController controller;
 
         public CancellationTokenSource CancelTokenSource { get; set; }
 
@@ -87,7 +87,7 @@ namespace Juke.UI
             SelectionTracker.Changed += SelectionTracker_Changed;
             controller.LoadHandler.LibraryUpdated += LoadHandler_LibraryUpdated;
             controller.LoadHandler.LoadCompleted += (sender, args) => View.CommandCompleted(null);
-            Player.SongPlayed += Player_SongPlayed;
+            controller.Player.SongPlayed += Player_SongPlayed;
             Messenger.FrontendMessagePosted += Messenger_FrontendMessagePosted;
         }
 
@@ -136,7 +136,7 @@ namespace Juke.UI
 
         private void RefreshQueue()
         {
-            Queue = new ObservableCollection<Song>(controller.Player.Queue.Songs);
+            Queue = new ObservableCollection<Song>(controller.Player.EnqueuedSongs);
             RaisePropertyChanged(nameof(Queue));
         }
 

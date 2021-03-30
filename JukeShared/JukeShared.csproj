@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Juke.Shared</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Control" />
+      <Folder Include="Core" />
+      <Folder Include="Datamodel" />
+      <Folder Include="IO" />
+    </ItemGroup>
+
+</Project>

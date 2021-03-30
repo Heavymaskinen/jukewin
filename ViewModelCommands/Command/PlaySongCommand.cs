@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Juke.Control;
 
 namespace Juke.UI.Command
 {
     public class PlaySongCommand : JukeCommand
     {
-        public PlaySongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+        public PlaySongCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
             model.PropertyChanged += Model_PropertyChanged;

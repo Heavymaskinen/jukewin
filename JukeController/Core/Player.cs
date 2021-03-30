@@ -1,12 +1,13 @@
 ﻿using DataModel;
 using System;
+using System.Collections.Generic;
 using Juke.Control;
 
 namespace Juke.Core
 {
-    public class Player
+    public class Player : IPlayer
     {
-        public static event EventHandler<Song> SongPlayed;
+        public event EventHandler<Song> SongPlayed;
 
         private PlayerEngine engine;
 
@@ -19,6 +20,8 @@ namespace Juke.Core
         }
 
         public Song NowPlaying { get; private set; }
+        
+        public IList<Song> EnqueuedSongs => Queue.Songs;
 
         public void RegisterPlayerEngine(PlayerEngine engine)
         {
@@ -58,7 +61,7 @@ namespace Juke.Core
             SongPlayed?.Invoke(this, song);
         }
 
-        internal void Dispose()
+        public void Dispose()
         {
             engine?.Dispose();
         }
@@ -69,7 +72,7 @@ namespace Juke.Core
             PlayNext();
         }
 
-        private void PlayNext()
+        public void PlayNext()
         {
             PlaySong(Queue.Dequeue());
         }

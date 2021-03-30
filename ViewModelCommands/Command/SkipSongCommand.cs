@@ -11,7 +11,8 @@ namespace ViewModelCommands.Command
 {
     public class SkipSongCommand : JukeCommand
     {
-        public SkipSongCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+
+        public SkipSongCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
         }

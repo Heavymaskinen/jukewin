@@ -37,7 +37,7 @@ namespace Juke.External.Xml
 
             List<PersistedSong> songs = null;
 
-            using (XmlReader reader = XmlReader.Create(filename))
+            using (var reader = XmlReader.Create(filename))
             {
                 songs = new List<PersistedSong>((PersistedSong[]) serializerInstance.Deserialize(reader));
             }

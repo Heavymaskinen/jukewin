@@ -1,5 +1,4 @@
 ﻿using System;
-using Juke.Control;
 
 namespace DataModel
 {
@@ -27,12 +26,6 @@ namespace DataModel
                 Artist = Artist == "<unknown>" ? other.Artist : Artist;
                 Album = Album == "<unknown>" ? other.Album : Album;
                 TrackNo = string.IsNullOrEmpty(TrackNo) ? other.TrackNo : TrackNo;
-
-                Messenger.Log("Merged to" + Name + " - " + Artist + " " + Album);
-            }
-            else
-            {
-                Messenger.Log("Merged with different ID?");
             }
         }
 

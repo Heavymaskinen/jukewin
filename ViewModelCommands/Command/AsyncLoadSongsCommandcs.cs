@@ -9,7 +9,7 @@ namespace Juke.UI.Command
 {
     public class AsyncLoadSongsCommand : AsyncJukeCommand
     {
-        public AsyncLoadSongsCommand(JukeController controller, ViewControl view, SelectionModel model) : base(
+        public AsyncLoadSongsCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(
             controller, view, model)
         {
         }

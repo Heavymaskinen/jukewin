@@ -13,11 +13,11 @@ namespace Juke.UI
     {
         public event EventHandler CanExecuteChanged;
 
-        protected JukeController controller;
+        protected IJukeController controller;
         protected ViewControl view;
         protected SelectionModel model;
 
-        protected AsyncJukeCommand(JukeController controller, ViewControl view, SelectionModel model):base(controller, view, model)
+        protected AsyncJukeCommand(IJukeController controller, ViewControl view, SelectionModel model):base(controller, view, model)
         {
             this.controller = controller;
             this.view = view;

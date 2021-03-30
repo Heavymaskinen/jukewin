@@ -17,7 +17,7 @@ namespace Juke.UI.Admin
         public event PropertyChangedEventHandler PropertyChanged;
 
         private ViewControl view;
-        private JukeController controller;
+        private IJukeController controller;
         private string selectedArtist;
         private string selectedAlbum;
         private Song selectedSong;
@@ -248,7 +248,7 @@ namespace Juke.UI.Admin
 
         private void RefreshQueue()
         {
-            Queue = new ObservableCollection<Song>(controller.Player.Queue.Songs);
+            Queue = new ObservableCollection<Song>(controller.Player.EnqueuedSongs);
             RaisePropertyChanged(nameof(Queue));
         }
     }

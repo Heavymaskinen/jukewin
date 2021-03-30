@@ -10,7 +10,7 @@ namespace Juke.UI.Command
 {
     public class RenameArtistCommand : JukeCommand
     {
-        public RenameArtistCommand(JukeController controller, ViewControl view, SelectionModel model) : base(controller,
+        public RenameArtistCommand(IJukeController controller, ViewControl view, SelectionModel model) : base(controller,
             view, model)
         {
         }

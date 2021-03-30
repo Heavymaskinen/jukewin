@@ -18,7 +18,7 @@ namespace JukeControllerTests
         {
             var cat = new FakeSongCatalogue(FakeSongCatalogue.CreateSongs(1, 1, 100));
             JukeController.Instance.LoadHandler.LoadSongs(cat);
-            var queue = JukeController.Instance.Player.Queue;
+            var queue = (JukeController.Instance.Player as Player).Queue;
             var first = queue.Random;
             for (var i = 0; i < 10; i++)
             {
@@ -33,7 +33,7 @@ namespace JukeControllerTests
         {
             var cat = new FakeSongCatalogue(FakeSongCatalogue.CreateSongs(1, 1, 5));
             JukeController.Instance.LoadHandler.LoadSongs(cat);
-            var queue = JukeController.Instance.Player.Queue;
+            var queue = (JukeController.Instance.Player as Player).Queue;
             var first = queue.Random;
             for (var i = 0; i < 4; i++)
             {
