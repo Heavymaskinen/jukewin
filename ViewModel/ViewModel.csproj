@@ -5,17 +5,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\JukeController\JukeController.csproj">
-      <Project>{d4bcd500-55a6-4e74-9943-3bdfe830dc68}</Project>
-      <Name>JukeController</Name>
     </ProjectReference>
     <ProjectReference Include="..\JukeShared\JukeShared.csproj" />
     <ProjectReference Include="..\UiComponents\UiComponents.csproj">
-      <Project>{02E2C976-8441-420D-9304-F784EE91F0BD}</Project>
-      <Name>UiComponents</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModelCommands\ViewModelCommands.csproj">
-      <Project>{ff709ab5-21f6-4b0c-b872-b6aabff715e8}</Project>
-      <Name>ViewModelCommands</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoreSongReader\CoreSongReader.csproj" />
+    <ProjectReference Include="..\JukeShared\JukeShared.csproj" />
+    <ProjectReference Include="..\JukeController\JukeController.csproj" />
+  </ItemGroup>
+</Project>

@@ -17,8 +17,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\DataModel\DataModel.csproj">
-      <Project>{f3727a39-b6cc-4a8f-8168-6ad2aeccad7e}</Project>
-      <Name>DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\JukeShared\JukeShared.csproj" />
     <ProjectReference Include="..\Messaging\Messaging.csproj" />
