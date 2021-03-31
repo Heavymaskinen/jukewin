@@ -1,7 +1,7 @@
 ﻿using System;
 using Juke.Control;
 
-namespace Juke.Log
+namespace Juke.Log2
 {
     public class Logger
     {
