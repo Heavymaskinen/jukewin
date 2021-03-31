@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Protobuf Include="..\greet.proto" GrpcServices="Server">
+        <Link>Protos/greet.proto</Link>
+      </Protobuf>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CoreAudioComponent\CoreAudioComponent.csproj" />
+      <ProjectReference Include="..\CoreSongReader\CoreSongReader.csproj" />
+      <ProjectReference Include="..\JukeController\JukeController.csproj" />
+      <ProjectReference Include="..\ProtoTypes\ProtoTypes.csproj" />
+      <ProjectReference Include="..\XmlLibrary\XmlLibrary.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="library.xml" />
+    </ItemGroup>
+
+</Project>

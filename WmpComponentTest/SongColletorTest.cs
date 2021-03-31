@@ -94,7 +94,7 @@ namespace WmpComponentTest
 
             while (!listener.IsCompleted)
             {
-                Thread.Sleep(4);
+                Thread.Sleep(10);
             }
 
             Assert.AreEqual(loadCount - 3, listener.CompletedSongs.Count);

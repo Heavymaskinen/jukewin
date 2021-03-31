@@ -26,7 +26,7 @@ namespace Juke.UI.Tests
         public void LoadSongs_LoaderStartedWithPath()
         {
             var engine = CreateFakeLoadEngine(ViewModelFaker.CreateSongs(1, 2, 1));
-            var listener = new EventListener();
+            var listener = new EventListener(JukeController.Instance);
             var viewControl = new FakeViewControl("path");
             LoaderFactory.SetLoaderInstance(new FakeAsyncSongLoader(engine));
 
@@ -56,7 +56,7 @@ namespace Juke.UI.Tests
         public void LoadSongs_ProgressIsTracked()
         {
             var engine = CreateFakeLoadEngine(ViewModelFaker.CreateSongs(1, 2, 1));
-            var listener = new EventListener();
+            var listener = new EventListener(JukeController.Instance);
             var viewControl = new FakeViewControl("path");
 
             var viewModel = CreateAdminViewModel(viewControl);
@@ -83,7 +83,7 @@ namespace Juke.UI.Tests
         public void LoadSongs_PromptReturnsNull_NothingLoaded()
         {
             CreateFakeLoadEngine(ViewModelFaker.CreateSongs(1, 1, 1));
-            var listener = new EventListener();
+            var listener = new EventListener(JukeController.Instance);
             var viewControl = new FakeViewControl(null);
             var viewModel = CreateAdminViewModel(viewControl);
             viewModel.LoadSongs.Execute(this);

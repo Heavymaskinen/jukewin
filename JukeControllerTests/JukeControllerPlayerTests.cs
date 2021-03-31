@@ -38,7 +38,7 @@ namespace Juke.Control.Tests
         [TestMethod]
         public void SongPlayed_ListenerNotified()
         {
-            var listener = new EventListener();
+            var listener = new EventListener(control);
             var song = new Song("blabal", "hej", "test");
             control.Player.PlaySong(song);
             Assert.AreEqual(song, listener.SongPlayed);

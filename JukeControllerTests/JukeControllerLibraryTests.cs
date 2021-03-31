@@ -20,7 +20,7 @@ namespace JukeControllerTests
         public void Setup()
         {
             control = (JukeController) JukeController.Create();
-            listener = new EventListener();
+            listener = new EventListener(JukeController.Instance);
         }
 
         [TestMethod]
@@ -450,7 +450,7 @@ namespace JukeControllerTests
         public void DeleteAlbum()
         {
             FakeLoad(CreateSongs(1, 2, 4));
-            control.LoadHandler.DeleteAlbum("album2", new EventListener());
+            control.LoadHandler.DeleteAlbum("album2", new EventListener(JukeController.Instance));
             Assert.AreEqual(4, control.Browser.Songs.Count);
             Assert.AreEqual(1, control.Browser.Albums.Count);
         }
@@ -459,7 +459,7 @@ namespace JukeControllerTests
         public void DeleteArtist()
         {
             FakeLoad(CreateSongs(2, 20, 40));
-            control.LoadHandler.DeleteArtist("artist1", new EventListener() as LoadListener);
+            control.LoadHandler.DeleteArtist("artist1", new EventListener(JukeController.Instance) as LoadListener);
             Assert.AreEqual(20 * 40, control.Browser.Songs.Count);
             Assert.AreEqual(1, control.Browser.Artists.Count);
             Assert.AreEqual("artist2", control.Browser.Artists[0]);

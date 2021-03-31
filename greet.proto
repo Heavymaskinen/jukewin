@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcJukeServer";
+
+package greet;
+
+service JukeDaemon {
+
+  rpc Load (LoadRequest) returns (StatusReply);
+  rpc Add (AddRequest) returns (StatusReply);
+  rpc Search (SearchRequest) returns (SearchReply);
+  rpc Play (PlayRequest) returns (StatusReply);
+  rpc PlayRandom(EmptyRequest) returns (SongInfo);
+  rpc Shutdown(EmptyRequest) returns (StatusReply);
+  rpc GetInfo(EmptyRequest) returns (InfoReply);
+  rpc GetLogStream (EmptyRequest) returns (stream OutputData);
+}
+
+
+message EmptyRequest {}
+
+message LoadRequest {
+  string fileName = 1;
+}
+
+message OutputData {
+  string message = 1;
+}
+
+message AddRequest {
+  string folder = 1;
+}
+
+message SearchRequest {
+  string query=1;
+}
+
+message PlayRequest {
+  string name=1;
+}
+
+message InfoReply {
+  SongInfo currentSong=1;
+  repeated SongInfo queue=2;
+}
+
+message StatusReply {
+  bool isOk = 1;
+}
+message SongInfo {
+  int32 songId = 1;
+  string name = 2;
+  string artist=3;
+  string album = 4;
+}
+
+message SearchReply {
+  repeated SongInfo matches = 1;
+}
+

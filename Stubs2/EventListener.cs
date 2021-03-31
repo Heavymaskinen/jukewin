@@ -18,12 +18,12 @@ namespace Juke.Control.Tests
         public string ProgressNoted { get; set; }
         public Song SongPlayed { get; set; }
 
-        public EventListener()
+        public EventListener(IJukeController jukeController)
         {
-            JukeController.Instance.LoadHandler.LoadInitiated += SongLoader_LoadInitiated;
-            JukeController.Instance.LoadHandler.LoadCompleted += LoadHandler_LoadCompleted;
-            JukeController.Instance.LoadHandler.LoadProgress += LoadHandlerOnLoadProgress;
-            JukeController.Instance.Player.SongPlayed += Instance_SongPlayed;
+            jukeController.LoadHandler.LoadInitiated += SongLoader_LoadInitiated;
+            jukeController.LoadHandler.LoadCompleted += LoadHandler_LoadCompleted;
+            jukeController.LoadHandler.LoadProgress += LoadHandlerOnLoadProgress;
+            jukeController.Player.SongPlayed += Instance_SongPlayed;
         }
 
         private void LoadHandlerOnLoadProgress(object sender, int e)
