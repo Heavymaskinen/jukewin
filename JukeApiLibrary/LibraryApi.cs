@@ -14,10 +14,10 @@ namespace JukeApiLibrary
             songLibrary = ApiConfiguration.SongLibrary;
         }
 
-        public List<Song> GetSongs(int tokenId)
+        public List<ApiSong> GetSongs(int tokenId)
         {
             var token = userRepository.GetFromId(tokenId);
-            return token.IsValid() ? songLibrary.GetAllSongs() : new List<Song>() { };
+            return token.IsValid() ? songLibrary.GetAllSongs() : new List<ApiSong>() { };
         }
     }
 }

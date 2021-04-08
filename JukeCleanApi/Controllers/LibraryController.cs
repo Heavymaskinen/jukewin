@@ -13,7 +13,7 @@ namespace JukeCleanApi
         private LibraryApi controller = new LibraryApi();
 
         [HttpGet]
-        public ActionResult<List<Song>> Get([FromQuery] int id)
+        public ActionResult<List<ApiSong>> Get([FromQuery] int id)
         {
             return controller.GetSongs(id);
         }

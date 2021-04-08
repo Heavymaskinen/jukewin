@@ -26,9 +26,9 @@ namespace JukeCleanApi
             repo.AddUser("admin", "1234");
             repo.AddUser("dummy", "password");
 
-            var library = new MemorySongLibrary(new List<Song>() {
-                new Song("Lovelove","Love first","Love me now"),
-                new Song("Badass Inc.","That's a bad ass","I want ass")
+            var library = new MemorySongLibrary(new List<ApiSong>() {
+                new ApiSong("Lovelove","Love first","Love me now"),
+                new ApiSong("Badass Inc.","That's a bad ass","I want ass")
             });
 
             ApiConfiguration.UserRepository = repo;

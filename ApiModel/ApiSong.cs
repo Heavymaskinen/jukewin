@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace JukeApiModel
 {
     [DataContract]
-    public class Song
+    public class ApiSong
     {
-        public Song(string artist,string album, string title)
+        public ApiSong(string artist,string album, string title)
         {
             Artist = artist;
             Name = title;

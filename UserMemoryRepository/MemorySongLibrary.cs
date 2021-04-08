@@ -7,14 +7,14 @@ namespace UserMemoryRepository
 {
     public class MemorySongLibrary : SongLibrary
     {
-        private List<Song> songs;
+        private List<ApiSong> songs;
 
-        public MemorySongLibrary(List<Song> songs)
+        public MemorySongLibrary(List<ApiSong> songs)
         {
             this.songs = songs;
         }
 
-        public List<Song> GetAllSongs()
+        public List<ApiSong> GetAllSongs()
         {
             return songs;
         }

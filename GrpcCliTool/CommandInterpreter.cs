@@ -39,16 +39,31 @@ namespace GrpcClient
 
         public void Run(string[] args)
         {
-            foreach (var command in commands)
+            if (args.Length == 0)
             {
-                if (command.Name == args[0])
-                {
-                    RunCommand(args, command);
-                    return;
-                }
+                PrintAvailableCommands();
+                return;
+            }
+
+            foreach (var command in commands.Where(command => command.Name == args[0]))
+            {
+                RunCommand(args, command);
+                return;
             }
 
             WriteError("Command " + args[0] + " not found!");
+        }
+
+        private void PrintAvailableCommands()
+        {
+            Console.WriteLine("Available commands:");
+            foreach (var n in GetCommandNames())
+            {
+                Console.WriteLine(n);
+            }
+
+            Console.WriteLine("--------");
+            Console.WriteLine("");
         }
 
         private void RunCommand(string[] args, Command command)

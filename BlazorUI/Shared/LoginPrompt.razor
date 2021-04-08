@@ -1,0 +1,24 @@
+@using JukeApiLibrary
+@using JukeApiModel
+@inject UserSession session
+@inject LoginApi users
+@inject NavigationManager NavManager
+
+<h3>Log in to use J.U.K.E.</h3>
+<input @bind-value="Username" type="text"/>
+<input type="password" @bind-value="Password" />
+<button @onclick="LoginClick">Login</button>
+
+@code {
+    string Username { get; set; }
+    string Password { get; set; }
+    void LoginClick()
+    {
+        var token = users.Login(Username, Password);
+        if (token != LoginToken.Empty)
+        {
+            session.LoginToken = token;
+            NavManager.NavigateTo("/");
+        }
+    }
+}

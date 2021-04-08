@@ -6,6 +6,6 @@ namespace JukeApiLibrary
 {
     public interface SongLibrary
     {
-        List<Song> GetAllSongs();
+        List<ApiSong> GetAllSongs();
     }
 }

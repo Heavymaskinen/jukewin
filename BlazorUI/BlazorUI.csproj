@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.4" PrivateAssets="all" />
+        <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CoreAudioComponent\CoreAudioComponent.csproj" />
+      <ProjectReference Include="..\JukeApiLibrary\JukeApiLibrary.csproj" />
+      <ProjectReference Include="..\JukeController\JukeController.csproj" />
+      <ProjectReference Include="..\JukeShared\JukeShared.csproj" />
+      <ProjectReference Include="..\LocalLibrary\LocalLibrary.csproj" />
+      <ProjectReference Include="..\UserMemoryRepository\UserMemoryRepository.csproj" />
+      <ProjectReference Include="..\XmlLibrary\XmlLibrary.csproj" />
+    </ItemGroup>
+
+</Project>

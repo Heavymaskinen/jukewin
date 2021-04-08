@@ -5,6 +5,6 @@ namespace JukeApiLibrary
 {
     public interface SongPlayer
     {
-        void Play(Song song);
+        void Play(ApiSong song);
     }
 }

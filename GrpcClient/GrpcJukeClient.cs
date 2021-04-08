@@ -43,7 +43,6 @@ namespace GrpcClient
                 Console.Error.WriteLine(e.Message);
                 return false;
             }
-            
         }
 
         public bool Shutdown()

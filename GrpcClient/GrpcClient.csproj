@@ -6,6 +6,7 @@
         <Company>Petanque</Company>
         <Product>Juke CLI</Product>
         <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,7 +20,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\GrpcJukeServer\GrpcJukeServer.csproj" />
       <ProjectReference Include="..\ProtoTypes\ProtoTypes.csproj" />
     </ItemGroup>
 

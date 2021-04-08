@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>LocalRepositori</RootNamespace>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ApiModel\ApiModel.csproj" />
+      <ProjectReference Include="..\JukeApiLibrary\JukeApiLibrary.csproj" />
+      <ProjectReference Include="..\JukeShared\JukeShared.csproj" />
+    </ItemGroup>
+
+</Project>

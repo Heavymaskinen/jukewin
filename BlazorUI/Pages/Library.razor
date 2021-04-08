@@ -1,0 +1,23 @@
+@page "/library"
+@inject JukeApiLibrary.LibraryApi library
+@inject JukeApiLibrary.LoginApi users
+<h3>Library</h3>
+<ul>
+    @foreach (var s in GetSongs())
+    {
+        <li>@s</li>
+    }
+</ul>
+@code {
+
+    protected override void OnInitialized()
+    {
+        
+    }
+    
+    private List<string> GetSongs()
+    {
+        var token = users.Login("user","user");
+        return library.GetSongs(token.Id).Select(s => s.Name).ToList();
+    }
+}
